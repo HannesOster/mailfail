@@ -1,0 +1,27 @@
+{
+  "name": "@mailfail/smtp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mailfail/db": "workspace:*",
+    "@mailfail/shared": "workspace:*",
+    "smtp-server": "^3",
+    "mailparser": "^3",
+    "@upstash/redis": "^1",
+    "dotenv": "^16",
+    "drizzle-orm": "^0.39"
+  },
+  "devDependencies": {
+    "@types/smtp-server": "^3",
+    "@types/mailparser": "^3",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}
