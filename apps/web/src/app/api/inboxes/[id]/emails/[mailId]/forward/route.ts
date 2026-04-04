@@ -40,9 +40,8 @@ export async function POST(
     from: "MailFail <forwarded@mailfail.dev>",
     to: [to],
     subject: `[Forwarded] ${email.subject}`,
-    html: email.htmlBody ?? undefined,
-    text: email.textBody ?? undefined,
-  });
+    html: email.htmlBody || email.textBody || "No content",
+  } as Parameters<typeof resend.emails.send>[0]);
 
   return NextResponse.json({ ok: true });
 }
