@@ -130,14 +130,66 @@ export function EmailDetailClient({
     <>
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider mb-6">
-        <Link href="/dashboard/inboxes" className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">Inboxes</Link>
-        <span className="text-zinc-300 dark:text-zinc-600">/</span>
-        <Link href={`/dashboard/inboxes/${inboxId}`} className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">
-          {inboxName}
-        </Link>
+        <Link href="/dashboard" className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">Inbox</Link>
         <span className="text-zinc-300 dark:text-zinc-600">/</span>
         <span className="text-zinc-900 dark:text-zinc-100 font-bold truncate max-w-[200px]">{email.subject}</span>
       </div>
+
+      {/* Prominent Spam Score Banner */}
+      {validation && (() => {
+        const spamData = validation.spamScore;
+        const score = spamData?.score ?? 0;
+        const isLow = score <= 3;
+        const isMed = score > 3 && score <= 6;
+        const tips: string[] = [];
+        const details = spamData?.details ?? [];
+        if (details.some((d) => /unsubscribe/i.test(d.message))) tips.push("Add an unsubscribe link to reduce spam score");
+        if (details.some((d) => /text/i.test(d.message) || /plain/i.test(d.message))) tips.push("Add a plain-text alternative");
+        if (details.some((d) => /caps/i.test(d.message) || /subject/i.test(d.message))) tips.push("Avoid ALL CAPS in subject line");
+        if (details.some((d) => /image/i.test(d.message) || /ratio/i.test(d.message))) tips.push("Improve image-to-text ratio");
+        return (
+          <div className={`mb-6 rounded-xl p-4 border flex items-start gap-4 ${
+            isLow
+              ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800/50"
+              : isMed
+              ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800/50"
+              : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800/50"
+          }`}>
+            <div className={`text-3xl font-extrabold tabular-nums leading-none ${
+              isLow ? "text-green-600 dark:text-green-400" : isMed ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
+            }`}>
+              {score}
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className={`text-sm font-bold ${
+                  isLow ? "text-green-700 dark:text-green-300" : isMed ? "text-amber-700 dark:text-amber-300" : "text-red-700 dark:text-red-300"
+                }`}>
+                  Spam Risk: {isLow ? "Low" : isMed ? "Medium" : "High"}
+                </span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide ${
+                  isLow
+                    ? "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300"
+                    : isMed
+                    ? "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300"
+                    : "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300"
+                }`}>
+                  {score}/10
+                </span>
+              </div>
+              {tips.length > 0 && (
+                <ul className="space-y-0.5">
+                  {tips.map((tip) => (
+                    <li key={tip} className="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
+                      <span className="text-zinc-400">›</span> {tip}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Metadata Row */}
       <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm mb-6">

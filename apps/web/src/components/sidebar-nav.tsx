@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Inbox, FileCode, Settings, Mail } from "lucide-react";
+import { Mail, Settings } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/inboxes", label: "Inboxes", icon: Inbox },
-  { href: "/dashboard/html-check", label: "HTML Check", icon: FileCode },
+  { href: "/dashboard", label: "Inbox", icon: Mail },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
@@ -34,7 +32,7 @@ export function SidebarNav() {
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive =
             href === "/dashboard"
-              ? pathname === "/dashboard"
+              ? pathname === "/dashboard" || pathname.startsWith("/dashboard/inboxes")
               : pathname.startsWith(href);
           return (
             <Link

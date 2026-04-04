@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import type { Database } from "..";
 import { validationResults } from "../schema";
 import type { ValidationResult } from "@mailfail/shared";
@@ -59,4 +59,12 @@ export async function getValidationForHtmlCheck(db: Database, htmlCheckId: strin
     .limit(1);
 
   return result ?? null;
+}
+
+export async function getValidationsForEmails(db: Database, emailIds: string[]) {
+  if (emailIds.length === 0) return [];
+  return db
+    .select()
+    .from(validationResults)
+    .where(inArray(validationResults.emailId, emailIds));
 }

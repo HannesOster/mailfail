@@ -1,6 +1,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "./db";
 import { getOrCreateUser, getUserByApiKey } from "@mailfail/db/src/queries/users";
+import { listInboxes, createInbox } from "@mailfail/db/src/queries/inboxes";
 
 export async function requireAuth() {
   const { userId: clerkUserId } = await auth();
@@ -17,7 +18,14 @@ export async function requireAuth() {
     clerkUser?.fullName ?? clerkUser?.firstName ?? undefined,
   );
 
-  return { clerkUserId, user };
+  // Auto-create inbox if user doesn't have one
+  const inboxes = await listInboxes(db, user.id);
+  let inbox = inboxes[0];
+  if (!inbox) {
+    inbox = await createInbox(db, user.id, "My Inbox");
+  }
+
+  return { clerkUserId, user, inbox };
 }
 
 export async function requireAuthFromRequest(request: Request) {

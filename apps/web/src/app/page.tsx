@@ -40,10 +40,10 @@ export default function LandingPage() {
         />
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-            Email Testing Made Simple
+            Stop sending test emails to real people
           </h1>
           <p className="text-xl text-neutral-500 max-w-2xl mx-auto mb-10">
-            Catch, inspect, and validate test emails before they reach real inboxes. Replace your SMTP credentials and start testing in seconds.
+            Get SMTP credentials in seconds. Catch every test email. Check for spam, broken links, and compatibility.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Link
@@ -53,9 +53,6 @@ export default function LandingPage() {
               Get Started Free
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <a href="#docs" className="border border-neutral-200 px-8 py-3 rounded-lg font-medium hover:bg-neutral-50 transition-all">
-              View Documentation
-            </a>
           </div>
 
           {/* SMTP Snippet */}
@@ -84,7 +81,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-lg font-bold mb-3">SMTP Catching</h3>
               <p className="text-neutral-500 text-sm leading-relaxed">
-                Catch all outgoing emails with unique SMTP credentials per inbox. Never worry about accidentally emailing real customers during development.
+                Catch all outgoing emails with unique SMTP credentials for your inbox. Never worry about accidentally emailing real customers during development.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl border border-neutral-200 hover:border-neutral-300 transition-colors">
@@ -235,23 +232,23 @@ export default function LandingPage() {
             {[
               {
                 step: "1",
-                title: "Create an Inbox",
-                description: "Sign up and create a virtual inbox. You'll get unique SMTP credentials — a host, port, username, and password.",
+                title: "Sign up — get your inbox",
+                description: "Sign up and your inbox is ready instantly. Copy your unique SMTP credentials from the dashboard.",
               },
               {
                 step: "2",
-                title: "Replace your SMTP config",
-                description: "Swap your production SMTP credentials with the MailFail credentials in your .env file. Your app sends emails to MailFail instead of real recipients.",
+                title: "Paste in your .env",
+                description: "Swap your production SMTP credentials with the MailFail credentials. Your app sends emails to MailFail instead of real recipients.",
               },
               {
                 step: "3",
-                title: "Inspect & validate",
-                description: "Every email appears in your MailFail inbox in real-time. View the HTML preview, check links, inspect headers, and run the full validation suite.",
+                title: "Catch and inspect",
+                description: "Every test email appears in your inbox in real-time. View HTML preview, check links, inspect headers, and see the full validation report.",
               },
               {
                 step: "4",
                 title: "Go to production",
-                description: "When you're ready, swap the SMTP credentials back to your production provider. No code changes needed — just update your .env.",
+                description: "When you're ready, swap the credentials back to your production provider. No code changes needed — just update your .env.",
               },
             ].map((item) => (
               <div key={item.step} className="flex gap-6 items-start">
