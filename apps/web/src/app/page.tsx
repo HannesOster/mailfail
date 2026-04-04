@@ -10,13 +10,13 @@ export default function LandingPage() {
         <div className="flex items-center justify-between px-6 h-14 max-w-7xl mx-auto">
           <div className="text-lg font-bold tracking-tighter text-neutral-900">MailFail</div>
           <div className="hidden md:flex items-center gap-8">
-            <a className="text-neutral-900 font-semibold text-sm hover:text-neutral-900 transition-colors" href="#features">Features</a>
+            <a className="text-neutral-900 font-semibold text-sm transition-colors" href="#features">Features</a>
             {BILLING_ENABLED && <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#pricing">Pricing</a>}
             <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#docs">Docs</a>
             <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#how-it-works">How it works</a>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/sign-in" className="text-neutral-900 text-sm font-medium hover:text-neutral-900 transition-colors">
+            <Link href="/sign-in" className="text-neutral-900 text-sm font-medium transition-colors">
               Login
             </Link>
             <Link

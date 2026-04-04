@@ -4,32 +4,20 @@ import Link from "next/link";
 import { Inbox, Mail, FileCode, ArrowRight } from "lucide-react";
 import { db } from "@/lib/db";
 import { requireOrg } from "@/lib/auth";
-import { listInboxes, getInboxCount } from "@mailfail/db/src/queries/inboxes";
+import { listInboxes } from "@mailfail/db/src/queries/inboxes";
 import { getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { listEmails } from "@mailfail/db/src/queries/emails";
 import { BILLING_ENABLED } from "@mailfail/shared";
-
-function timeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? "s" : ""} ago`;
-}
+import { timeAgo } from "@/lib/utils";
 
 export default async function DashboardPage() {
   const { org } = await requireOrg();
 
-  const [orgInboxes, inboxCount, htmlCheckCount] = await Promise.all([
+  const [orgInboxes, htmlCheckCount] = await Promise.all([
     listInboxes(db, org.id),
-    getInboxCount(db, org.id),
     getHtmlCheckCount(db, org.id),
   ]);
 
-  // Fetch recent emails from the first inbox (or all inboxes sequentially)
   const recentEmailsByInbox = await Promise.all(
     orgInboxes.slice(0, 3).map((inbox) =>
       listEmails(db, inbox.id, { limit: 5 }).then((emails) =>
@@ -59,7 +47,6 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      {/* Stats Grid */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white border border-zinc-200 p-6 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
           <div className="flex justify-between items-start mb-4">
@@ -69,7 +56,7 @@ export default async function DashboardPage() {
             <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Active</span>
           </div>
           <div className="flex items-baseline gap-2">
-            <h3 className="text-3xl font-bold">{inboxCount}</h3>
+            <h3 className="text-3xl font-bold">{orgInboxes.length}</h3>
             <p className="text-zinc-500 text-sm">Inboxes</p>
           </div>
           {BILLING_ENABLED && <p className="mt-4 text-xs text-zinc-400">1 inbox on Free plan</p>}
@@ -122,7 +109,6 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      {/* Recent Emails Table */}
       <section className="bg-white border border-zinc-200 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] overflow-hidden">
         <div className="px-6 py-4 border-b border-zinc-100 flex justify-between items-center">
           <h3 className="font-bold text-zinc-900">Recent Emails</h3>
@@ -176,7 +162,6 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      {/* SMTP Quick Connect */}
       {orgInboxes.length > 0 && (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white border border-zinc-200 p-6 rounded-xl">

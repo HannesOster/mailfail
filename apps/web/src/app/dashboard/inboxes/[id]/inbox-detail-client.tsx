@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Copy, Trash2, RefreshCw } from "lucide-react";
+import { timeAgo } from "@/lib/utils";
 
 type Email = {
   id: string;
@@ -21,17 +22,6 @@ type Inbox = {
   monthlyMailCount: number;
   createdAt: Date;
 };
-
-function timeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? "s" : ""} ago`;
-}
 
 function useInboxStream(inboxId: string) {
   const [newEmailTrigger, setNewEmailTrigger] = useState(0);
@@ -57,7 +47,6 @@ export function InboxDetailClient({
   const [refreshing, setRefreshing] = useState(false);
   const newEmailTrigger = useInboxStream(inbox.id);
 
-  // Reload when SSE fires
   useEffect(() => {
     if (newEmailTrigger === 0) return;
     handleRefresh();
@@ -90,7 +79,6 @@ export function InboxDetailClient({
 
   return (
     <>
-      {/* Page Header */}
       <div className="flex justify-between items-end mb-8">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900">{inbox.name}</h1>
@@ -123,7 +111,6 @@ export function InboxDetailClient({
         </div>
       </div>
 
-      {/* Email List Table */}
       <div className="bg-white border border-zinc-200 rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm border-collapse">
@@ -191,7 +178,6 @@ export function InboxDetailClient({
             </tbody>
           </table>
         </div>
-        {/* Footer */}
         <div className="py-3 px-4 bg-zinc-50/50 border-t border-zinc-200 flex justify-between items-center text-xs text-zinc-500">
           <div>
             <span className="font-medium text-zinc-700">{emails.length}</span> emails shown
@@ -213,7 +199,6 @@ export function InboxDetailClient({
         </div>
       </div>
 
-      {/* Stats row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <div className="p-5 border border-zinc-200 rounded-lg bg-zinc-50/30">
           <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-500 mb-2">

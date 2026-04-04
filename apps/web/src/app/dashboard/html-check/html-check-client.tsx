@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Upload, ClipboardPaste, Link as LinkIcon, Zap, MoreVertical } from "lucide-react";
 import type { HtmlCheckSource } from "@mailfail/shared";
+import { timeAgo } from "@/lib/utils";
 
 type HtmlCheck = {
   id: string;
@@ -15,19 +16,7 @@ type HtmlCheck = {
 
 type InputTab = "upload" | "paste" | "url";
 
-function timeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (seconds < 60) return "just now";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? "s" : ""} ago`;
-}
-
 function ScoreBadge({ score }: { score?: string | null }) {
-  // We don't have score on the list — show placeholder
   if (!score) return <div className="w-8 h-8 rounded-full border-2 border-zinc-200 flex items-center justify-center text-xs text-zinc-400">—</div>;
   const num = parseInt(score, 10);
   const color =
@@ -145,12 +134,10 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
         </p>
       </header>
 
-      {/* Input Form */}
       <form
         onSubmit={handleSubmit}
         className="bg-white border border-[#E5E5E5] rounded-xl shadow-sm overflow-hidden mb-12"
       >
-        {/* Name input */}
         <div className="p-6 border-b border-[#E5E5E5]">
           <label className="block text-xs font-bold text-[#525252] uppercase tracking-wider mb-2 font-mono">
             Check name
@@ -164,7 +151,6 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
           />
         </div>
 
-        {/* Source tabs */}
         <div className="px-6 py-2 bg-[#FAFAFA] border-b border-[#E5E5E5] flex gap-6">
           {inputTabs.map(({ id, label }) => (
             <button
@@ -255,7 +241,6 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
         </div>
       </form>
 
-      {/* Previous Checks */}
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold tracking-tight">Previous Checks</h2>

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Copy, Eye, EyeOff, Inbox } from "lucide-react";
+import { timeAgo, copyToClipboard } from "@/lib/utils";
 
 type InboxData = {
   id: string;
@@ -13,25 +14,6 @@ type InboxData = {
   monthlyMailCount: number;
   createdAt: Date;
 };
-
-function timeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (seconds < 60) return "just now";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `${days} day${days > 1 ? "s" : ""} ago`;
-  const weeks = Math.floor(days / 7);
-  if (weeks < 5) return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
-  const months = Math.floor(days / 30);
-  return `${months} month${months > 1 ? "s" : ""} ago`;
-}
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).catch(() => {});
-}
 
 function InboxCard({
   inbox,
@@ -45,6 +27,9 @@ function InboxCard({
   const [showPass, setShowPass] = useState(false);
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   async function handleDelete() {
     if (!confirm(`Delete inbox "${inbox.name}"? All emails will be lost.`)) return;
@@ -56,6 +41,9 @@ function InboxCard({
       setDeleting(false);
     }
   }
+
+  const copyEnv = `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${inbox.smtpPass}`;
+  const envBlock = showPass ? copyEnv : copyEnv.replace(inbox.smtpPass, "•".repeat(24));
 
   return (
     <div className="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm hover:border-neutral-300 transition-all group">
@@ -80,44 +68,35 @@ function InboxCard({
         </button>
       </div>
 
-      {/* SMTP Credentials as ENV block */}
-      {(() => {
-        const envBlock = showPass
-          ? `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${inbox.smtpPass}`
-          : `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${"•".repeat(24)}`;
-        const copyEnv = `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${inbox.smtpPass}`;
-        return (
-          <div className="relative bg-neutral-900 rounded-lg p-5 mb-5 font-mono text-sm text-neutral-300">
-            <div className="absolute top-3 right-3 flex items-center gap-2">
-              <button
-                onClick={() => setShowPass((v) => !v)}
-                className="text-neutral-500 hover:text-white transition-colors p-1"
-                title={showPass ? "Hide password" : "Show password"}
-              >
-                {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-              <button
-                onClick={() => {
-                  copyToClipboard(copyEnv);
-                  setCopied(true);
-                  setTimeout(() => setCopied(false), 2000);
-                }}
-                className="text-neutral-500 hover:text-white transition-colors p-1"
-                title="Copy all as .env"
-              >
-                {copied ? (
-                  <span className="text-green-400 text-xs font-sans">Copied!</span>
-                ) : (
-                  <Copy className="w-4 h-4" />
-                )}
-              </button>
-            </div>
-            <pre className="whitespace-pre leading-relaxed">{envBlock}</pre>
-          </div>
-        );
-      })()}
+      <div className="relative bg-neutral-900 rounded-lg p-5 mb-5 font-mono text-sm text-neutral-300">
+        <div className="absolute top-3 right-3 flex items-center gap-2">
+          <button
+            onClick={() => setShowPass((v) => !v)}
+            className="text-neutral-500 hover:text-white transition-colors p-1"
+            title={showPass ? "Hide password" : "Show password"}
+          >
+            {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </button>
+          <button
+            onClick={() => {
+              copyToClipboard(copyEnv);
+              setCopied(true);
+              if (timerRef.current) clearTimeout(timerRef.current);
+              timerRef.current = setTimeout(() => setCopied(false), 2000);
+            }}
+            className="text-neutral-500 hover:text-white transition-colors p-1"
+            title="Copy all as .env"
+          >
+            {copied ? (
+              <span className="text-green-400 text-xs font-sans">Copied!</span>
+            ) : (
+              <Copy className="w-4 h-4" />
+            )}
+          </button>
+        </div>
+        <pre className="whitespace-pre leading-relaxed">{envBlock}</pre>
+      </div>
 
-      {/* Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
         <div className="text-sm text-neutral-500">
           {inbox.monthlyMailCount} emails this month · Created {timeAgo(inbox.createdAt)}
@@ -179,7 +158,6 @@ export function InboxListClient({
 
   return (
     <>
-      {/* Page Header */}
       <div className="flex justify-between items-center mb-10">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900">Inboxes</h2>
@@ -194,7 +172,6 @@ export function InboxListClient({
         </button>
       </div>
 
-      {/* Create form */}
       {showForm && (
         <form
           onSubmit={handleCreate}
@@ -233,7 +210,6 @@ export function InboxListClient({
         </form>
       )}
 
-      {/* Inbox Cards */}
       <div className="space-y-6">
         {inboxes.length === 0 ? (
           <div className="text-center py-16 text-neutral-400">
