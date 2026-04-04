@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { redis } from "@/lib/redis";
 import { requireOrg } from "@/lib/auth";
 import { getInbox } from "@mailfail/db/src/queries/inboxes";
