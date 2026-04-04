@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { getHtmlCheck } from "@mailfail/db/src/queries/html-checks";
 import { upsertValidationResult } from "@mailfail/db/src/queries/validation";
-import { runValidation } from "@/lib/validation/pipeline";
+import { runValidation } from "@mailfail/validation";
 
 export async function POST(
   _request: Request,

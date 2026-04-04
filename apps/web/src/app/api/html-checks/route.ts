@@ -6,7 +6,7 @@ import { requireAuth } from "@/lib/auth";
 import { insertHtmlCheck, listHtmlChecks, getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { upsertValidationResult } from "@mailfail/db/src/queries/validation";
 import { checkHtmlCheckLimit } from "@/lib/limits";
-import { runValidation } from "@/lib/validation/pipeline";
+import { runValidation } from "@mailfail/validation";
 import { VALIDATION_CONFIG } from "@mailfail/shared";
 import type { HtmlCheckSource } from "@mailfail/shared";
 

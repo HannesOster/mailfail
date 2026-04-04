@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^7",
     "@mailfail/db": "workspace:*",
     "@mailfail/shared": "workspace:*",
+    "@mailfail/validation": "workspace:*",
     "@upstash/redis": "^1",
     "@vercel/blob": "^0.27",
     "geist": "^1.7.0",

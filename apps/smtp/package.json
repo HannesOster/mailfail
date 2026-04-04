@@ -11,6 +11,8 @@
   "dependencies": {
     "@mailfail/db": "workspace:*",
     "@mailfail/shared": "workspace:*",
+    "@mailfail/validation": "workspace:*",
+    "@vercel/blob": "^0.27",
     "smtp-server": "^3",
     "mailparser": "^3",
     "@upstash/redis": "^1",

@@ -15,3 +15,4 @@ export * as inboxQueries from "./queries/inboxes";
 export * as emailQueries from "./queries/emails";
 export * as htmlCheckQueries from "./queries/html-checks";
 export * as validationQueries from "./queries/validation";
+export * as attachmentQueries from "./queries/attachments";
