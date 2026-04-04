@@ -71,6 +71,21 @@ export async function renameInbox(
   return updated ?? null;
 }
 
+export async function updateInbox(
+  db: Database,
+  id: string,
+  userId: string,
+  data: { name?: string; webhookUrl?: string | null },
+) {
+  const [updated] = await db
+    .update(inboxes)
+    .set(data)
+    .where(and(eq(inboxes.id, id), eq(inboxes.userId, userId)))
+    .returning();
+
+  return updated ?? null;
+}
+
 export async function authenticateSmtp(db: Database, smtpUser: string, smtpPass: string) {
   const [inbox] = await db
     .select()

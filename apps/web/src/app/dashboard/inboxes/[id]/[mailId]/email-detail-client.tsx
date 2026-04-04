@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Trash2, RefreshCw } from "lucide-react";
+import { Trash2, RefreshCw, Forward, X, Send } from "lucide-react";
 import { ValidationResult } from "@/components/validation/validation-result";
 import type { LinkCheckEntry, ImageCheckEntry, SpamScoreResult, CheckEntry, OverallScore } from "@mailfail/shared";
 
@@ -62,6 +62,13 @@ export function EmailDetailClient({
   const [recheckLoading, setRecheckLoading] = useState(false);
   const [previewWidth, setPreviewWidth] = useState<"desktop" | "mobile">("desktop");
 
+  // Forward dialog state
+  const [showForward, setShowForward] = useState(false);
+  const [forwardTo, setForwardTo] = useState("");
+  const [forwarding, setForwarding] = useState(false);
+  const [forwardStatus, setForwardStatus] = useState<"idle" | "success" | "error">("idle");
+  const [forwardError, setForwardError] = useState("");
+
   async function handleDelete() {
     if (!confirm("Delete this email?")) return;
     await fetch(`/api/inboxes/${inboxId}/emails/${email.id}`, { method: "DELETE" });
@@ -80,6 +87,35 @@ export function EmailDetailClient({
       }
     } finally {
       setRecheckLoading(false);
+    }
+  }
+
+  async function handleForward(e: React.FormEvent) {
+    e.preventDefault();
+    if (!forwardTo.trim()) return;
+    setForwarding(true);
+    setForwardStatus("idle");
+    setForwardError("");
+    try {
+      const res = await fetch(`/api/inboxes/${inboxId}/emails/${email.id}/forward`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: forwardTo.trim() }),
+      });
+      if (res.ok) {
+        setForwardStatus("success");
+        setTimeout(() => {
+          setShowForward(false);
+          setForwardTo("");
+          setForwardStatus("idle");
+        }, 1500);
+      } else {
+        const data = await res.json();
+        setForwardStatus("error");
+        setForwardError(data.error ?? "Failed to forward email");
+      }
+    } finally {
+      setForwarding(false);
     }
   }
 
@@ -119,14 +155,65 @@ export function EmailDetailClient({
             <span className="text-zinc-600 dark:text-zinc-400">{formatDate(new Date(email.receivedAt))}</span>
           </div>
         </div>
-        <button
-          onClick={handleDelete}
-          className="flex items-center gap-2 px-3 py-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded transition-colors text-sm font-medium border border-transparent hover:border-red-100 dark:hover:border-red-900/50"
-        >
-          <Trash2 className="w-4 h-4" />
-          Delete
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowForward((v) => !v)}
+            className="flex items-center gap-2 px-3 py-1.5 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded transition-colors text-sm font-medium border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600"
+          >
+            <Forward className="w-4 h-4" />
+            Forward
+          </button>
+          <button
+            onClick={handleDelete}
+            className="flex items-center gap-2 px-3 py-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded transition-colors text-sm font-medium border border-transparent hover:border-red-100 dark:hover:border-red-900/50"
+          >
+            <Trash2 className="w-4 h-4" />
+            Delete
+          </button>
+        </div>
       </section>
+
+      {/* Forward Dialog */}
+      {showForward && (
+        <div className="mb-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <Forward className="w-4 h-4" />
+              Forward Email
+            </h4>
+            <button
+              onClick={() => { setShowForward(false); setForwardTo(""); setForwardStatus("idle"); setForwardError(""); }}
+              className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1 rounded transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <form onSubmit={handleForward} className="flex gap-2">
+            <input
+              autoFocus
+              type="email"
+              value={forwardTo}
+              onChange={(e) => setForwardTo(e.target.value)}
+              placeholder="recipient@example.com"
+              className="flex-1 px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-400 focus:border-zinc-900 dark:focus:border-zinc-400 outline-none transition-all bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
+            />
+            <button
+              type="submit"
+              disabled={forwarding || !forwardTo.trim()}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
+            >
+              <Send className="w-4 h-4" />
+              {forwarding ? "Sending…" : "Send"}
+            </button>
+          </form>
+          {forwardStatus === "success" && (
+            <p className="mt-2 text-xs text-green-600 dark:text-green-400">Email forwarded successfully.</p>
+          )}
+          {forwardStatus === "error" && (
+            <p className="mt-2 text-xs text-red-500">{forwardError}</p>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Main Preview Column */}
