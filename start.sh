@@ -48,7 +48,7 @@ echo "  Ready!"
 echo ""
 
 # Open in browser
-open http://localhost:3333
+open http://localhost:3333/dashboard
 
 # Handle Ctrl+C — kill both processes
 trap "echo ''; echo '  Stopping MailFail...'; kill $SMTP_PID $WEB_PID 2>/dev/null; exit 0" INT TERM
