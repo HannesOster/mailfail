@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {},
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Geist"],
+                    "body": ["Geist"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-white text-zinc-900 antialiased">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 border-r border-zinc-800 bg-zinc-950 dark:bg-black flex flex-col p-4 fixed left-0 top-0">
+<div class="mb-8">
+<div class="flex items-center gap-2 px-2">
+<div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-black" style="font-variation-settings: 'FILL' 1;">mail</span>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight text-white">MailFail</h1>
+<p class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Dev Environment</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">inbox</span>
+                    Inboxes
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+                    Analytics
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+                    Team
+                </a>
+<!-- Active Tab: Settings -->
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium bg-zinc-800 text-white rounded-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-zinc-800 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">description</span>
+                    Docs
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">help</span>
+                    Support
+                </a>
+<button class="mt-4 w-full bg-white text-black text-sm font-bold py-2 rounded hover:bg-zinc-200 transition-all active:scale-[0.99]">
+                    Upgrade Plan
+                </button>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 ml-64 flex flex-col">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center h-14 px-6 w-full bg-white border-b border-zinc-200 sticky top-0 z-10">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="pl-9 pr-4 py-1.5 bg-zinc-50 border border-zinc-200 rounded text-sm focus:ring-1 focus:ring-black focus:border-black w-64 outline-none transition-all" placeholder="Search settings..." type="text"/>
+</div>
+<nav class="flex gap-4">
+<a class="text-zinc-500 hover:text-zinc-900 text-sm transition-all duration-200" href="#">Feedback</a>
+<a class="text-zinc-500 hover:text-zinc-900 text-sm transition-all duration-200" href="#">Status</a>
+<a class="text-zinc-500 hover:text-zinc-900 text-sm transition-all duration-200" href="#">Changelog</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-1.5 bg-black text-white text-sm font-medium rounded hover:bg-zinc-800 transition-all">
+                        Create Inbox
+                    </button>
+<div class="flex items-center gap-2 text-zinc-500">
+<button class="p-1 hover:text-black transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-1 hover:text-black transition-colors"><span class="material-symbols-outlined">help_outline</span></button>
+</div>
+<div class="w-8 h-8 rounded-full bg-zinc-200 overflow-hidden border border-zinc-200">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="Professional portrait of a developer with a neutral background, high contrast studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmVhEE6jbSYyGq6R6oRidFyG3sIX-_JZz9CIjwRrzsIbMkXmbZBaXwStFCDb8lU78A5f_PQ8kMMQEA92jAH2AUlTbi5A6P2AIL7EEaGTUKanan-sqD-kpUY9fd_CEW5c6LxpsY0ajMMus1TtMDjaU9s5BoCjNxWKieLpGDOo3eDFW8TDj5QKNz3wIuiQN6elXTN-jLUlaRDFOd68_JQHs6yJ5wjqsKfY2Nrlp9MAhn-ruByE86t7xfy3E-IU7HZUKx_BmeuTxn3R8"/>
+</div>
+</div>
+</header>
+<!-- Settings Content Area -->
+<div class="max-w-4xl w-full mx-auto p-8 space-y-8">
+<header>
+<h2 class="text-2xl font-bold tracking-tight mb-1">Organization Settings</h2>
+<p class="text-zinc-500 text-sm">Manage your organization's members, billing, and global configuration.</p>
+</header>
+<!-- 1. ORGANIZATION SECTION -->
+<section class="bg-white border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
+<div class="p-6">
+<h3 class="text-sm font-semibold text-zinc-900 mb-4">Organization</h3>
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-zinc-100 rounded-lg flex items-center justify-center border border-zinc-200">
+<span class="material-symbols-outlined text-zinc-400">domain</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-medium text-zinc-900">Osterkamp Digital</span>
+<button class="p-1 text-zinc-400 hover:text-zinc-900 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 16px;">edit</span>
+</button>
+</div>
+<div class="flex gap-2 mt-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-black text-white">Owner</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-zinc-100 text-zinc-500 border border-zinc-200">Free</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-zinc-100">
+<div>
+<p class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1">Inboxes</p>
+<div class="flex items-baseline gap-2">
+<span class="text-xl font-mono font-semibold">3</span>
+<span class="text-xs text-zinc-400">(unlimited)</span>
+</div>
+</div>
+<div>
+<p class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1">Emails this month</p>
+<div class="flex items-baseline gap-2">
+<span class="text-xl font-mono font-semibold">47</span>
+<span class="text-xs text-zinc-400">(unlimited)</span>
+</div>
+</div>
+<div>
+<p class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1">HTML checks</p>
+<div class="flex items-baseline gap-2">
+<span class="text-xl font-mono font-semibold">8</span>
+<span class="text-xs text-zinc-400">(unlimited)</span>
+</div>
+</div>
+</div>
+</div>
+<div class="px-6 py-3 bg-zinc-50 border-t border-zinc-100 flex justify-end">
+<button class="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors">View detailed usage →</button>
+</div>
+</section>
+<!-- 2. MEMBERS SECTION -->
+<section class="bg-white border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
+<div class="p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-sm font-semibold text-zinc-900">Members</h3>
+<button class="px-3 py-1.5 border border-zinc-200 rounded text-xs font-medium hover:bg-zinc-50 transition-all flex items-center gap-1.5">
+<span class="material-symbols-outlined" style="font-size: 16px;">person_add</span>
+                                Invite Member
+                            </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="text-zinc-400 font-medium border-b border-zinc-100">
+<th class="pb-3 font-medium">Name</th>
+<th class="pb-3 font-medium">Email</th>
+<th class="pb-3 font-medium">Role</th>
+<th class="pb-3 text-right font-medium">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-zinc-100">
+<tr class="group">
+<td class="py-4 font-medium text-zinc-900">Johannes Osterkamp</td>
+<td class="py-4 text-zinc-500 font-mono text-xs">johannes@osterkamp.de</td>
+<td class="py-4">
+<span class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 text-[10px] font-medium border border-zinc-200">Admin</span>
+<span class="ml-1 text-[10px] text-zinc-400 italic">(you)</span>
+</td>
+<td class="py-4 text-right">
+<span class="text-zinc-300 material-symbols-outlined cursor-not-allowed">lock</span>
+</td>
+</tr>
+<tr class="group hover:bg-zinc-50 transition-colors">
+<td class="py-4 font-medium text-zinc-900">Max Mustermann</td>
+<td class="py-4 text-zinc-500 font-mono text-xs">max@osterkamp.de</td>
+<td class="py-4">
+<span class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 text-[10px] font-medium border border-zinc-200">Member</span>
+</td>
+<td class="py-4 text-right">
+<button class="text-xs text-red-500 hover:text-red-700 font-medium px-2 py-1 rounded hover:bg-red-50 transition-all">Remove</button>
+</td>
+</tr>
+<tr class="group hover:bg-zinc-50 transition-colors">
+<td class="py-4 font-medium text-zinc-900">Lisa Schmidt</td>
+<td class="py-4 text-zinc-500 font-mono text-xs">lisa@osterkamp.de</td>
+<td class="py-4">
+<span class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 text-[10px] font-medium border border-zinc-200">Member</span>
+</td>
+<td class="py-4 text-right">
+<button class="text-xs text-red-500 hover:text-red-700 font-medium px-2 py-1 rounded hover:bg-red-50 transition-all">Remove</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- 3. DANGER ZONE -->
+<section class="bg-red-50/30 border border-red-200 rounded-lg overflow-hidden shadow-sm">
+<div class="p-6">
+<h3 class="text-sm font-bold text-red-600 mb-2">Danger Zone</h3>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<p class="text-sm text-zinc-600 max-w-md">
+                                This will permanently delete all inboxes, emails, and data associated with <strong>Osterkamp Digital</strong>. This action cannot be undone.
+                            </p>
+<button class="px-4 py-2 border border-red-300 text-red-600 rounded text-sm font-semibold hover:bg-red-600 hover:text-white transition-all whitespace-nowrap">
+                                Delete Organization
+                            </button>
+</div>
+</div>
+</section>
+<footer class="text-center pt-8 pb-12 border-t border-zinc-100">
+<p class="text-xs text-zinc-400">MailFail Settings • v2.4.1-stable • Osterkamp Digital</p>
+</footer>
+</div>
+</main>
+</div>
+</body></html>

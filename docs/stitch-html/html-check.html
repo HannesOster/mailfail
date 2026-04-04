@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HTML Check - MailFail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Geist', sans-serif; }
+        .font-label { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono-code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        neutral: {
+                            950: "#0A0A0A"
+                        }
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Geist"],
+                        "body": ["Geist"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[#FAFAFA] text-[#0A0A0A]">
+<!-- SideNavBar (Execution from JSON) -->
+<aside class="fixed left-0 top-0 h-screen flex flex-col p-4 bg-neutral-950 dark:bg-black h-full w-64 border-r border-neutral-800 font-sans text-sm font-medium z-50">
+<div class="mb-8 px-2">
+<div class="text-lg font-black text-white tracking-tight">MailFail</div>
+<div class="text-xs text-neutral-500 mt-1 uppercase tracking-widest">Dev Workspace</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span>Inboxes</span>
+</a>
+<!-- Active State: HTML Check -->
+<a class="flex items-center gap-3 px-3 py-2 bg-neutral-800 text-white rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span>HTML Check</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span>Automations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Team</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1 pt-4 border-t border-neutral-800">
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Documentation</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Support</span>
+</a>
+<div class="mt-4 p-3 bg-neutral-900 rounded-lg border border-neutral-800">
+<p class="text-xs text-neutral-400 mb-2">Free Plan</p>
+<button class="w-full text-xs font-bold bg-white text-black py-2 rounded hover:bg-neutral-200 transition-all">Upgrade Plan</button>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Execution from JSON) -->
+<header class="flex justify-between items-center w-full px-6 py-3 sticky top-0 z-40 ml-64 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 font-sans text-sm tracking-tight">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute inset-y-0 left-3 flex items-center text-neutral-400">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+</span>
+<input class="pl-10 pr-4 py-1.5 bg-neutral-100 dark:bg-neutral-900 border-none rounded-full text-xs focus:ring-1 focus:ring-neutral-300 w-64" placeholder="Search..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-4">
+<a class="text-neutral-500 hover:text-neutral-900 transition-all" href="#">Docs</a>
+<a class="text-neutral-500 hover:text-neutral-900 transition-all" href="#">API Reference</a>
+<a class="text-neutral-500 hover:text-neutral-900 transition-all" href="#">Status</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-[#0A0A0A] text-white px-4 py-1.5 rounded-md font-medium text-xs hover:scale-95 transition-transform active:scale-95">Check HTML</button>
+<button class="text-neutral-500 hover:text-neutral-900"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<div class="h-8 w-8 rounded-full bg-neutral-200 border border-neutral-300 flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="h-full w-full object-cover" data-alt="close-up minimalist professional avatar icon with clean geometric shapes and monochromatic color scheme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXXOxwePQ6Fk0xTiCdhACbYVlGXx-V9ngaT6FsTwY6hF8fGTwmJVZ-0R5QA60E4yaMPfimZIejzvorM0OpjY-05jN3pABZfRYNBaBXIS38LjqtpVsN9PbqY-QSwv13PdPIfu9qNTFpd4N5C2Cg9VSTlHhUq1wAFdAmwYtGKlEcFRO0g7SI11usB-1KF9h5RwZV7j5lOtVWtCUcW6wtJy5_CkvkdZUQb4jpI_BjmUg8nOO6_O1ox-xAHWhoFtRwoPLgy2f7JHmpPmg"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-64 p-8 min-h-screen">
+<div class="max-w-5xl mx-auto">
+<header class="mb-8">
+<h1 class="text-3xl font-black tracking-tight text-[#0A0A0A]">HTML Check</h1>
+<p class="text-[#525252] mt-1">Validate your email templates against dozens of email clients and standards.</p>
+</header>
+<!-- Input Section (Modern Card) -->
+<section class="bg-white border border-[#E5E5E5] rounded-xl shadow-sm overflow-hidden mb-12">
+<div class="p-6 border-b border-[#E5E5E5]">
+<label class="block text-xs font-bold text-[#525252] uppercase tracking-wider mb-2 font-label">Check name</label>
+<input class="w-full px-4 py-2 border border-[#E5E5E5] rounded-lg focus:ring-1 focus:ring-black focus:border-black outline-none transition-all" placeholder="e.g. Weekly Newsletter - October" type="text"/>
+</div>
+<!-- Tabs -->
+<div class="px-6 py-2 bg-[#FAFAFA] border-b border-[#E5E5E5] flex gap-6">
+<button class="py-2 text-sm font-semibold border-b-2 border-black text-black">Upload File</button>
+<button class="py-2 text-sm font-medium text-[#525252] hover:text-black border-b-2 border-transparent transition-all">Paste HTML</button>
+<button class="py-2 text-sm font-medium text-[#525252] hover:text-black border-b-2 border-transparent transition-all">Fetch URL</button>
+</div>
+<!-- Tab Content: Upload (Active) -->
+<div class="p-8">
+<div class="border-2 border-dashed border-[#E5E5E5] rounded-xl flex flex-col items-center justify-center py-16 px-4 bg-[#FAFAFA]/50 hover:bg-[#FAFAFA] transition-colors cursor-pointer group">
+<div class="h-12 w-12 rounded-full bg-white border border-[#E5E5E5] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-neutral-400" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<p class="text-sm font-medium text-[#0A0A0A]">Drop .html file here or click to browse</p>
+<p class="text-xs text-[#525252] mt-1">Maximum file size 2MB</p>
+</div>
+<div class="mt-8 flex justify-end">
+<button class="bg-[#0A0A0A] text-white px-8 py-2.5 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+<span>Run Check</span>
+<span class="material-symbols-outlined text-sm" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Previous Checks Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold tracking-tight">Previous Checks</h2>
+<button class="text-xs font-bold text-[#525252] hover:text-black flex items-center gap-1">
+                        View All <span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<div class="bg-white border border-[#E5E5E5] rounded-xl shadow-sm overflow-hidden">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-[#FAFAFA] text-xs font-bold text-[#525252] uppercase tracking-wider font-label">
+<th class="px-6 py-4">Name</th>
+<th class="px-6 py-4">Source</th>
+<th class="px-6 py-4 text-center">Score</th>
+<th class="px-6 py-4">Created</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#E5E5E5]">
+<!-- Row 1 -->
+<tr class="hover:bg-[#FAFAFA] transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="font-semibold text-[#0A0A0A]">März Newsletter</div>
+<div class="text-[10px] font-mono-code text-[#525252]">ID: mf-9281-xk</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-neutral-100 text-[#525252] text-[10px] font-bold uppercase tracking-tight">
+<span class="material-symbols-outlined text-xs" data-icon="link">link</span> URL
+                                    </span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="inline-flex items-center justify-center h-8 w-8 rounded-full border-2 border-[#EF4444] text-[#EF4444] font-bold text-xs bg-[#EF4444]/5">
+                                        42
+                                    </div>
+</td>
+<td class="px-6 py-4 text-sm text-[#525252]">2 hours ago</td>
+<td class="px-6 py-4 text-right">
+<button class="text-neutral-300 group-hover:text-black transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-[#FAFAFA] transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="font-semibold text-[#0A0A0A]">Welcome Email Template</div>
+<div class="text-[10px] font-mono-code text-[#525252]">ID: mf-7721-aw</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-neutral-100 text-[#525252] text-[10px] font-bold uppercase tracking-tight">
+<span class="material-symbols-outlined text-xs" data-icon="upload_file">upload_file</span> Upload
+                                    </span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="inline-flex items-center justify-center h-8 w-8 rounded-full border-2 border-[#22C55E] text-[#22C55E] font-bold text-xs bg-[#22C55E]/5">
+                                        98
+                                    </div>
+</td>
+<td class="px-6 py-4 text-sm text-[#525252]">Yesterday</td>
+<td class="px-6 py-4 text-right">
+<button class="text-neutral-300 group-hover:text-black transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-[#FAFAFA] transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="font-semibold text-[#0A0A0A]">Bestellbestätigung v2</div>
+<div class="text-[10px] font-mono-code text-[#525252]">ID: mf-6120-ll</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-neutral-100 text-[#525252] text-[10px] font-bold uppercase tracking-tight">
+<span class="material-symbols-outlined text-xs" data-icon="content_paste">content_paste</span> Paste
+                                    </span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="inline-flex items-center justify-center h-8 w-8 rounded-full border-2 border-[#EAB308] text-[#EAB308] font-bold text-xs bg-[#EAB308]/5">
+                                        76
+                                    </div>
+</td>
+<td class="px-6 py-4 text-sm text-[#525252]">3 days ago</td>
+<td class="px-6 py-4 text-right">
+<button class="text-neutral-300 group-hover:text-black transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<!-- Background Decoration -->
+<div class="fixed top-0 right-0 -z-10 w-full h-full opacity-[0.03] pointer-events-none overflow-hidden">
+<svg viewbox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+<filter id="noiseFilter">
+<feturbulence basefrequency="0.65" numoctaves="3" stitchtiles="stitch" type="fractalNoise"></feturbulence>
+</filter>
+<rect filter="url(#noiseFilter)" height="100%" width="100%"></rect>
+</svg>
+</div>
+</body></html>

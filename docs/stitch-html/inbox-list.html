@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MailFail | Inboxes</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Space Grotesk", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Geist', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+</head>
+<body class="bg-white text-neutral-900 h-full">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col bg-neutral-950 text-white font-sans text-sm font-medium h-screen w-64 border-r border-neutral-800">
+<!-- Logo Header -->
+<div class="px-6 py-8 flex items-center gap-3">
+<div class="w-8 h-8 bg-white rounded-md flex items-center justify-center">
+<span class="material-symbols-outlined text-neutral-900" style="font-variation-settings: 'FILL' 1;">mail</span>
+</div>
+<div>
+<h1 class="text-xl font-bold text-white tracking-tight">MailFail</h1>
+<p class="text-[10px] text-neutral-500 uppercase tracking-widest">Dev Email Testing</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 px-3 space-y-1">
+<a class="text-neutral-400 px-3 py-2 flex items-center gap-3 hover:bg-neutral-900 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="bg-neutral-800 text-white rounded-md px-3 py-2 flex items-center gap-3 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+                Inboxes
+            </a>
+<a class="text-neutral-400 px-3 py-2 flex items-center gap-3 hover:bg-neutral-900 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+                HTML Check
+            </a>
+<a class="text-neutral-400 px-3 py-2 flex items-center gap-3 hover:bg-neutral-900 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<!-- CTA Section -->
+<div class="px-4 py-4">
+<button class="w-full bg-white text-neutral-950 font-bold py-2 rounded-md hover:bg-neutral-200 transition-colors">
+                Create Project
+            </button>
+</div>
+<!-- Footer Links -->
+<div class="px-3 py-6 border-t border-neutral-800 space-y-1">
+<a class="text-neutral-400 px-3 py-2 flex items-center gap-3 hover:bg-neutral-900 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                Docs
+            </a>
+<a class="text-neutral-400 px-3 py-2 flex items-center gap-3 hover:bg-neutral-900 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="flex justify-between items-center px-6 w-full ml-64 h-16 bg-white border-b border-neutral-200 font-sans text-sm fixed top-0 right-0 z-10">
+<div class="flex items-center gap-8 w-1/2">
+<span class="text-lg font-semibold text-neutral-900">Inboxes</span>
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-lg">search</span>
+<input class="w-full bg-neutral-50 border-neutral-200 rounded-lg pl-10 pr-4 py-1.5 focus:ring-1 focus:ring-neutral-200 focus:border-neutral-300 transition-all outline-none" placeholder="Search inboxes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-neutral-500 hover:bg-neutral-50 rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-neutral-500 hover:bg-neutral-50 rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<button class="text-neutral-500 font-medium px-3 py-2 hover:bg-neutral-50 rounded-md transition-all">Feedback</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-neutral-200 bg-neutral-100 ml-2">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="close-up portrait of a professional male developer in a brightly lit studio environment with a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTzQfMBMDP8iHtkD5q2TftzyPIqhELa1JEXnJimaQ8yovXu-0B4b59n747lklj3c6hfxm2jsNMtvc5L-Xicp8HhcerRieGg5Omt2glQchNemZ_5tRxRIvTUWw6FaNIXhWVo6pQlgD9bLpBwkfOUzmL0ISAsR9adSbCWRzsLKSoaxnsaYpioUiYbigHMAqjjTEdMvc9AHw-3x9NxCeEp_LGUeDUUAHPsAnNVr46pdBXb5DQzpkWIaNzc0rs1mbc8y1vZr1Up4OPzpA"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-screen bg-neutral-50">
+<div class="max-w-5xl mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-center mb-10">
+<div>
+<h2 class="text-2xl font-bold tracking-tight text-neutral-900">Inboxes</h2>
+<p class="text-neutral-500 mt-1">Manage and monitor your virtual SMTP endpoints.</p>
+</div>
+<button class="bg-neutral-900 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-neutral-800 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">add</span>
+                    New Inbox
+                </button>
+</div>
+<!-- Inbox Cards List -->
+<div class="space-y-6">
+<!-- Card 1 -->
+<div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm hover:border-neutral-300 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-neutral-400">mark_email_unread</span>
+</div>
+<h3 class="font-bold text-lg text-neutral-900">Wannwetsch Staging</h3>
+</div>
+<button class="text-neutral-400 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<!-- SMTP Credentials Block -->
+<div class="bg-neutral-50 border border-neutral-200 rounded-md p-5 mb-5 font-label text-sm text-neutral-700 space-y-3">
+<div class="flex items-center justify-between group/row">
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Host:</span>
+<span class="text-neutral-900 font-medium">sandbox.smtp.mailfail.com</span>
+</div>
+<button class="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all">
+<span class="material-symbols-outlined text-lg">content_copy</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Port:</span>
+<span class="text-neutral-900 font-medium">2525</span>
+</div>
+<div class="flex items-center justify-between group/row">
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Username:</span>
+<span class="text-neutral-900 font-medium">a1b2c3d4e5f6a1b2c3d4</span>
+</div>
+<button class="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all">
+<span class="material-symbols-outlined text-lg">content_copy</span>
+</button>
+</div>
+<div class="flex items-center justify-between group/row">
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Password:</span>
+<span class="text-neutral-900 font-medium tracking-widest">•••••••••••••••••••••••</span>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover/row:opacity-100 transition-all">
+<button class="text-neutral-400 hover:text-neutral-900"><span class="material-symbols-outlined text-lg">visibility</span></button>
+<button class="text-neutral-400 hover:text-neutral-900"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+</div>
+</div>
+</div>
+<!-- Footer Meta -->
+<div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+<div class="text-sm text-neutral-500">
+                            47 emails · <span class="text-neutral-900 font-medium">3 unread</span> · Created 2 weeks ago
+                        </div>
+<div class="flex items-center gap-2 text-xs font-medium bg-green-50 text-green-700 px-2 py-1 rounded-full border border-green-100">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            Last email: Passed
+                        </div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm hover:border-neutral-300 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-neutral-400">developer_board</span>
+</div>
+<h3 class="font-bold text-lg text-neutral-900">Neuhaus Dev</h3>
+</div>
+<button class="text-neutral-400 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<div class="bg-neutral-50 border border-neutral-200 rounded-md p-5 mb-5 font-label text-sm text-neutral-700 space-y-3">
+<div class="flex items-center justify-between group/row">
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Host:</span>
+<span class="text-neutral-900 font-medium">sandbox.smtp.mailfail.com</span>
+</div>
+<button class="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+</div>
+<div class="flex items-center justify-between group/row">
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Username:</span>
+<span class="text-neutral-900 font-medium">x9y8z7w6v5u4t3s2r1q0</span>
+</div>
+<button class="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+<div class="text-sm text-neutral-500">
+                            12 emails · <span class="text-neutral-900 font-medium">0 unread</span> · Created 5 days ago
+                        </div>
+<div class="flex items-center gap-2 text-xs font-medium bg-green-50 text-green-700 px-2 py-1 rounded-full border border-green-100">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            Last email: Passed
+                        </div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm hover:border-neutral-300 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-neutral-400">test_clone</span>
+</div>
+<h3 class="font-bold text-lg text-neutral-900">KS Verbund Test</h3>
+</div>
+<button class="text-neutral-400 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<div class="bg-neutral-50 border border-neutral-200 rounded-md p-5 mb-5 font-label text-sm text-neutral-700 space-y-3">
+<div class="flex items-center justify-between group/row">
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Host:</span>
+<span class="text-neutral-900 font-medium">sandbox.smtp.mailfail.com</span>
+</div>
+<button class="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+</div>
+<div class="flex items-center justify-between group/row">
+<div class="flex items-center gap-4">
+<span class="text-neutral-400 w-20">Username:</span>
+<span class="text-neutral-900 font-medium">m1n2b3v4c5x6z7l8k9j0</span>
+</div>
+<button class="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+<div class="text-sm text-neutral-500">
+                            89 emails · <span class="text-neutral-400 font-medium">12 unread</span> · Created 1 month ago
+                        </div>
+<div class="flex items-center gap-2 text-xs font-medium bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full border border-yellow-100">
+<span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                            Last email: Warning
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

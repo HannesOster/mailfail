@@ -43,6 +43,7 @@ function InboxCard({
   onDelete: (id: string) => void;
 }) {
   const [showPass, setShowPass] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   async function handleDelete() {
@@ -79,63 +80,42 @@ function InboxCard({
         </button>
       </div>
 
-      {/* SMTP Credentials */}
-      <div className="bg-neutral-50 border border-neutral-200 rounded-md p-5 mb-5 font-mono text-sm text-neutral-700 space-y-3">
-        {/* Host */}
-        <div className="flex items-center justify-between group/row">
-          <div className="flex items-center gap-4">
-            <span className="text-neutral-400 w-24">Host:</span>
-            <span className="text-neutral-900 font-medium">{smtpHost}</span>
+      {/* SMTP Credentials as ENV block */}
+      {(() => {
+        const envBlock = showPass
+          ? `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${inbox.smtpPass}`
+          : `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${"•".repeat(24)}`;
+        const copyEnv = `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${inbox.smtpPass}`;
+        return (
+          <div className="relative bg-neutral-900 rounded-lg p-5 mb-5 font-mono text-sm text-neutral-300">
+            <div className="absolute top-3 right-3 flex items-center gap-2">
+              <button
+                onClick={() => setShowPass((v) => !v)}
+                className="text-neutral-500 hover:text-white transition-colors p-1"
+                title={showPass ? "Hide password" : "Show password"}
+              >
+                {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+              <button
+                onClick={() => {
+                  copyToClipboard(copyEnv);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                className="text-neutral-500 hover:text-white transition-colors p-1"
+                title="Copy all as .env"
+              >
+                {copied ? (
+                  <span className="text-green-400 text-xs font-sans">Copied!</span>
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+              </button>
+            </div>
+            <pre className="whitespace-pre leading-relaxed">{envBlock}</pre>
           </div>
-          <button
-            onClick={() => copyToClipboard(smtpHost)}
-            className="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all"
-          >
-            <Copy className="w-4 h-4" />
-          </button>
-        </div>
-        {/* Port */}
-        <div className="flex items-center gap-4">
-          <span className="text-neutral-400 w-24">Port:</span>
-          <span className="text-neutral-900 font-medium">2525</span>
-        </div>
-        {/* Username */}
-        <div className="flex items-center justify-between group/row">
-          <div className="flex items-center gap-4">
-            <span className="text-neutral-400 w-24">Username:</span>
-            <span className="text-neutral-900 font-medium truncate max-w-[220px]">{inbox.smtpUser}</span>
-          </div>
-          <button
-            onClick={() => copyToClipboard(inbox.smtpUser)}
-            className="opacity-0 group-hover/row:opacity-100 text-neutral-400 hover:text-neutral-900 transition-all"
-          >
-            <Copy className="w-4 h-4" />
-          </button>
-        </div>
-        {/* Password */}
-        <div className="flex items-center justify-between group/row">
-          <div className="flex items-center gap-4">
-            <span className="text-neutral-400 w-24">Password:</span>
-            <span className="text-neutral-900 font-medium tracking-widest">
-              {showPass ? inbox.smtpPass : "•".repeat(Math.min(24, inbox.smtpPass.length))}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 opacity-0 group-hover/row:opacity-100 transition-all">
-            <button
-              onClick={() => setShowPass((v) => !v)}
-              className="text-neutral-400 hover:text-neutral-900"
-            >
-              {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={() => copyToClipboard(inbox.smtpPass)}
-              className="text-neutral-400 hover:text-neutral-900"
-            >
-              <Copy className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
+        );
+      })()}
 
       {/* Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-neutral-100">

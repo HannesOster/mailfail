@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wannwetsch Staging - MailFail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.cdnfonts.com/css/geist" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {},
+            borderRadius: {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            fontFamily: {
+                    "headline": ["Geist", "sans-serif"],
+                    "body": ["Geist", "sans-serif"],
+                    "label": ["Space Grotesk", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            width: 1em;
+            height: 1em;
+        }
+    </style>
+</head>
+<body class="bg-white text-zinc-900 flex min-h-screen">
+<!-- SideNavBar Component (Shared) -->
+<aside class="h-screen w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col p-4 shrink-0 overflow-y-auto">
+<div class="flex items-center gap-2 mb-8 px-2">
+<div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-zinc-950 text-xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">mail</span>
+</div>
+<div>
+<div class="text-lg font-bold tracking-tighter text-white">MailFail</div>
+<div class="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Dev Sandbox</div>
+</div>
+</div>
+<button class="w-full bg-white text-zinc-950 font-medium py-2 px-4 rounded-md mb-6 active:scale-95 transition-transform flex items-center justify-center gap-2 text-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+            New Inbox
+        </button>
+<nav class="space-y-1 flex-grow">
+<!-- Active State: Inboxes -->
+<a class="flex items-center gap-3 px-3 py-2 bg-zinc-900 text-white rounded-md font-sans text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+                Inboxes
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-zinc-100 transition-colors font-sans text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+                Verification
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-zinc-100 transition-colors font-sans text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="key">key</span>
+                API Keys
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-zinc-100 transition-colors font-sans text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Team
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-zinc-100 transition-colors font-sans text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-zinc-800 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-zinc-100 transition-colors font-sans text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                Documentation
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-zinc-100 transition-colors font-sans text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col min-w-0">
+<!-- TopNavBar Component (Shared) -->
+<header class="flex justify-between items-center h-14 px-6 w-full border-b border-zinc-200 bg-white sticky top-0 z-10">
+<div class="flex items-center gap-4 text-sm">
+<span class="text-zinc-500">Inboxes</span>
+<span class="text-zinc-300">/</span>
+<span class="text-zinc-900 font-semibold">Wannwetsch Staging</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-6 mr-6">
+<span class="text-zinc-500 font-sans text-sm cursor-pointer hover:text-zinc-900 transition-colors">Inboxes</span>
+<span class="text-zinc-500 font-sans text-sm cursor-pointer hover:text-zinc-900 transition-colors">Project Alpha</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1.5 hover:bg-zinc-100 rounded transition-colors text-zinc-500">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+</button>
+<button class="p-1.5 hover:bg-zinc-100 rounded transition-colors text-zinc-500">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-zinc-100 border border-zinc-200 overflow-hidden ml-2">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="minimalist professional male user avatar tech company profile picture clean studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdUMwk4_3RqPpmQTIePnsVj8p0O_aS4mkssMUOpk5ez6DsveGmV4aTdp9Pok47_gQ0P83h5TnXKmmWR5CztAANT5-IXzHBjibqJSO76JJJmIVqjj6jYkeTjcBV7_PBglrXQk_bRE4y8ka41d7k3s-fmccqKSe1iQCTGw_tQ5bwhtO186SCA0OlzuopZH4Q78R_Gnc5U4NlIw3V7RFjt_GHT7hMJH6z6se7lphWMXPb7sSfZTZLpZVQyk8_V40egf51kfRXrAZN8Zo"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-8 max-w-6xl w-full mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-8">
+<div class="flex items-center gap-3">
+<h1 class="text-2xl font-bold tracking-tight text-zinc-900">Wannwetsch Staging</h1>
+<div class="flex items-center gap-1.5 bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-[11px] font-bold border border-green-200/50">
+<span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        LIVE
+                    </div>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-sm border border-zinc-200 text-zinc-700 font-medium rounded hover:bg-zinc-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+                        Copy SMTP
+                    </button>
+<button class="px-3 py-1.5 text-sm border border-red-100 text-red-600 font-medium rounded hover:bg-red-50 transition-colors">
+                        Delete All
+                    </button>
+</div>
+</div>
+<!-- Email List Table (Bento/Linear style) -->
+<div class="bg-white border border-zinc-200 rounded-lg overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm border-collapse">
+<thead>
+<tr class="bg-zinc-50/50 border-b border-zinc-200 text-zinc-500 font-medium">
+<th class="py-3 px-4 w-12 text-center"></th>
+<th class="py-3 px-4">From</th>
+<th class="py-3 px-4">Subject</th>
+<th class="py-3 px-4 w-24">Score</th>
+<th class="py-3 px-4 w-32 text-right">Received</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-zinc-100">
+<!-- Row 1: Unread -->
+<tr class="bg-blue-50/30 hover:bg-blue-50/50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<span class="w-2 h-2 bg-blue-500 rounded-full inline-block"></span>
+</td>
+<td class="py-3 px-4 font-semibold text-zinc-900">noreply@wannwetsch.de</td>
+<td class="py-3 px-4 font-semibold text-zinc-900">Buchungsbestätigung #4521</td>
+<td class="py-3 px-4">
+<div class="w-2 h-2 bg-green-500 rounded-full" title="Excellent Score"></div>
+</td>
+<td class="py-3 px-4 text-right text-zinc-500 font-medium">2 min ago</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-zinc-50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<span class="w-2 h-2 border border-zinc-300 rounded-full inline-block"></span>
+</td>
+<td class="py-3 px-4 text-zinc-600">noreply@wannwetsch.de</td>
+<td class="py-3 px-4 text-zinc-900">Passwort zurücksetzen</td>
+<td class="py-3 px-4">
+<div class="w-2 h-2 bg-yellow-500 rounded-full" title="Warning Score"></div>
+</td>
+<td class="py-3 px-4 text-right text-zinc-400">1 hour ago</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-zinc-50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<span class="w-2 h-2 border border-zinc-300 rounded-full inline-block"></span>
+</td>
+<td class="py-3 px-4 text-zinc-600">noreply@wannwetsch.de</td>
+<td class="py-3 px-4 text-zinc-900">Newsletter März 2026</td>
+<td class="py-3 px-4">
+<div class="w-2 h-2 bg-red-500 rounded-full" title="Critical Score"></div>
+</td>
+<td class="py-3 px-4 text-right text-zinc-400">3 hours ago</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-zinc-50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<span class="w-2 h-2 border border-zinc-300 rounded-full inline-block"></span>
+</td>
+<td class="py-3 px-4 text-zinc-600">info@neuhaus-shop.de</td>
+<td class="py-3 px-4 text-zinc-900">Bestellbestätigung</td>
+<td class="py-3 px-4">
+<div class="w-2 h-2 bg-green-500 rounded-full" title="Excellent Score"></div>
+</td>
+<td class="py-3 px-4 text-right text-zinc-400">5 hours ago</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-zinc-50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<span class="w-2 h-2 border border-zinc-300 rounded-full inline-block"></span>
+</td>
+<td class="py-3 px-4 text-zinc-600">support@travel-buddy.com</td>
+<td class="py-3 px-4 text-zinc-900">Password Reset</td>
+<td class="py-3 px-4">
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+</td>
+<td class="py-3 px-4 text-right text-zinc-400">1 day ago</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-zinc-50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<span class="w-2 h-2 border border-zinc-300 rounded-full inline-block"></span>
+</td>
+<td class="py-3 px-4 text-zinc-600">newsletter@tech-pulse.io</td>
+<td class="py-3 px-4 text-zinc-900">Weekly Update</td>
+<td class="py-3 px-4">
+<div class="w-2 h-2 bg-red-500 rounded-full"></div>
+</td>
+<td class="py-3 px-4 text-right text-zinc-400">2 days ago</td>
+</tr>
+<!-- Additional filler rows for height -->
+<tr class="hover:bg-zinc-50 transition-colors group">
+<td class="py-3 px-4 text-center"><span class="w-2 h-2 border border-zinc-300 rounded-full inline-block"></span></td>
+<td class="py-3 px-4 text-zinc-600">noreply@dev.io</td>
+<td class="py-3 px-4 text-zinc-900">New Login detected</td>
+<td class="py-3 px-4"><div class="w-2 h-2 bg-green-500 rounded-full"></div></td>
+<td class="py-3 px-4 text-right text-zinc-400">2 days ago</td>
+</tr>
+<tr class="hover:bg-zinc-50 transition-colors group">
+<td class="py-3 px-4 text-center"><span class="w-2 h-2 border border-zinc-300 rounded-full inline-block"></span></td>
+<td class="py-3 px-4 text-zinc-600">hello@v-base.com</td>
+<td class="py-3 px-4 text-zinc-900">Welcome to the platform</td>
+<td class="py-3 px-4"><div class="w-2 h-2 bg-yellow-500 rounded-full"></div></td>
+<td class="py-3 px-4 text-right text-zinc-400">3 days ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination footer -->
+<div class="py-3 px-4 bg-zinc-50/50 border-t border-zinc-200 flex justify-between items-center text-xs text-zinc-500">
+<div>Showing <span class="font-medium text-zinc-700">1-10</span> of <span class="font-medium text-zinc-700">47</span></div>
+<div class="flex gap-1">
+<button class="px-2 py-1 rounded border border-zinc-200 bg-white hover:bg-zinc-50 disabled:opacity-50" disabled="">Previous</button>
+<button class="px-2 py-1 rounded border border-zinc-200 bg-white hover:bg-zinc-50">Next</button>
+</div>
+</div>
+</div>
+<!-- Stats/Contextual Bento Row (Optional UX enhancement) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+<div class="p-5 border border-zinc-200 rounded-lg bg-zinc-50/30">
+<div class="text-[10px] uppercase tracking-wider font-bold text-zinc-500 mb-2">Health Score</div>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold text-zinc-900">92%</span>
+<span class="text-green-600 text-xs font-medium mb-1">↑ 2.4%</span>
+</div>
+</div>
+<div class="p-5 border border-zinc-200 rounded-lg bg-zinc-50/30">
+<div class="text-[10px] uppercase tracking-wider font-bold text-zinc-500 mb-2">Total Emails</div>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold text-zinc-900">1,204</span>
+<span class="text-zinc-400 text-xs font-medium mb-1">Lifetime</span>
+</div>
+</div>
+<div class="p-5 border border-zinc-200 rounded-lg bg-zinc-50/30">
+<div class="text-[10px] uppercase tracking-wider font-bold text-zinc-500 mb-2">Retention</div>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold text-zinc-900">30d</span>
+<span class="text-zinc-400 text-xs font-medium mb-1">Auto-purge</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

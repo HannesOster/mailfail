@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MailFail - Developer Email Testing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+                border: "#E5E5E5",
+                background: "#FFFFFF",
+                foreground: "#0A0A0A",
+                muted: "#525252",
+                accent: "#22C55E"
+            },
+            borderRadius: {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            fontFamily: {
+                    "headline": ["Geist", "sans-serif"],
+                    "body": ["Geist", "sans-serif"],
+                    "label": ["Space Grotesk", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+            font-weight: 700;
+        }
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] text-foreground antialiased">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-6 px-4 bg-gray-950 dark:bg-black h-screen w-60 border-r border-gray-800 z-50">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-950 text-xl" style="font-variation-settings: 'FILL' 1;">mail</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-white">MailFail</h1>
+<p class="text-[10px] text-gray-500 uppercase tracking-widest font-medium">Developer Email Testing</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg font-sans text-sm font-semibold bg-gray-900 text-white transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg font-sans text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-gray-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="inbox">inbox</span>
+<span>Inboxes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg font-sans text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-gray-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="html">html</span>
+<span>HTML Check</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg font-sans text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-gray-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-gray-800">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg font-sans text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-gray-900 transition-colors duration-200" href="#">
+<img alt="Profile Avatar" class="w-6 h-6 rounded-full" data-alt="close-up portrait of a professional male developer with short hair and friendly expression against a neutral studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0T6gu3MiaVNySKQtglPU1vVwD1A3kAnZSnB0NPZFDGqzOyCI-kFM2LQvC0mHHWOUfTsyJMcOxdXt2mPqrAPbP6p40xEN8KD10TVn0V8Ob-ufiNPnc9QyrQVsq9gCW3PVN052pHLxaloty22boT6F8C7f-LxJuNn6XuG-3qDoKv4T5xkDj2LGILs87k96xYytRV3_Yeaoiwfp4Un7BnM8KpWzPm4ptqLOKyekj_svf3d_U-kxoE7LZHjHJFQDy3xvl_EUG6nagoqA"/>
+<span>Profile</span>
+<span class="material-symbols-outlined text-lg ml-auto" data-icon="account_circle">account_circle</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-60 min-h-screen">
+<!-- TopAppBar Component -->
+<header class="flex justify-between items-center h-16 px-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">Dashboard</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-gray-900 focus:border-gray-900 w-64 outline-none transition-all" placeholder="Search emails..." type="text"/>
+</div>
+<div class="flex items-center gap-3 text-gray-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-gray-900" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-gray-900" data-icon="help_outline">help_outline</span>
+<button class="ml-2 bg-gray-900 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-black transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                        New Inbox
+                    </button>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Inboxes Card -->
+<div class="bg-white border border-gray-200 p-6 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-gray-50 rounded-lg">
+<span class="material-symbols-outlined text-gray-900" style="font-variation-settings: 'FILL' 0;">inbox</span>
+</div>
+<span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Active</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold">3</h3>
+<p class="text-gray-500 text-sm">Inboxes</p>
+</div>
+<p class="mt-4 text-xs text-gray-400">Total capacity used: 30%</p>
+</div>
+<!-- Emails Progress -->
+<div class="bg-white border border-gray-200 p-6 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-gray-50 rounded-lg">
+<span class="material-symbols-outlined text-gray-900">mail</span>
+</div>
+<span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Usage</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold">47</h3>
+<p class="text-gray-500 text-sm">/ 100 Emails</p>
+</div>
+<div class="mt-4 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-gray-900 rounded-full" style="width: 47%"></div>
+</div>
+<p class="mt-2 text-xs text-gray-400 text-right">Reset in 12 days</p>
+</div>
+<!-- HTML Checks Progress -->
+<div class="bg-white border border-gray-200 p-6 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-gray-50 rounded-lg">
+<span class="material-symbols-outlined text-gray-900">html</span>
+</div>
+<span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Limits</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold">8</h3>
+<p class="text-gray-500 text-sm">/ 20 Checks</p>
+</div>
+<div class="mt-4 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-yellow-500 rounded-full" style="width: 40%"></div>
+</div>
+<p class="mt-2 text-xs text-gray-400 text-right">Running low on credits</p>
+</div>
+</section>
+<!-- Table Section -->
+<section class="bg-white border border-gray-200 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+<h3 class="font-bold text-gray-900">Recent Emails</h3>
+<button class="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-1 transition-colors">
+                        View all <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="bg-gray-50/50 text-gray-500 font-medium">
+<th class="px-6 py-3 font-semibold">From</th>
+<th class="px-6 py-3 font-semibold">Subject</th>
+<th class="px-6 py-3 font-semibold">Inbox</th>
+<th class="px-6 py-3 font-semibold text-center">Score</th>
+<th class="px-6 py-3 font-semibold text-right">Received</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<!-- Row 1 -->
+<tr class="hover:bg-gray-50/80 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-gray-900 font-medium">noreply@wannwetsch.de</span>
+<span class="text-[11px] text-gray-400 font-mono uppercase">Internal</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-600">Buchungsbestätigung #4521</td>
+<td class="px-6 py-4">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-[11px] font-medium">Wannwetsch Staging</span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right text-gray-400">2 min ago</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-gray-50/80 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-gray-900 font-medium">info@neuhaus-shop.de</span>
+<span class="text-[11px] text-gray-400 font-mono uppercase">Customer</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-600">Bestellbestätigung</td>
+<td class="px-6 py-4">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-[11px] font-medium">Neuhaus Dev</span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.4)]"></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right text-gray-400">15 min ago</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-gray-50/80 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-gray-900 font-medium">support@travel-buddy.com</span>
+<span class="text-[11px] text-gray-400 font-mono uppercase">System</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-600">Password Reset</td>
+<td class="px-6 py-4">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-[11px] font-medium">Travel Buddy Staging</span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right text-gray-400">1 hour ago</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-gray-50/80 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-gray-900 font-medium">newsletter@tech-pulse.io</span>
+<span class="text-[11px] text-gray-400 font-mono uppercase">Marketing</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-600">Weekly Update</td>
+<td class="px-6 py-4">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-[11px] font-medium">Tech Pulse Dev</span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]"></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right text-gray-400">3 hours ago</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-gray-50/80 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-gray-900 font-medium">accounts@fin-flow.net</span>
+<span class="text-[11px] text-gray-400 font-mono uppercase">Finance</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-600">Statement Ready</td>
+<td class="px-6 py-4">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-[11px] font-medium">Fin Flow Staging</span>
+</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right text-gray-400">5 hours ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- SMTP Credentials Bento Block -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white border border-gray-200 p-6 rounded-xl">
+<h4 class="text-sm font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-base">code</span>
+                        Quick Connect SMTP
+                    </h4>
+<div class="space-y-3 font-mono text-xs">
+<div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg group">
+<span class="text-gray-400">Host</span>
+<span class="text-gray-900 font-medium">sandbox.smtp.mailfail.com</span>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-gray-900 cursor-pointer text-sm">content_copy</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg group">
+<span class="text-gray-400">Port</span>
+<span class="text-gray-900 font-medium">2525</span>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-gray-900 cursor-pointer text-sm">content_copy</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg group">
+<span class="text-gray-400">User</span>
+<span class="text-gray-900 font-medium">7a8b9c2d1e0f</span>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-gray-900 cursor-pointer text-sm">content_copy</span>
+</div>
+</div>
+</div>
+<div class="bg-gray-900 text-white p-6 rounded-xl flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<h4 class="text-sm font-bold mb-2">Upgrade to Pro</h4>
+<p class="text-gray-400 text-xs leading-relaxed max-w-[200px]">Get dedicated IP addresses and unlimited email history for your entire team.</p>
+</div>
+<button class="relative z-10 mt-6 bg-white text-gray-950 text-xs font-bold px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors w-fit">
+                        Explore Plans
+                    </button>
+<!-- Abstract Background Pattern -->
+<div class="absolute -right-10 -bottom-10 w-48 h-48 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[180px]" style="font-variation-settings: 'FILL' 1;">mail</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
