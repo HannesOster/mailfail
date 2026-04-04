@@ -1,3 +1,9 @@
+/**
+ * When true, pricing UI is hidden and all limits are bypassed.
+ * Set to false when ready to launch with paid plans.
+ */
+export const BILLING_ENABLED = false;
+
 export const PLAN_LIMITS = {
   free: {
     maxInboxes: 1,

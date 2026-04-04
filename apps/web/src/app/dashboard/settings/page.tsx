@@ -7,6 +7,7 @@ import { getInboxCount } from "@mailfail/db/src/queries/inboxes";
 import { getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { listInboxes } from "@mailfail/db/src/queries/inboxes";
 import { Building2 } from "lucide-react";
+import { BILLING_ENABLED } from "@mailfail/shared";
 
 export default async function SettingsPage() {
   const { org } = await requireOrg();
@@ -50,9 +51,11 @@ export default async function SettingsPage() {
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-black text-white">
                     Admin
                   </span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-zinc-100 text-zinc-500 border border-zinc-200">
-                    Free
-                  </span>
+                  {BILLING_ENABLED && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-zinc-100 text-zinc-500 border border-zinc-200">
+                      Free
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -63,7 +66,7 @@ export default async function SettingsPage() {
               <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1">Inboxes</p>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-mono font-semibold">{inboxCount}</span>
-                <span className="text-xs text-zinc-400">/ 1 on Free</span>
+                {BILLING_ENABLED && <span className="text-xs text-zinc-400">/ 1 on Free</span>}
               </div>
             </div>
             <div>
@@ -72,7 +75,7 @@ export default async function SettingsPage() {
               </p>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-mono font-semibold">{emailCount}</span>
-                <span className="text-xs text-zinc-400">/ 100</span>
+                {BILLING_ENABLED && <span className="text-xs text-zinc-400">/ 100</span>}
               </div>
             </div>
             <div>
@@ -81,7 +84,7 @@ export default async function SettingsPage() {
               </p>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-mono font-semibold">{htmlCheckCount}</span>
-                <span className="text-xs text-zinc-400">/ 20</span>
+                {BILLING_ENABLED && <span className="text-xs text-zinc-400">/ 20</span>}
               </div>
             </div>
           </div>

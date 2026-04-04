@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Mail, CheckCircle, Zap, Check } from "lucide-react";
+import { BILLING_ENABLED } from "@mailfail/shared";
 
 export default function LandingPage() {
   return (
@@ -10,7 +11,7 @@ export default function LandingPage() {
           <div className="text-lg font-bold tracking-tighter text-neutral-900">MailFail</div>
           <div className="hidden md:flex items-center gap-8">
             <a className="text-neutral-900 font-semibold text-sm hover:text-neutral-900 transition-colors" href="#features">Features</a>
-            <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#pricing">Pricing</a>
+            {BILLING_ENABLED && <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#pricing">Pricing</a>}
             <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#">Docs</a>
             <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#">Changelog</a>
           </div>
@@ -164,65 +165,67 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 bg-neutral-50/50">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold tracking-tight mb-4">Simple Pricing</h2>
-            <p className="text-neutral-500">Scale your testing as you grow.</p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Free */}
-            <div className="bg-white border border-neutral-200 rounded-2xl p-8 flex flex-col hover:shadow-lg transition-shadow">
-              <div className="mb-8">
-                <h3 className="font-bold text-xl mb-1">FREE</h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold tracking-tighter">$0</span>
-                  <span className="text-neutral-400 text-sm">/month</span>
-                </div>
-              </div>
-              <ul className="space-y-4 mb-8 flex-grow">
-                {["1 Inbox", "100 emails / month", "20 HTML checks / month", "7-day retention"].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm text-neutral-600">
-                    <Check className="w-4 h-4 text-neutral-400" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/sign-up"
-                className="w-full border border-neutral-900 py-3 rounded-lg font-bold text-sm hover:bg-neutral-900 hover:text-white transition-all text-center block"
-              >
-                Get Started
-              </Link>
+      {BILLING_ENABLED && (
+        <section id="pricing" className="py-24 bg-neutral-50/50">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold tracking-tight mb-4">Simple Pricing</h2>
+              <p className="text-neutral-500">Scale your testing as you grow.</p>
             </div>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Free */}
+              <div className="bg-white border border-neutral-200 rounded-2xl p-8 flex flex-col hover:shadow-lg transition-shadow">
+                <div className="mb-8">
+                  <h3 className="font-bold text-xl mb-1">FREE</h3>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-extrabold tracking-tighter">$0</span>
+                    <span className="text-neutral-400 text-sm">/month</span>
+                  </div>
+                </div>
+                <ul className="space-y-4 mb-8 flex-grow">
+                  {["1 Inbox", "100 emails / month", "20 HTML checks / month", "7-day retention"].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm text-neutral-600">
+                      <Check className="w-4 h-4 text-neutral-400" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/sign-up"
+                  className="w-full border border-neutral-900 py-3 rounded-lg font-bold text-sm hover:bg-neutral-900 hover:text-white transition-all text-center block"
+                >
+                  Get Started
+                </Link>
+              </div>
 
-            {/* Pro */}
-            <div className="bg-neutral-900 text-white border border-neutral-800 rounded-2xl p-8 flex flex-col relative overflow-hidden">
-              <div className="absolute top-4 right-4 bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
-                Coming Soon
-              </div>
-              <div className="mb-8">
-                <h3 className="font-bold text-xl mb-1">PRO</h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold tracking-tighter">$19</span>
-                  <span className="text-neutral-400 text-sm">/month</span>
+              {/* Pro */}
+              <div className="bg-neutral-900 text-white border border-neutral-800 rounded-2xl p-8 flex flex-col relative overflow-hidden">
+                <div className="absolute top-4 right-4 bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                  Coming Soon
                 </div>
+                <div className="mb-8">
+                  <h3 className="font-bold text-xl mb-1">PRO</h3>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-extrabold tracking-tighter">$19</span>
+                    <span className="text-neutral-400 text-sm">/month</span>
+                  </div>
+                </div>
+                <ul className="space-y-4 mb-8 flex-grow">
+                  {["Unlimited inboxes", "Unlimited emails", "Unlimited HTML checks", "30-day retention"].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm text-neutral-300">
+                      <Check className="w-4 h-4 text-neutral-500" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <button className="w-full bg-white text-neutral-900 py-3 rounded-lg font-bold text-sm hover:bg-neutral-100 transition-all">
+                  Join Waitlist
+                </button>
               </div>
-              <ul className="space-y-4 mb-8 flex-grow">
-                {["Unlimited inboxes", "Unlimited emails", "Unlimited HTML checks", "30-day retention"].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm text-neutral-300">
-                    <Check className="w-4 h-4 text-neutral-500" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <button className="w-full bg-white text-neutral-900 py-3 rounded-lg font-bold text-sm hover:bg-neutral-100 transition-all">
-                Join Waitlist
-              </button>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="w-full border-t border-neutral-200 bg-white">

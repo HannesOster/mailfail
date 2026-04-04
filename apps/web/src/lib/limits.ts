@@ -1,9 +1,10 @@
-import { PLAN_LIMITS } from "@mailfail/shared";
+import { PLAN_LIMITS, BILLING_ENABLED } from "@mailfail/shared";
 import { db } from "./db";
 import { isOwnerOrg } from "@mailfail/db/src/queries/organizations";
 import { getInboxCount } from "@mailfail/db/src/queries/inboxes";
 
 export async function checkInboxLimit(clerkOrgId: string, organizationId: string) {
+  if (!BILLING_ENABLED) return { allowed: true } as const;
   if (await isOwnerOrg(db, clerkOrgId)) return { allowed: true } as const;
 
   const count = await getInboxCount(db, organizationId);
@@ -17,6 +18,7 @@ export async function checkMailLimit(
   clerkOrgId: string,
   monthlyMailCount: number,
 ) {
+  if (!BILLING_ENABLED) return { allowed: true } as const;
   if (await isOwnerOrg(db, clerkOrgId)) return { allowed: true } as const;
 
   if (monthlyMailCount >= PLAN_LIMITS.free.maxMailsPerMonth) {
@@ -32,6 +34,7 @@ export async function checkHtmlCheckLimit(
   clerkOrgId: string,
   currentMonthCount: number,
 ) {
+  if (!BILLING_ENABLED) return { allowed: true } as const;
   if (await isOwnerOrg(db, clerkOrgId)) return { allowed: true } as const;
 
   if (currentMonthCount >= PLAN_LIMITS.free.maxHtmlChecksPerMonth) {

@@ -7,6 +7,7 @@ import { requireOrg } from "@/lib/auth";
 import { listInboxes, getInboxCount } from "@mailfail/db/src/queries/inboxes";
 import { getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { listEmails } from "@mailfail/db/src/queries/emails";
+import { BILLING_ENABLED } from "@mailfail/shared";
 
 function timeAgo(date: Date): string {
   const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
@@ -71,7 +72,7 @@ export default async function DashboardPage() {
             <h3 className="text-3xl font-bold">{inboxCount}</h3>
             <p className="text-zinc-500 text-sm">Inboxes</p>
           </div>
-          <p className="mt-4 text-xs text-zinc-400">1 inbox on Free plan</p>
+          {BILLING_ENABLED && <p className="mt-4 text-xs text-zinc-400">1 inbox on Free plan</p>}
         </div>
 
         <div className="bg-white border border-zinc-200 p-6 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
@@ -83,14 +84,16 @@ export default async function DashboardPage() {
           </div>
           <div className="flex items-baseline gap-2">
             <h3 className="text-3xl font-bold">{emailCount}</h3>
-            <p className="text-zinc-500 text-sm">/ {emailLimit} Emails</p>
+            <p className="text-zinc-500 text-sm">{BILLING_ENABLED ? `/ ${emailLimit} Emails` : "Emails"}</p>
           </div>
-          <div className="mt-4 h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-zinc-900 rounded-full"
-              style={{ width: `${Math.min(100, (emailCount / emailLimit) * 100)}%` }}
-            />
-          </div>
+          {BILLING_ENABLED && (
+            <div className="mt-4 h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-zinc-900 rounded-full"
+                style={{ width: `${Math.min(100, (emailCount / emailLimit) * 100)}%` }}
+              />
+            </div>
+          )}
           <p className="mt-2 text-xs text-zinc-400 text-right">This month</p>
         </div>
 
@@ -103,16 +106,18 @@ export default async function DashboardPage() {
           </div>
           <div className="flex items-baseline gap-2">
             <h3 className="text-3xl font-bold">{htmlCheckCount}</h3>
-            <p className="text-zinc-500 text-sm">/ {htmlCheckLimit} Checks</p>
+            <p className="text-zinc-500 text-sm">{BILLING_ENABLED ? `/ ${htmlCheckLimit} Checks` : "Checks"}</p>
           </div>
-          <div className="mt-4 h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-yellow-500 rounded-full"
-              style={{ width: `${Math.min(100, (htmlCheckCount / htmlCheckLimit) * 100)}%` }}
-            />
-          </div>
+          {BILLING_ENABLED && (
+            <div className="mt-4 h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-yellow-500 rounded-full"
+                style={{ width: `${Math.min(100, (htmlCheckCount / htmlCheckLimit) * 100)}%` }}
+              />
+            </div>
+          )}
           <p className="mt-2 text-xs text-zinc-400 text-right">
-            {htmlCheckCount >= htmlCheckLimit ? "Limit reached" : "This month"}
+            {BILLING_ENABLED && htmlCheckCount >= htmlCheckLimit ? "Limit reached" : "This month"}
           </p>
         </div>
       </section>
@@ -187,20 +192,22 @@ export default async function DashboardPage() {
               ))}
             </div>
           </div>
-          <div className="bg-zinc-900 text-white p-6 rounded-xl flex flex-col justify-between overflow-hidden relative">
-            <div className="relative z-10">
-              <h4 className="text-sm font-bold mb-2">Upgrade to Pro</h4>
-              <p className="text-zinc-400 text-xs leading-relaxed max-w-[200px]">
-                Get dedicated IP addresses and unlimited email history for your entire team.
-              </p>
+          {BILLING_ENABLED && (
+            <div className="bg-zinc-900 text-white p-6 rounded-xl flex flex-col justify-between overflow-hidden relative">
+              <div className="relative z-10">
+                <h4 className="text-sm font-bold mb-2">Upgrade to Pro</h4>
+                <p className="text-zinc-400 text-xs leading-relaxed max-w-[200px]">
+                  Get dedicated IP addresses and unlimited email history for your entire team.
+                </p>
+              </div>
+              <button className="relative z-10 mt-6 bg-white text-zinc-950 text-xs font-bold px-4 py-2 rounded-lg hover:bg-zinc-100 transition-colors w-fit">
+                Explore Plans
+              </button>
+              <div className="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+                <Mail className="w-36 h-36" />
+              </div>
             </div>
-            <button className="relative z-10 mt-6 bg-white text-zinc-950 text-xs font-bold px-4 py-2 rounded-lg hover:bg-zinc-100 transition-colors w-fit">
-              Explore Plans
-            </button>
-            <div className="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
-              <Mail className="w-36 h-36" />
-            </div>
-          </div>
+          )}
         </section>
       )}
     </div>
