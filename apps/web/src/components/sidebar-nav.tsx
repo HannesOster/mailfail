@@ -14,7 +14,7 @@ export function SidebarNav() {
       .then((res) => res.json())
       .then((data) => setUnreadCount(data.count))
       .catch(() => {});
-  }, [pathname]);
+  }, []);
 
   const isInboxActive =
     pathname === "/dashboard" || pathname.startsWith("/dashboard/inboxes");

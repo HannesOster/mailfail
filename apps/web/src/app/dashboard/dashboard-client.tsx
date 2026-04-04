@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Copy, RefreshCw, Trash2, Check, Search, Mail } from "lucide-react";
 import { timeAgo } from "@/lib/utils";
+import { useInboxStream } from "@/lib/hooks";
 import type { SpamScoreResult, OverallScore } from "@mailfail/shared";
 
 type Email = {
@@ -64,16 +65,6 @@ function OverallBadge({ score }: { score: string }) {
   return <span className="w-3 h-3 bg-red-500 rounded-full inline-block" title="Issues" />;
 }
 
-function useInboxStream(inboxId: string) {
-  const [trigger, setTrigger] = useState(0);
-  useEffect(() => {
-    const es = new EventSource(`/api/inboxes/${inboxId}/stream`);
-    es.onmessage = () => setTrigger((p) => p + 1);
-    return () => es.close();
-  }, [inboxId]);
-  return trigger;
-}
-
 export function DashboardClient({
   inbox,
   initialEmails,
@@ -90,6 +81,11 @@ export function DashboardClient({
   const [refreshing, setRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [search, setSearch] = useState("");
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+  }, []);
   const newEmailTrigger = useInboxStream(inbox.id);
 
   useEffect(() => {
@@ -122,7 +118,8 @@ export function DashboardClient({
     const text = `SMTP_HOST=${smtpHost}\nSMTP_PORT=2525\nSMTP_USER=${inbox.smtpUser}\nSMTP_PASS=${inbox.smtpPass}`;
     navigator.clipboard.writeText(text).catch(() => {});
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
   }
 
   async function handleToggleRead(emailId: string, currentIsRead: boolean) {

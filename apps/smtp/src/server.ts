@@ -6,6 +6,14 @@ import { handleMessage } from "./handler";
 // Simple in-memory rate limiter
 const rateLimits = new Map<string, { count: number; resetAt: number }>();
 
+// Clean up expired entries periodically to prevent unbounded memory growth
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of rateLimits) {
+    if (now > value.resetAt) rateLimits.delete(key);
+  }
+}, 60_000);
+
 function checkRateLimit(inboxId: string): boolean {
   const now = Date.now();
   const limit = rateLimits.get(inboxId);

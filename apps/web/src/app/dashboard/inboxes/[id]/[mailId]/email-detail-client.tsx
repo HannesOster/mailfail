@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Trash2, RefreshCw, Forward, X, Send } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 import { ValidationResult } from "@/components/validation/validation-result";
 import type { LinkCheckEntry, ImageCheckEntry, SpamScoreResult, CheckEntry, OverallScore } from "@mailfail/shared";
 
@@ -31,15 +32,6 @@ type ValidationData = {
 
 type Tab = "html" | "text" | "raw" | "validation";
 
-function formatDate(date: Date): string {
-  return new Date(date).toLocaleString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 
 export function EmailDetailClient({
   inboxId,

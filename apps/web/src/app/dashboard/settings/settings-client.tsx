@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff, Copy, RefreshCw, Key } from "lucide-react";
 import { copyToClipboard } from "@/lib/utils";
 
@@ -9,6 +9,11 @@ export function ApiKeySection({ initialApiKey }: { initialApiKey: string | null 
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+  }, []);
 
   async function handleGenerate(confirmed: boolean) {
     if (confirmed && apiKey) {
@@ -31,7 +36,8 @@ export function ApiKeySection({ initialApiKey }: { initialApiKey: string | null 
     if (!apiKey) return;
     copyToClipboard(apiKey);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
   }
 
   const maskedKey = apiKey

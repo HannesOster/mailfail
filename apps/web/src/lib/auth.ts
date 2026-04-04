@@ -18,12 +18,9 @@ export async function requireAuth() {
     clerkUser?.fullName ?? clerkUser?.firstName ?? undefined,
   );
 
-  // Auto-create inbox if user doesn't have one
-  const inboxes = await listInboxes(db, user.id);
-  let inbox = inboxes[0];
-  if (!inbox) {
-    inbox = await createInbox(db, user.id, "My Inbox");
-  }
+  // Auto-create inbox if user doesn't have one (single query in common case)
+  const [existingInbox] = await listInboxes(db, user.id);
+  const inbox = existingInbox ?? (await createInbox(db, user.id, "My Inbox"));
 
   return { clerkUserId, user, inbox };
 }

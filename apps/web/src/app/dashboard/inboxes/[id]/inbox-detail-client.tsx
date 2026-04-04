@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Copy, Trash2, RefreshCw } from "lucide-react";
-import { timeAgo } from "@/lib/utils";
+import { timeAgo, copyToClipboard } from "@/lib/utils";
+import { useInboxStream } from "@/lib/hooks";
 
 type Email = {
   id: string;
@@ -22,16 +23,6 @@ type Inbox = {
   monthlyMailCount: number;
   createdAt: Date;
 };
-
-function useInboxStream(inboxId: string) {
-  const [newEmailTrigger, setNewEmailTrigger] = useState(0);
-  useEffect(() => {
-    const eventSource = new EventSource(`/api/inboxes/${inboxId}/stream`);
-    eventSource.onmessage = () => setNewEmailTrigger((prev) => prev + 1);
-    return () => eventSource.close();
-  }, [inboxId]);
-  return newEmailTrigger;
-}
 
 export function InboxDetailClient({
   inbox,
@@ -74,7 +65,7 @@ export function InboxDetailClient({
 
   function copySmtp() {
     const text = `Host: ${smtpHost}\nPort: 2525\nUsername: ${inbox.smtpUser}\nPassword: ${inbox.smtpPass}`;
-    navigator.clipboard.writeText(text).catch(() => {});
+    copyToClipboard(text);
   }
 
   return (
