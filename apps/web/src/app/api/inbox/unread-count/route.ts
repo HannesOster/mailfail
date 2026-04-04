@@ -3,14 +3,11 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
-import { emails } from "@mailfail/db";
-import { eq, and, sql } from "drizzle-orm";
+import { listEmails } from "@mailfail/db/src/queries/emails";
 
 export async function GET() {
   const { inbox } = await requireAuth();
-  const [result] = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(emails)
-    .where(and(eq(emails.inboxId, inbox.id), eq(emails.isRead, false)));
-  return NextResponse.json({ count: Number(result.count) });
+  const emails = await listEmails(db, inbox.id, { limit: 1000 });
+  const count = emails.filter((e) => !e.isRead).length;
+  return NextResponse.json({ count });
 }

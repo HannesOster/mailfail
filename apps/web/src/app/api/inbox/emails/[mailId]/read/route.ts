@@ -3,8 +3,7 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
-import { emails } from "@mailfail/db";
-import { eq, and } from "drizzle-orm";
+import { setReadStatus } from "@mailfail/db/src/queries/emails";
 
 export async function PATCH(
   request: Request,
@@ -14,10 +13,7 @@ export async function PATCH(
   const { mailId } = await params;
   const { isRead } = await request.json();
 
-  await db
-    .update(emails)
-    .set({ isRead })
-    .where(and(eq(emails.id, mailId), eq(emails.inboxId, inbox.id)));
+  await setReadStatus(db, mailId, inbox.id, isRead);
 
   return NextResponse.json({ ok: true });
 }

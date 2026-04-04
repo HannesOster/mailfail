@@ -61,6 +61,13 @@ export async function markAsRead(db: Database, id: string) {
   return db.update(emails).set({ isRead: true }).where(eq(emails.id, id));
 }
 
+export async function setReadStatus(db: Database, id: string, inboxId: string, isRead: boolean) {
+  return db
+    .update(emails)
+    .set({ isRead })
+    .where(and(eq(emails.id, id), eq(emails.inboxId, inboxId)));
+}
+
 export async function getEmailCount(db: Database, inboxId: string): Promise<number> {
   const result = await db
     .select({ count: sql<number>`count(*)` })
