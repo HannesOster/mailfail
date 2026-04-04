@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireOrg } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { getInbox } from "@mailfail/db/src/queries/inboxes";
 import { getEmail } from "@mailfail/db/src/queries/emails";
 import { upsertValidationResult } from "@mailfail/db/src/queries/validation";
@@ -12,10 +12,10 @@ export async function POST(
   _request: Request,
   { params }: { params: Promise<{ id: string; mailId: string }> },
 ) {
-  const { org } = await requireOrg();
+  const { user } = await requireAuth();
   const { id, mailId } = await params;
 
-  const inbox = await getInbox(db, id, org.id);
+  const inbox = await getInbox(db, id, user.id);
   if (!inbox) {
     return NextResponse.json({ error: "Inbox not found" }, { status: 404 });
   }

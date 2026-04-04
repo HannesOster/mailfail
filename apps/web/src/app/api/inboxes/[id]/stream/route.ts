@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { redis } from "@/lib/redis";
-import { requireOrg } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { getInbox } from "@mailfail/db/src/queries/inboxes";
 import { db } from "@/lib/db";
 
@@ -9,10 +9,10 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const { org } = await requireOrg();
+  const { user } = await requireAuth();
   const { id } = await params;
 
-  const inbox = await getInbox(db, id, org.id);
+  const inbox = await getInbox(db, id, user.id);
   if (!inbox) {
     return new Response("Inbox not found", { status: 404 });
   }

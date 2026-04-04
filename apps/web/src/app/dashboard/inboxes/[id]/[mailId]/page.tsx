@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
-import { requireOrg } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { getInbox } from "@mailfail/db/src/queries/inboxes";
 import { getEmail } from "@mailfail/db/src/queries/emails";
 import { getValidationForEmail } from "@mailfail/db/src/queries/validation";
@@ -14,9 +14,9 @@ export default async function EmailDetailPage({
   params: Promise<{ id: string; mailId: string }>;
 }) {
   const { id, mailId } = await params;
-  const { org } = await requireOrg();
+  const { user } = await requireAuth();
 
-  const inbox = await getInbox(db, id, org.id);
+  const inbox = await getInbox(db, id, user.id);
   if (!inbox) notFound();
 
   const email = await getEmail(db, mailId, id);

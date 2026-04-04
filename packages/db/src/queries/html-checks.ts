@@ -6,7 +6,7 @@ import type { HtmlCheckSource } from "@mailfail/shared";
 export async function insertHtmlCheck(
   db: Database,
   data: {
-    organizationId: string;
+    userId: string;
     name: string;
     source: HtmlCheckSource;
     htmlContent: string;
@@ -17,38 +17,38 @@ export async function insertHtmlCheck(
   return check;
 }
 
-export async function listHtmlChecks(db: Database, organizationId: string) {
+export async function listHtmlChecks(db: Database, userId: string) {
   return db
     .select()
     .from(htmlChecks)
-    .where(eq(htmlChecks.organizationId, organizationId))
+    .where(eq(htmlChecks.userId, userId))
     .orderBy(desc(htmlChecks.createdAt));
 }
 
-export async function getHtmlCheck(db: Database, id: string, organizationId: string) {
+export async function getHtmlCheck(db: Database, id: string, userId: string) {
   const [check] = await db
     .select()
     .from(htmlChecks)
-    .where(and(eq(htmlChecks.id, id), eq(htmlChecks.organizationId, organizationId)))
+    .where(and(eq(htmlChecks.id, id), eq(htmlChecks.userId, userId)))
     .limit(1);
 
   return check ?? null;
 }
 
-export async function deleteHtmlCheck(db: Database, id: string, organizationId: string) {
+export async function deleteHtmlCheck(db: Database, id: string, userId: string) {
   return db
     .delete(htmlChecks)
-    .where(and(eq(htmlChecks.id, id), eq(htmlChecks.organizationId, organizationId)));
+    .where(and(eq(htmlChecks.id, id), eq(htmlChecks.userId, userId)));
 }
 
 export async function getHtmlCheckCount(
   db: Database,
-  organizationId: string,
+  userId: string,
 ): Promise<number> {
   const result = await db
     .select({ count: sql<number>`count(*)` })
     .from(htmlChecks)
-    .where(eq(htmlChecks.organizationId, organizationId));
+    .where(eq(htmlChecks.userId, userId));
 
   return Number(result[0].count);
 }

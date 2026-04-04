@@ -1,51 +1,48 @@
 export const dynamic = "force-dynamic";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { requireOrg } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { getInboxCount } from "@mailfail/db/src/queries/inboxes";
 import { getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { listInboxes } from "@mailfail/db/src/queries/inboxes";
-import { Building2 } from "lucide-react";
 import { BILLING_ENABLED } from "@mailfail/shared";
 
 export default async function SettingsPage() {
-  const { org } = await requireOrg();
-  const user = await currentUser();
+  const { user } = await requireAuth();
+  const clerkUser = await currentUser();
 
   const [inboxCount, htmlCheckCount, inboxes] = await Promise.all([
-    getInboxCount(db, org.id),
-    getHtmlCheckCount(db, org.id),
-    listInboxes(db, org.id),
+    getInboxCount(db, user.id),
+    getHtmlCheckCount(db, user.id),
+    listInboxes(db, user.id),
   ]);
 
   const emailCount = inboxes.reduce((sum, i) => sum + i.monthlyMailCount, 0);
-  const userName = user
-    ? [user.firstName, user.lastName].filter(Boolean).join(" ") || user.emailAddresses[0]?.emailAddress || "Unknown"
-    : "Unknown";
-  const userEmail = user?.emailAddresses[0]?.emailAddress ?? "";
+  const userName = clerkUser
+    ? [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") || clerkUser.emailAddresses[0]?.emailAddress || "Unknown"
+    : user.name ?? "Unknown";
+  const userEmail = clerkUser?.emailAddresses[0]?.emailAddress ?? user.email ?? "";
+  const displayName = user.name ?? userName;
 
   return (
     <div className="max-w-4xl w-full mx-auto space-y-8">
       <header>
-        <h2 className="text-2xl font-bold tracking-tight mb-1">Organization Settings</h2>
+        <h2 className="text-2xl font-bold tracking-tight mb-1">Account Settings</h2>
         <p className="text-zinc-500 text-sm">
-          Manage your organization's members, billing, and global configuration.
+          Manage your account, billing, and global configuration.
         </p>
       </header>
 
-      {/* Organization Section */}
+      {/* Account Section */}
       <section className="bg-white border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
         <div className="p-6">
-          <h3 className="text-sm font-semibold text-zinc-900 mb-4">Organization</h3>
+          <h3 className="text-sm font-semibold text-zinc-900 mb-4">Account</h3>
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-zinc-100 rounded-lg flex items-center justify-center border border-zinc-200">
-                <Building2 className="w-5 h-5 text-zinc-400" />
-              </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-zinc-900">{org.name}</span>
+                  <span className="font-medium text-zinc-900">{displayName}</span>
                 </div>
                 <div className="flex gap-2 mt-1">
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-black text-white">
@@ -90,7 +87,7 @@ export default async function SettingsPage() {
           </div>
         </div>
         <div className="px-6 py-3 bg-zinc-50 border-t border-zinc-100 flex justify-end">
-          <span className="text-sm text-zinc-400 font-mono text-xs">{org.clerkOrgId}</span>
+          <span className="text-sm text-zinc-400 font-mono text-xs">{user.clerkUserId}</span>
         </div>
       </section>
 
@@ -98,10 +95,7 @@ export default async function SettingsPage() {
       <section className="bg-white border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-sm font-semibold text-zinc-900">Members</h3>
-            <button className="px-3 py-1.5 border border-zinc-200 rounded text-xs font-medium hover:bg-zinc-50 transition-all flex items-center gap-1.5">
-              Invite Member
-            </button>
+            <h3 className="text-sm font-semibold text-zinc-900">Account Details</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
@@ -110,7 +104,6 @@ export default async function SettingsPage() {
                   <th className="pb-3 font-medium">Name</th>
                   <th className="pb-3 font-medium">Email</th>
                   <th className="pb-3 font-medium">Role</th>
-                  <th className="pb-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
@@ -122,9 +115,6 @@ export default async function SettingsPage() {
                       Admin
                     </span>
                     <span className="ml-1 text-[10px] text-zinc-400 italic">(you)</span>
-                  </td>
-                  <td className="py-4 text-right">
-                    <span className="text-zinc-300 text-xs">—</span>
                   </td>
                 </tr>
               </tbody>
@@ -139,18 +129,17 @@ export default async function SettingsPage() {
           <h3 className="text-sm font-bold text-red-600 mb-2">Danger Zone</h3>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <p className="text-sm text-zinc-600 max-w-md">
-              This will permanently delete all inboxes, emails, and data associated with{" "}
-              <strong>{org.name}</strong>. This action cannot be undone.
+              This will permanently delete all inboxes, emails, and data associated with your account. This action cannot be undone.
             </p>
             <button className="px-4 py-2 border border-red-300 text-red-600 rounded text-sm font-semibold hover:bg-red-600 hover:text-white transition-all whitespace-nowrap">
-              Delete Organization
+              Delete Account
             </button>
           </div>
         </div>
       </section>
 
       <footer className="text-center pt-8 pb-12 border-t border-zinc-100">
-        <p className="text-xs text-zinc-400">MailFail Settings · {org.name}</p>
+        <p className="text-xs text-zinc-400">MailFail Settings · {displayName}</p>
       </footer>
     </div>
   );

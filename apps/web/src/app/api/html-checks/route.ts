@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireOrg } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { insertHtmlCheck, listHtmlChecks, getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { upsertValidationResult } from "@mailfail/db/src/queries/validation";
 import { checkHtmlCheckLimit } from "@/lib/limits";
@@ -11,16 +11,16 @@ import { VALIDATION_CONFIG } from "@mailfail/shared";
 import type { HtmlCheckSource } from "@mailfail/shared";
 
 export async function GET() {
-  const { org } = await requireOrg();
-  const checks = await listHtmlChecks(db, org.id);
+  const { user } = await requireAuth();
+  const checks = await listHtmlChecks(db, user.id);
   return NextResponse.json(checks);
 }
 
 export async function POST(request: Request) {
-  const { org, orgId } = await requireOrg();
+  const { user, clerkUserId } = await requireAuth();
 
-  const count = await getHtmlCheckCount(db, org.id);
-  const limit = await checkHtmlCheckLimit(orgId, count);
+  const count = await getHtmlCheckCount(db, user.id);
+  const limit = await checkHtmlCheckLimit(clerkUserId, count);
   if (!limit.allowed) {
     return NextResponse.json({ error: limit.reason }, { status: 403 });
   }
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
   }
 
   const check = await insertHtmlCheck(db, {
-    organizationId: org.id,
+    userId: user.id,
     name,
     source,
     htmlContent: html,

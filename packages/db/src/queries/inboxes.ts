@@ -15,13 +15,13 @@ function getMonthlyResetDate(): Date {
   return new Date(now.getFullYear(), now.getMonth() + 1, 1);
 }
 
-export async function createInbox(db: Database, organizationId: string, name: string) {
+export async function createInbox(db: Database, userId: string, name: string) {
   const { smtpUser, smtpPass } = generateCredentials();
 
   const [inbox] = await db
     .insert(inboxes)
     .values({
-      organizationId,
+      userId,
       name,
       smtpUser,
       smtpPass,
@@ -32,40 +32,40 @@ export async function createInbox(db: Database, organizationId: string, name: st
   return inbox;
 }
 
-export async function listInboxes(db: Database, organizationId: string) {
+export async function listInboxes(db: Database, userId: string) {
   return db
     .select()
     .from(inboxes)
-    .where(eq(inboxes.organizationId, organizationId))
+    .where(eq(inboxes.userId, userId))
     .orderBy(inboxes.createdAt);
 }
 
-export async function getInbox(db: Database, id: string, organizationId: string) {
+export async function getInbox(db: Database, id: string, userId: string) {
   const [inbox] = await db
     .select()
     .from(inboxes)
-    .where(and(eq(inboxes.id, id), eq(inboxes.organizationId, organizationId)))
+    .where(and(eq(inboxes.id, id), eq(inboxes.userId, userId)))
     .limit(1);
 
   return inbox ?? null;
 }
 
-export async function deleteInbox(db: Database, id: string, organizationId: string) {
+export async function deleteInbox(db: Database, id: string, userId: string) {
   return db
     .delete(inboxes)
-    .where(and(eq(inboxes.id, id), eq(inboxes.organizationId, organizationId)));
+    .where(and(eq(inboxes.id, id), eq(inboxes.userId, userId)));
 }
 
 export async function renameInbox(
   db: Database,
   id: string,
-  organizationId: string,
+  userId: string,
   name: string,
 ) {
   const [updated] = await db
     .update(inboxes)
     .set({ name })
-    .where(and(eq(inboxes.id, id), eq(inboxes.organizationId, organizationId)))
+    .where(and(eq(inboxes.id, id), eq(inboxes.userId, userId)))
     .returning();
 
   return updated ?? null;
@@ -114,11 +114,11 @@ export async function incrementMailCount(db: Database, inboxId: string) {
   return updated;
 }
 
-export async function getInboxCount(db: Database, organizationId: string): Promise<number> {
+export async function getInboxCount(db: Database, userId: string): Promise<number> {
   const result = await db
     .select({ count: sql<number>`count(*)` })
     .from(inboxes)
-    .where(eq(inboxes.organizationId, organizationId));
+    .where(eq(inboxes.userId, userId));
 
   return Number(result[0].count);
 }

@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Inbox, Mail, FileCode, ArrowRight } from "lucide-react";
 import { db } from "@/lib/db";
-import { requireOrg } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { listInboxes } from "@mailfail/db/src/queries/inboxes";
 import { getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { listEmails } from "@mailfail/db/src/queries/emails";
@@ -11,15 +11,15 @@ import { BILLING_ENABLED } from "@mailfail/shared";
 import { timeAgo } from "@/lib/utils";
 
 export default async function DashboardPage() {
-  const { org } = await requireOrg();
+  const { user } = await requireAuth();
 
-  const [orgInboxes, htmlCheckCount] = await Promise.all([
-    listInboxes(db, org.id),
-    getHtmlCheckCount(db, org.id),
+  const [userInboxes, htmlCheckCount] = await Promise.all([
+    listInboxes(db, user.id),
+    getHtmlCheckCount(db, user.id),
   ]);
 
   const recentEmailsByInbox = await Promise.all(
-    orgInboxes.slice(0, 3).map((inbox) =>
+    userInboxes.slice(0, 3).map((inbox) =>
       listEmails(db, inbox.id, { limit: 5 }).then((emails) =>
         emails.map((e) => ({ ...e, inboxId: inbox.id, inboxName: inbox.name }))
       )
@@ -30,7 +30,7 @@ export default async function DashboardPage() {
     .sort((a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime())
     .slice(0, 5);
 
-  const emailCount = orgInboxes.reduce((sum, i) => sum + i.monthlyMailCount, 0);
+  const emailCount = userInboxes.reduce((sum, i) => sum + i.monthlyMailCount, 0);
   const emailLimit = 100;
   const htmlCheckLimit = 20;
 
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
             <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Active</span>
           </div>
           <div className="flex items-baseline gap-2">
-            <h3 className="text-3xl font-bold">{orgInboxes.length}</h3>
+            <h3 className="text-3xl font-bold">{userInboxes.length}</h3>
             <p className="text-zinc-500 text-sm">Inboxes</p>
           </div>
           {BILLING_ENABLED && <p className="mt-4 text-xs text-zinc-400">1 inbox on Free plan</p>}
@@ -162,7 +162,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      {orgInboxes.length > 0 && (
+      {userInboxes.length > 0 && (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white border border-zinc-200 p-6 rounded-xl">
             <h4 className="text-sm font-bold mb-4 flex items-center gap-2">
@@ -173,7 +173,7 @@ export default async function DashboardPage() {
               {[
                 { label: "Host", value: process.env.SMTP_HOST ?? "smtp.mailfail.dev" },
                 { label: "Port", value: "2525" },
-                { label: "User", value: orgInboxes[0].smtpUser },
+                { label: "User", value: userInboxes[0].smtpUser },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between items-center p-3 bg-zinc-50 rounded-lg">
                   <span className="text-zinc-400">{label}</span>

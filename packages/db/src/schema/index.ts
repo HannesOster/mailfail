@@ -1,4 +1,4 @@
-export { organizations } from "./organizations";
+export { users } from "./organizations";
 export { inboxes } from "./inboxes";
 export { emails } from "./emails";
 export { attachments } from "./attachments";

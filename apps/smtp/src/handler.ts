@@ -3,7 +3,7 @@ import type { Readable } from "stream";
 import type { SMTPServerSession } from "smtp-server";
 import { Redis } from "@upstash/redis";
 import type { Database } from "@mailfail/db";
-import { organizations } from "@mailfail/db";
+import { users } from "@mailfail/db";
 import { eq } from "drizzle-orm";
 import { PLAN_LIMITS } from "@mailfail/shared";
 import type { SseEvent } from "@mailfail/shared";
@@ -27,13 +27,13 @@ export async function handleMessage(
   if (!inbox) throw new Error("No inbox in session");
 
   // Check monthly limit
-  const [org] = await db
+  const [user] = await db
     .select()
-    .from(organizations)
-    .where(eq(organizations.id, inbox.organizationId))
+    .from(users)
+    .where(eq(users.id, inbox.userId))
     .limit(1);
 
-  if (org && !org.isOwner) {
+  if (user && !user.isOwner) {
     if (inbox.monthlyMailCount >= PLAN_LIMITS.free.maxMailsPerMonth) {
       throw new Error("Monthly email limit reached");
     }
