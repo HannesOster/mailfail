@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Copy, RefreshCw, Trash2, Check } from "lucide-react";
+import { Copy, RefreshCw, Trash2, Check, Search, Mail } from "lucide-react";
 import { timeAgo } from "@/lib/utils";
 import type { SpamScoreResult, OverallScore } from "@mailfail/shared";
 
@@ -10,6 +10,7 @@ type Email = {
   id: string;
   from: string;
   subject: string | null;
+  textBody?: string | null;
   isRead: boolean;
   receivedAt: Date;
 };
@@ -88,6 +89,7 @@ export function DashboardClient({
   const [validations, setValidations] = useState<ValidationEntry[]>(initialValidations);
   const [refreshing, setRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [search, setSearch] = useState("");
   const newEmailTrigger = useInboxStream(inbox.id);
 
   useEffect(() => {
@@ -122,6 +124,33 @@ export function DashboardClient({
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
+
+  async function handleToggleRead(emailId: string, currentIsRead: boolean) {
+    const newIsRead = !currentIsRead;
+    setEmails((prev) =>
+      prev.map((e) => (e.id === emailId ? { ...e, isRead: newIsRead } : e)),
+    );
+    await fetch(`/api/inbox/emails/${emailId}/read`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isRead: newIsRead }),
+    }).catch(() => {
+      // Revert on failure
+      setEmails((prev) =>
+        prev.map((e) => (e.id === emailId ? { ...e, isRead: currentIsRead } : e)),
+      );
+    });
+  }
+
+  const filteredEmails = emails.filter((email) => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return (
+      email.from.toLowerCase().includes(q) ||
+      (email.subject ?? "").toLowerCase().includes(q) ||
+      (email.textBody ?? "").toLowerCase().includes(q)
+    );
+  });
 
   const validationMap = new Map(validations.map((v) => [v.emailId, v]));
 
@@ -206,28 +235,72 @@ export function DashboardClient({
 
       {/* Email List */}
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm border-collapse">
-            <thead>
-              <tr className="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-medium">
-                <th className="py-3 px-4 w-10 text-center" />
-                <th className="py-3 px-4">From</th>
-                <th className="py-3 px-4">Subject</th>
-                <th className="py-3 px-4 w-20 text-center">Score</th>
-                <th className="py-3 px-4 w-20 text-center">Status</th>
-                <th className="py-3 px-4 w-28 text-right">Received</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-              {emails.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-16 text-center text-zinc-400 dark:text-zinc-500 text-sm">
-                    <p className="font-medium mb-1">No emails yet</p>
-                    <p className="text-xs">Send your first test email using the SMTP credentials above</p>
-                  </td>
+        {/* Search */}
+        <div className="p-3 border-b border-zinc-200 dark:border-zinc-800">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 dark:text-zinc-500 pointer-events-none" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by sender, subject, or body…"
+              className="w-full pl-9 pr-4 py-2 text-sm bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:border-zinc-400 dark:focus:border-zinc-500 transition-all"
+            />
+          </div>
+        </div>
+
+        {emails.length === 0 ? (
+          /* Empty state — no emails at all */
+          <div className="text-center py-16 px-8">
+            <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Mail className="w-8 h-8 text-zinc-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">No emails yet</h3>
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-8 max-w-md mx-auto">
+              Copy the SMTP credentials above and paste them into your project&apos;s .env file. Then trigger a test email — it will appear here instantly.
+            </p>
+            <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl p-6 max-w-lg mx-auto text-left">
+              <h4 className="font-semibold text-sm mb-4 text-zinc-900 dark:text-zinc-100">Quick Setup</h4>
+              <ol className="space-y-3 text-sm text-zinc-600 dark:text-zinc-400">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md flex items-center justify-center text-xs font-bold">1</span>
+                  <span>Copy the .env block above</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md flex items-center justify-center text-xs font-bold">2</span>
+                  <span>Paste into your project&apos;s .env file</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md flex items-center justify-center text-xs font-bold">3</span>
+                  <span>Trigger a test email from your app</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md flex items-center justify-center text-xs font-bold">4</span>
+                  <span>Watch it appear here in real-time</span>
+                </li>
+              </ol>
+            </div>
+          </div>
+        ) : filteredEmails.length === 0 && search ? (
+          /* No search results */
+          <div className="text-center py-12 text-zinc-500 dark:text-zinc-400 text-sm">
+            No emails matching &ldquo;{search}&rdquo;
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm border-collapse">
+              <thead>
+                <tr className="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-medium">
+                  <th className="py-3 px-4 w-10 text-center" />
+                  <th className="py-3 px-4">From</th>
+                  <th className="py-3 px-4">Subject</th>
+                  <th className="py-3 px-4 w-20 text-center">Score</th>
+                  <th className="py-3 px-4 w-20 text-center">Status</th>
+                  <th className="py-3 px-4 w-28 text-right">Received</th>
                 </tr>
-              ) : (
-                emails.map((email) => {
+              </thead>
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                {filteredEmails.map((email) => {
                   const validation = validationMap.get(email.id);
                   const spamScore = validation?.spamScore;
                   const overallScore = validation?.overallScore;
@@ -239,11 +312,21 @@ export function DashboardClient({
                       }`}
                     >
                       <td className="py-3 px-4 text-center">
-                        {!email.isRead ? (
-                          <span className="w-2 h-2 bg-blue-500 rounded-full inline-block" />
-                        ) : (
-                          <span className="w-2 h-2 border border-zinc-300 dark:border-zinc-600 rounded-full inline-block" />
-                        )}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleToggleRead(email.id, email.isRead);
+                          }}
+                          title={email.isRead ? "Mark as unread" : "Mark as read"}
+                          className="relative z-10 inline-flex items-center justify-center w-5 h-5 rounded-full hover:scale-110 transition-transform"
+                        >
+                          {!email.isRead ? (
+                            <span className="w-2.5 h-2.5 bg-blue-500 rounded-full" />
+                          ) : (
+                            <span className="w-2.5 h-2.5 border border-zinc-300 dark:border-zinc-600 rounded-full" />
+                          )}
+                        </button>
                       </td>
                       <td className={`py-3 px-4 ${!email.isRead ? "font-semibold text-zinc-900 dark:text-zinc-100" : "text-zinc-600 dark:text-zinc-400"}`}>
                         <Link
@@ -274,13 +357,15 @@ export function DashboardClient({
                       </td>
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
         <div className="py-2.5 px-4 bg-zinc-50/50 dark:bg-zinc-800/30 border-t border-zinc-200 dark:border-zinc-800 text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="font-medium text-zinc-700 dark:text-zinc-300">{emails.length}</span> emails
+          <span className="font-medium text-zinc-700 dark:text-zinc-300">{filteredEmails.length}</span>
+          {search ? ` of ${emails.length}` : ""} emails
         </div>
       </div>
     </div>

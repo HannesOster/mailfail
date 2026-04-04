@@ -5,8 +5,16 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MailFail — Email Testing Made Simple",
-  description: "Catch, inspect, and validate test emails. A Mailtrap alternative.",
+  title: "MailFail — Email Testing for Developers",
+  description: "Catch, inspect, and validate test emails. Get SMTP credentials in seconds. Check for spam, broken links, and compatibility.",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "MailFail — Email Testing for Developers",
+    description: "Stop sending test emails to real people. Get SMTP credentials in seconds.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
