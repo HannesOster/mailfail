@@ -1,0 +1,22 @@
+{
+  "name": "@mailfail/db",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tsc --noEmit",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.39",
+    "@neondatabase/serverless": "^0.10",
+    "@mailfail/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30",
+    "typescript": "^5"
+  }
+}
