@@ -165,7 +165,7 @@ export function EmailDetailClient({
                 <iframe
                   srcDoc={email.htmlBody}
                   className="w-full h-[600px] bg-white rounded-lg border border-zinc-200 shadow"
-                  sandbox="allow-same-origin"
+                  sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
                   title="Email HTML preview"
                 />
               ) : (

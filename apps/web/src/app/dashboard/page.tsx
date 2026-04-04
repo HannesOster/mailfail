@@ -152,23 +152,18 @@ export default async function DashboardPage() {
                 </tr>
               ) : (
                 recentEmails.map((email) => (
-                  <tr key={email.id} className="hover:bg-zinc-50/80 transition-colors cursor-pointer group">
+                  <tr key={email.id} className="hover:bg-zinc-50/80 transition-colors cursor-pointer group relative">
                     <td className="px-6 py-4 text-zinc-900 font-medium">
-                      <Link href={`/dashboard/inboxes/${email.inboxId}/${email.id}`} className="hover:underline">
-                        {email.from}
-                      </Link>
+                      <Link href={`/dashboard/inboxes/${email.inboxId}/${email.id}`} className="absolute inset-0" />
+                      {email.from}
                     </td>
                     <td className="px-6 py-4 text-zinc-600">
-                      <Link href={`/dashboard/inboxes/${email.inboxId}/${email.id}`}>
-                        {email.subject ?? "(no subject)"}
-                      </Link>
+                      {email.subject ?? "(no subject)"}
                     </td>
                     <td className="px-6 py-4">
-                      <Link href={`/dashboard/inboxes/${email.inboxId}`}>
-                        <span className="bg-zinc-100 text-zinc-600 px-2 py-1 rounded text-[11px] font-medium hover:bg-zinc-200 transition-colors">
-                          {email.inboxName}
-                        </span>
-                      </Link>
+                      <span className="bg-zinc-100 text-zinc-600 px-2 py-1 rounded text-[11px] font-medium">
+                        {email.inboxName}
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-right text-zinc-400">
                       {timeAgo(new Date(email.receivedAt))}
