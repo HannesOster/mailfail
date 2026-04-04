@@ -7,6 +7,7 @@ import { getInboxCount } from "@mailfail/db/src/queries/inboxes";
 import { getHtmlCheckCount } from "@mailfail/db/src/queries/html-checks";
 import { listInboxes } from "@mailfail/db/src/queries/inboxes";
 import { BILLING_ENABLED } from "@mailfail/shared";
+import { ApiKeySection } from "./settings-client";
 
 export default async function SettingsPage() {
   const { user } = await requireAuth();
@@ -28,28 +29,28 @@ export default async function SettingsPage() {
   return (
     <div className="max-w-4xl w-full mx-auto space-y-8">
       <header>
-        <h2 className="text-2xl font-bold tracking-tight mb-1">Account Settings</h2>
-        <p className="text-zinc-500 text-sm">
+        <h2 className="text-2xl font-bold tracking-tight mb-1 dark:text-zinc-100">Account Settings</h2>
+        <p className="text-zinc-500 dark:text-zinc-400 text-sm">
           Manage your account, billing, and global configuration.
         </p>
       </header>
 
       {/* Account Section */}
-      <section className="bg-white border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
+      <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden shadow-sm">
         <div className="p-6">
-          <h3 className="text-sm font-semibold text-zinc-900 mb-4">Account</h3>
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Account</h3>
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-zinc-900">{displayName}</span>
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">{displayName}</span>
                 </div>
                 <div className="flex gap-2 mt-1">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-black text-white">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-black dark:bg-zinc-100 text-white dark:text-zinc-900">
                     Admin
                   </span>
                   {BILLING_ENABLED && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-zinc-100 text-zinc-500 border border-zinc-200">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
                       Free
                     </span>
                   )}
@@ -58,63 +59,63 @@ export default async function SettingsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-zinc-100">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-zinc-100 dark:border-zinc-800">
             <div>
-              <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1">Inboxes</p>
+              <p className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">Inboxes</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-xl font-mono font-semibold">{inboxCount}</span>
-                {BILLING_ENABLED && <span className="text-xs text-zinc-400">/ 1 on Free</span>}
+                <span className="text-xl font-mono font-semibold dark:text-zinc-100">{inboxCount}</span>
+                {BILLING_ENABLED && <span className="text-xs text-zinc-400 dark:text-zinc-500">/ 1 on Free</span>}
               </div>
             </div>
             <div>
-              <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1">
+              <p className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">
                 Emails this month
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-xl font-mono font-semibold">{emailCount}</span>
-                {BILLING_ENABLED && <span className="text-xs text-zinc-400">/ 100</span>}
+                <span className="text-xl font-mono font-semibold dark:text-zinc-100">{emailCount}</span>
+                {BILLING_ENABLED && <span className="text-xs text-zinc-400 dark:text-zinc-500">/ 100</span>}
               </div>
             </div>
             <div>
-              <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1">
+              <p className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">
                 HTML checks
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-xl font-mono font-semibold">{htmlCheckCount}</span>
-                {BILLING_ENABLED && <span className="text-xs text-zinc-400">/ 20</span>}
+                <span className="text-xl font-mono font-semibold dark:text-zinc-100">{htmlCheckCount}</span>
+                {BILLING_ENABLED && <span className="text-xs text-zinc-400 dark:text-zinc-500">/ 20</span>}
               </div>
             </div>
           </div>
         </div>
-        <div className="px-6 py-3 bg-zinc-50 border-t border-zinc-100 flex justify-end">
-          <span className="text-sm text-zinc-400 font-mono text-xs">{user.clerkUserId}</span>
+        <div className="px-6 py-3 bg-zinc-50 dark:bg-zinc-800/50 border-t border-zinc-100 dark:border-zinc-800 flex justify-end">
+          <span className="text-sm text-zinc-400 dark:text-zinc-500 font-mono text-xs">{user.clerkUserId}</span>
         </div>
       </section>
 
       {/* Members Section */}
-      <section className="bg-white border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
+      <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden shadow-sm">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-sm font-semibold text-zinc-900">Account Details</h3>
+            <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Account Details</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="text-zinc-400 font-medium border-b border-zinc-100">
+                <tr className="text-zinc-400 dark:text-zinc-500 font-medium border-b border-zinc-100 dark:border-zinc-800">
                   <th className="pb-3 font-medium">Name</th>
                   <th className="pb-3 font-medium">Email</th>
                   <th className="pb-3 font-medium">Role</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                 <tr>
-                  <td className="py-4 font-medium text-zinc-900">{userName}</td>
-                  <td className="py-4 text-zinc-500 font-mono text-xs">{userEmail}</td>
+                  <td className="py-4 font-medium text-zinc-900 dark:text-zinc-100">{userName}</td>
+                  <td className="py-4 text-zinc-500 dark:text-zinc-400 font-mono text-xs">{userEmail}</td>
                   <td className="py-4">
-                    <span className="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 text-[10px] font-medium border border-zinc-200">
+                    <span className="px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-medium border border-zinc-200 dark:border-zinc-700">
                       Admin
                     </span>
-                    <span className="ml-1 text-[10px] text-zinc-400 italic">(you)</span>
+                    <span className="ml-1 text-[10px] text-zinc-400 dark:text-zinc-500 italic">(you)</span>
                   </td>
                 </tr>
               </tbody>
@@ -123,23 +124,26 @@ export default async function SettingsPage() {
         </div>
       </section>
 
+      {/* API Key */}
+      <ApiKeySection initialApiKey={user.apiKey ?? null} />
+
       {/* Danger Zone */}
-      <section className="bg-red-50/30 border border-red-200 rounded-lg overflow-hidden shadow-sm">
+      <section className="bg-red-50/30 dark:bg-red-950/10 border border-red-200 dark:border-red-900/50 rounded-lg overflow-hidden shadow-sm">
         <div className="p-6">
           <h3 className="text-sm font-bold text-red-600 mb-2">Danger Zone</h3>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <p className="text-sm text-zinc-600 max-w-md">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md">
               This will permanently delete all inboxes, emails, and data associated with your account. This action cannot be undone.
             </p>
-            <button className="px-4 py-2 border border-red-300 text-red-600 rounded text-sm font-semibold hover:bg-red-600 hover:text-white transition-all whitespace-nowrap">
+            <button className="px-4 py-2 border border-red-300 dark:border-red-800 text-red-600 rounded text-sm font-semibold hover:bg-red-600 hover:text-white transition-all whitespace-nowrap">
               Delete Account
             </button>
           </div>
         </div>
       </section>
 
-      <footer className="text-center pt-8 pb-12 border-t border-zinc-100">
-        <p className="text-xs text-zinc-400">MailFail Settings · {displayName}</p>
+      <footer className="text-center pt-8 pb-12 border-t border-zinc-100 dark:border-zinc-800">
+        <p className="text-xs text-zinc-400 dark:text-zinc-500">MailFail Settings · {displayName}</p>
       </footer>
     </div>
   );

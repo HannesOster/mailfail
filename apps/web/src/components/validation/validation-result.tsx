@@ -42,38 +42,38 @@ function allIssues(v: ValidationData): CheckEntry[] {
 function ScoreHeader({ score }: { score: OverallScore }) {
   if (score === "green") {
     return (
-      <div className="p-6 bg-green-50/50 border-b border-green-100 flex items-center gap-4">
+      <div className="p-6 bg-green-50/50 dark:bg-green-950/20 border-b border-green-100 dark:border-green-900/30 flex items-center gap-4">
         <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white shrink-0">
           <CheckCircle className="w-7 h-7 fill-white" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-green-900 leading-tight">Validation Pass</h3>
-          <p className="text-xs text-green-700 mt-0.5">All checks passed</p>
+          <h3 className="text-lg font-bold text-green-900 dark:text-green-400 leading-tight">Validation Pass</h3>
+          <p className="text-xs text-green-700 dark:text-green-500 mt-0.5">All checks passed</p>
         </div>
       </div>
     );
   }
   if (score === "yellow") {
     return (
-      <div className="p-6 bg-amber-50/50 border-b border-amber-100 flex items-center gap-4">
+      <div className="p-6 bg-amber-50/50 dark:bg-amber-950/20 border-b border-amber-100 dark:border-amber-900/30 flex items-center gap-4">
         <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-white shrink-0">
           <AlertTriangle className="w-7 h-7" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-amber-900 leading-tight">Warnings Found</h3>
-          <p className="text-xs text-amber-700 mt-0.5">Some issues need attention</p>
+          <h3 className="text-lg font-bold text-amber-900 dark:text-amber-400 leading-tight">Warnings Found</h3>
+          <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Some issues need attention</p>
         </div>
       </div>
     );
   }
   return (
-    <div className="p-6 bg-red-50/50 border-b border-red-100 flex items-center gap-4">
+    <div className="p-6 bg-red-50/50 dark:bg-red-950/20 border-b border-red-100 dark:border-red-900/30 flex items-center gap-4">
       <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white shrink-0">
         <XCircle className="w-7 h-7 fill-white" />
       </div>
       <div>
-        <h3 className="text-lg font-bold text-red-900 leading-tight">Validation Failed</h3>
-        <p className="text-xs text-red-700 mt-0.5">Critical issues detected</p>
+        <h3 className="text-lg font-bold text-red-900 dark:text-red-400 leading-tight">Validation Failed</h3>
+        <p className="text-xs text-red-700 dark:text-red-500 mt-0.5">Critical issues detected</p>
       </div>
     </div>
   );
@@ -103,10 +103,10 @@ function CategoryRow({
   );
 
   const bgClass = hasErrors
-    ? "bg-red-50/20 hover:bg-red-50"
+    ? "bg-red-50/20 dark:bg-red-950/10 hover:bg-red-50 dark:hover:bg-red-950/20"
     : hasWarnings
-    ? "bg-amber-50/20 hover:bg-amber-50"
-    : "hover:bg-zinc-50";
+    ? "bg-amber-50/20 dark:bg-amber-950/10 hover:bg-amber-50 dark:hover:bg-amber-950/20"
+    : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50";
 
   return (
     <div className={`${bgClass} transition-colors`}>
@@ -116,25 +116,25 @@ function CategoryRow({
       >
         <div className="flex items-center gap-3">
           {icon}
-          <span className="text-sm font-semibold">{label}</span>
+          <span className="text-sm font-semibold dark:text-zinc-100">{label}</span>
           {extra}
           {counts.errors > 0 && (
-            <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">
+            <span className="text-[10px] font-bold text-red-600 bg-red-50 dark:bg-red-950/30 px-1.5 py-0.5 rounded border border-red-100 dark:border-red-900/50">
               {counts.errors} error{counts.errors > 1 ? "s" : ""}
             </span>
           )}
           {counts.warnings > 0 && (
-            <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100">
+            <span className="text-[10px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/50">
               {counts.warnings} warning{counts.warnings > 1 ? "s" : ""}
             </span>
           )}
           {!hasIssues && (
-            <span className="text-xs text-zinc-400">all ok</span>
+            <span className="text-xs text-zinc-400 dark:text-zinc-500">all ok</span>
           )}
         </div>
         {hasIssues && (
           <ChevronRight
-            className={`w-4 h-4 text-zinc-400 transition-transform ${open ? "rotate-90" : ""}`}
+            className={`w-4 h-4 text-zinc-400 dark:text-zinc-500 transition-transform ${open ? "rotate-90" : ""}`}
           />
         )}
       </button>
@@ -152,15 +152,15 @@ function CategoryRow({
               <span
                 className={
                   item.severity === "error"
-                    ? "text-red-800"
+                    ? "text-red-800 dark:text-red-400"
                     : item.severity === "warning"
-                    ? "text-amber-800"
-                    : "text-zinc-500"
+                    ? "text-amber-800 dark:text-amber-400"
+                    : "text-zinc-500 dark:text-zinc-400"
                 }
               >
                 {item.message}
                 {item.element && (
-                  <span className="ml-1 font-mono text-[10px] text-zinc-400">({item.element})</span>
+                  <span className="ml-1 font-mono text-[10px] text-zinc-400 dark:text-zinc-500">({item.element})</span>
                 )}
               </span>
             </div>
@@ -186,18 +186,18 @@ export function ValidationResult({
   const totalInfos = issues.filter((i) => i.severity === "info").length;
 
   return (
-    <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
       <ScoreHeader score={validation.overallScore} />
 
       {/* Summary */}
-      <div className="px-6 py-3 border-b border-zinc-100 flex gap-4 font-mono text-[11px] font-bold">
+      <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 flex gap-4 font-mono text-[11px] font-bold">
         <span className="text-red-600">{totalErrors} ERRORS</span>
         <span className="text-amber-600">{totalWarnings} WARNINGS</span>
-        <span className="text-zinc-500">{totalInfos} INFO</span>
+        <span className="text-zinc-500 dark:text-zinc-400">{totalInfos} INFO</span>
       </div>
 
       {/* Categories */}
-      <div className="divide-y divide-zinc-100">
+      <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
         <CategoryRow
           label="Links"
           items={validation.linkChecks}
@@ -224,7 +224,7 @@ export function ValidationResult({
           label="Spam Score"
           items={validation.spamScore.details}
           extra={
-            <span className="px-1.5 py-0.5 bg-zinc-100 text-zinc-600 text-[10px] font-bold rounded">
+            <span className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold rounded">
               {validation.spamScore.score}/10
             </span>
           }
@@ -236,11 +236,11 @@ export function ValidationResult({
 
       {/* Re-check */}
       {onRecheck && (
-        <div className="p-4 bg-zinc-50 border-t border-zinc-100">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800">
           <button
             onClick={onRecheck}
             disabled={recheckLoading}
-            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 text-white rounded font-bold text-sm hover:bg-zinc-800 transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded font-bold text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${recheckLoading ? "animate-spin" : ""}`} />
             Re-Check

@@ -39,7 +39,7 @@ function SourceBadge({ source }: { source: HtmlCheckSource }) {
     url: { icon: <LinkIcon className="w-3 h-3" />, label: "URL" },
   }[source];
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-neutral-100 text-[#525252] text-[10px] font-bold uppercase tracking-tight">
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-neutral-100 dark:bg-zinc-800 text-[#525252] dark:text-zinc-400 text-[10px] font-bold uppercase tracking-tight">
       {config.icon} {config.label}
     </span>
   );
@@ -128,18 +128,18 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
   return (
     <>
       <header className="mb-8">
-        <h1 className="text-3xl font-black tracking-tight text-[#0A0A0A]">HTML Check</h1>
-        <p className="text-[#525252] mt-1">
+        <h1 className="text-3xl font-black tracking-tight text-[#0A0A0A] dark:text-zinc-100">HTML Check</h1>
+        <p className="text-[#525252] dark:text-zinc-400 mt-1">
           Validate your email templates against dozens of email clients and standards.
         </p>
       </header>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-[#E5E5E5] rounded-xl shadow-sm overflow-hidden mb-12"
+        className="bg-white dark:bg-zinc-900 border border-[#E5E5E5] dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden mb-12"
       >
-        <div className="p-6 border-b border-[#E5E5E5]">
-          <label className="block text-xs font-bold text-[#525252] uppercase tracking-wider mb-2 font-mono">
+        <div className="p-6 border-b border-[#E5E5E5] dark:border-zinc-800">
+          <label className="block text-xs font-bold text-[#525252] dark:text-zinc-400 uppercase tracking-wider mb-2 font-mono">
             Check name
           </label>
           <input
@@ -147,11 +147,11 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
             value={checkName}
             onChange={(e) => setCheckName(e.target.value)}
             placeholder="e.g. Weekly Newsletter - October"
-            className="w-full px-4 py-2 border border-[#E5E5E5] rounded-lg focus:ring-1 focus:ring-black focus:border-black outline-none transition-all text-sm"
+            className="w-full px-4 py-2 border border-[#E5E5E5] dark:border-zinc-700 rounded-lg focus:ring-1 focus:ring-black dark:focus:ring-zinc-400 focus:border-black dark:focus:border-zinc-400 outline-none transition-all text-sm bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
           />
         </div>
 
-        <div className="px-6 py-2 bg-[#FAFAFA] border-b border-[#E5E5E5] flex gap-6">
+        <div className="px-6 py-2 bg-[#FAFAFA] dark:bg-zinc-800/50 border-b border-[#E5E5E5] dark:border-zinc-800 flex gap-6">
           {inputTabs.map(({ id, label }) => (
             <button
               key={id}
@@ -159,8 +159,8 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
               onClick={() => setActiveInputTab(id)}
               className={`py-2 text-sm font-medium border-b-2 -mb-[2px] transition-all ${
                 activeInputTab === id
-                  ? "border-black text-black font-semibold"
-                  : "border-transparent text-[#525252] hover:text-black"
+                  ? "border-black dark:border-zinc-100 text-black dark:text-zinc-100 font-semibold"
+                  : "border-transparent text-[#525252] dark:text-zinc-400 hover:text-black dark:hover:text-zinc-100"
               }`}
             >
               {label}
@@ -177,21 +177,21 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-xl flex flex-col items-center justify-center py-16 px-4 transition-colors cursor-pointer group ${
                 dragOver
-                  ? "border-black bg-zinc-50"
-                  : "border-[#E5E5E5] bg-[#FAFAFA]/50 hover:bg-[#FAFAFA]"
+                  ? "border-black dark:border-zinc-400 bg-zinc-50 dark:bg-zinc-800"
+                  : "border-[#E5E5E5] dark:border-zinc-700 bg-[#FAFAFA]/50 dark:bg-zinc-800/30 hover:bg-[#FAFAFA] dark:hover:bg-zinc-800/50"
               }`}
             >
-              <div className="h-12 w-12 rounded-full bg-white border border-[#E5E5E5] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Upload className="w-5 h-5 text-neutral-400" />
+              <div className="h-12 w-12 rounded-full bg-white dark:bg-zinc-800 border border-[#E5E5E5] dark:border-zinc-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Upload className="w-5 h-5 text-neutral-400 dark:text-zinc-500" />
               </div>
               {fileName ? (
-                <p className="text-sm font-medium text-[#0A0A0A]">{fileName}</p>
+                <p className="text-sm font-medium text-[#0A0A0A] dark:text-zinc-100">{fileName}</p>
               ) : (
                 <>
-                  <p className="text-sm font-medium text-[#0A0A0A]">
+                  <p className="text-sm font-medium text-[#0A0A0A] dark:text-zinc-100">
                     Drop .html file here or click to browse
                   </p>
-                  <p className="text-xs text-[#525252] mt-1">Maximum file size 2MB</p>
+                  <p className="text-xs text-[#525252] dark:text-zinc-400 mt-1">Maximum file size 2MB</p>
                 </>
               )}
               <input
@@ -212,7 +212,7 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
               value={pasteContent}
               onChange={(e) => setPasteContent(e.target.value)}
               placeholder="Paste your HTML email template here..."
-              className="w-full h-64 px-4 py-3 border border-[#E5E5E5] rounded-xl font-mono text-xs focus:ring-1 focus:ring-black focus:border-black outline-none transition-all resize-y bg-[#FAFAFA]"
+              className="w-full h-64 px-4 py-3 border border-[#E5E5E5] dark:border-zinc-700 rounded-xl font-mono text-xs focus:ring-1 focus:ring-black dark:focus:ring-zinc-400 focus:border-black dark:focus:border-zinc-400 outline-none transition-all resize-y bg-[#FAFAFA] dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
             />
           )}
 
@@ -222,7 +222,7 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
               value={urlContent}
               onChange={(e) => setUrlContent(e.target.value)}
               placeholder="https://example.com/email-template.html"
-              className="w-full px-4 py-3 border border-[#E5E5E5] rounded-xl text-sm focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
+              className="w-full px-4 py-3 border border-[#E5E5E5] dark:border-zinc-700 rounded-xl text-sm focus:ring-1 focus:ring-black dark:focus:ring-zinc-400 focus:border-black dark:focus:border-zinc-400 outline-none transition-all bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
             />
           )}
 
@@ -232,7 +232,7 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
             <button
               type="submit"
               disabled={uploading}
-              className="bg-[#0A0A0A] text-white px-8 py-2.5 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50"
+              className="bg-[#0A0A0A] dark:bg-zinc-100 text-white dark:text-zinc-900 px-8 py-2.5 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50"
             >
               {uploading ? "Running…" : "Run Check"}
               <Zap className="w-4 h-4" />
@@ -243,12 +243,12 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
 
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold tracking-tight">Previous Checks</h2>
+          <h2 className="text-xl font-bold tracking-tight dark:text-zinc-100">Previous Checks</h2>
         </div>
-        <div className="bg-white border border-[#E5E5E5] rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-zinc-900 border border-[#E5E5E5] dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-[#FAFAFA] text-xs font-bold text-[#525252] uppercase tracking-wider font-mono">
+              <tr className="bg-[#FAFAFA] dark:bg-zinc-800/50 text-xs font-bold text-[#525252] dark:text-zinc-400 uppercase tracking-wider font-mono">
                 <th className="px-6 py-4">Name</th>
                 <th className="px-6 py-4">Source</th>
                 <th className="px-6 py-4 text-center">Score</th>
@@ -256,10 +256,10 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
                 <th className="px-6 py-4" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E5E5]">
+            <tbody className="divide-y divide-[#E5E5E5] dark:divide-zinc-800">
               {checks.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-zinc-400 text-sm">
+                  <td colSpan={5} className="px-6 py-12 text-center text-zinc-400 dark:text-zinc-500 text-sm">
                     No HTML checks yet. Run your first check above.
                   </td>
                 </tr>
@@ -267,12 +267,12 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
                 checks.map((check) => (
                   <tr
                     key={check.id}
-                    className="hover:bg-[#FAFAFA] transition-colors cursor-pointer group"
+                    className="hover:bg-[#FAFAFA] dark:hover:bg-zinc-800/50 transition-colors cursor-pointer group"
                     onClick={() => router.push(`/dashboard/html-check/${check.id}`)}
                   >
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-[#0A0A0A]">{check.name}</div>
-                      <div className="text-[10px] font-mono text-[#525252]">
+                      <div className="font-semibold text-[#0A0A0A] dark:text-zinc-100">{check.name}</div>
+                      <div className="text-[10px] font-mono text-[#525252] dark:text-zinc-400">
                         ID: {check.id.slice(0, 8)}
                       </div>
                     </td>
@@ -282,11 +282,11 @@ export function HtmlCheckClient({ initialChecks }: { initialChecks: HtmlCheck[] 
                     <td className="px-6 py-4 text-center">
                       <ScoreBadge />
                     </td>
-                    <td className="px-6 py-4 text-sm text-[#525252]">
+                    <td className="px-6 py-4 text-sm text-[#525252] dark:text-zinc-400">
                       {timeAgo(new Date(check.createdAt))}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button className="text-neutral-300 group-hover:text-black transition-colors">
+                      <button className="text-neutral-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-zinc-100 transition-colors">
                         <MoreVertical className="w-5 h-5" />
                       </button>
                     </td>
