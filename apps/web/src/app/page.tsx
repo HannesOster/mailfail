@@ -12,15 +12,15 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-8">
             <a className="text-neutral-900 font-semibold text-sm hover:text-neutral-900 transition-colors" href="#features">Features</a>
             {BILLING_ENABLED && <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#pricing">Pricing</a>}
-            <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#">Docs</a>
-            <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#">Changelog</a>
+            <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#docs">Docs</a>
+            <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#how-it-works">How it works</a>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/sign-in" className="text-neutral-900 text-sm font-medium hover:text-neutral-900 transition-colors">
               Login
             </Link>
             <Link
-              href="/sign-up"
+              href="/dashboard"
               className="bg-neutral-900 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-neutral-800 transition-transform active:scale-95 duration-100"
             >
               Sign Up
@@ -47,15 +47,15 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Link
-              href="/sign-up"
+              href="/dashboard"
               className="bg-neutral-900 text-white px-8 py-3 rounded-lg font-medium hover:bg-neutral-800 transition-all flex items-center gap-2"
             >
               Get Started Free
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <button className="border border-neutral-200 px-8 py-3 rounded-lg font-medium hover:bg-neutral-50 transition-all">
+            <a href="#docs" className="border border-neutral-200 px-8 py-3 rounded-lg font-medium hover:bg-neutral-50 transition-all">
               View Documentation
-            </button>
+            </a>
           </div>
 
           {/* SMTP Snippet */}
@@ -191,7 +191,7 @@ export default function LandingPage() {
                   ))}
                 </ul>
                 <Link
-                  href="/sign-up"
+                  href="/dashboard"
                   className="w-full border border-neutral-900 py-3 rounded-lg font-bold text-sm hover:bg-neutral-900 hover:text-white transition-all text-center block"
                 >
                   Get Started
@@ -227,19 +227,145 @@ export default function LandingPage() {
         </section>
       )}
 
+      {/* How it works */}
+      <section id="how-it-works" className="py-24 bg-neutral-50/50">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold tracking-tight mb-16 text-center">How it works</h2>
+          <div className="space-y-12">
+            {[
+              {
+                step: "1",
+                title: "Create an Inbox",
+                description: "Sign up and create a virtual inbox. You'll get unique SMTP credentials — a host, port, username, and password.",
+              },
+              {
+                step: "2",
+                title: "Replace your SMTP config",
+                description: "Swap your production SMTP credentials with the MailFail credentials in your .env file. Your app sends emails to MailFail instead of real recipients.",
+              },
+              {
+                step: "3",
+                title: "Inspect & validate",
+                description: "Every email appears in your MailFail inbox in real-time. View the HTML preview, check links, inspect headers, and run the full validation suite.",
+              },
+              {
+                step: "4",
+                title: "Go to production",
+                description: "When you're ready, swap the SMTP credentials back to your production provider. No code changes needed — just update your .env.",
+              },
+            ].map((item) => (
+              <div key={item.step} className="flex gap-6 items-start">
+                <div className="w-10 h-10 bg-neutral-900 text-white rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0">
+                  {item.step}
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">{item.title}</h3>
+                  <p className="text-neutral-500 text-sm leading-relaxed">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Docs / Quick Start */}
+      <section id="docs" className="py-24">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold tracking-tight mb-6 text-center">Quick Start</h2>
+          <p className="text-neutral-500 text-center mb-12">Get up and running in under a minute.</p>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* SMTP Config */}
+            <div className="bg-white border border-neutral-200 rounded-xl p-6">
+              <h3 className="font-bold mb-4 flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                SMTP Configuration
+              </h3>
+              <p className="text-neutral-500 text-sm mb-4">Add these environment variables to your project:</p>
+              <div className="bg-neutral-900 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
+                <div><span className="text-neutral-500">EMAIL_SMTP_HOST=</span>localhost</div>
+                <div><span className="text-neutral-500">EMAIL_SMTP_PORT=</span>2525</div>
+                <div><span className="text-neutral-500">EMAIL_SMTP_USERNAME=</span><span className="text-amber-400">your-inbox-username</span></div>
+                <div><span className="text-neutral-500">EMAIL_SMTP_PASSWORD=</span><span className="text-amber-400">your-inbox-password</span></div>
+              </div>
+            </div>
+
+            {/* Nodemailer Example */}
+            <div className="bg-white border border-neutral-200 rounded-xl p-6">
+              <h3 className="font-bold mb-4 flex items-center gap-2">
+                <Zap className="w-4 h-4" />
+                Nodemailer Example
+              </h3>
+              <p className="text-neutral-500 text-sm mb-4">Works with any SMTP client. Here's Nodemailer:</p>
+              <div className="bg-neutral-900 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
+                <div><span className="text-blue-400">const</span> transport = nodemailer.createTransport({"{"}</div>
+                <div className="pl-4">host: process.env.<span className="text-amber-400">EMAIL_SMTP_HOST</span>,</div>
+                <div className="pl-4">port: process.env.<span className="text-amber-400">EMAIL_SMTP_PORT</span>,</div>
+                <div className="pl-4">auth: {"{"}</div>
+                <div className="pl-8">user: process.env.<span className="text-amber-400">EMAIL_SMTP_USERNAME</span>,</div>
+                <div className="pl-8">pass: process.env.<span className="text-amber-400">EMAIL_SMTP_PASSWORD</span>,</div>
+                <div className="pl-4">{"}"},</div>
+                <div>{"}"});</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Validation Checks */}
+          <div className="mt-8 bg-white border border-neutral-200 rounded-xl p-6">
+            <h3 className="font-bold mb-4 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4" />
+              Validation Checks
+            </h3>
+            <p className="text-neutral-500 text-sm mb-6">Every email and HTML upload is automatically checked for:</p>
+            <div className="grid md:grid-cols-3 gap-4">
+              {[
+                { name: "Link Check", desc: "Verifies all links are reachable, follows redirects, flags broken URLs" },
+                { name: "Image Check", desc: "Tests image reachability, flags oversized files and missing dimensions" },
+                { name: "Spam Score", desc: "Checks for unsubscribe links, image-to-text ratio, trigger words" },
+                { name: "HTML Validation", desc: "Detects unclosed tags, missing alt attributes, deprecated elements" },
+                { name: "Client Compatibility", desc: "Flags CSS not supported in Outlook, Gmail, Yahoo, Apple Mail" },
+                { name: "Accessibility", desc: "WCAG contrast checks, heading structure, descriptive link text" },
+              ].map((check) => (
+                <div key={check.name} className="p-4 bg-neutral-50 rounded-lg border border-neutral-100">
+                  <h4 className="font-semibold text-sm mb-1">{check.name}</h4>
+                  <p className="text-neutral-500 text-xs leading-relaxed">{check.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* HTML Check */}
+          <div className="mt-8 bg-white border border-neutral-200 rounded-xl p-6">
+            <h3 className="font-bold mb-4 flex items-center gap-2">
+              <ArrowRight className="w-4 h-4" />
+              Standalone HTML Check
+            </h3>
+            <p className="text-neutral-500 text-sm mb-4">
+              Don't want to use SMTP? You can also validate HTML directly:
+            </p>
+            <ul className="space-y-2 text-sm text-neutral-600">
+              <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Upload an .html file</li>
+              <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Paste raw HTML</li>
+              <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Fetch from a URL</li>
+            </ul>
+            <p className="text-neutral-400 text-xs mt-4">
+              Perfect for validating newsletters, email templates, or transactional emails without setting up SMTP.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="w-full border-t border-neutral-200 bg-white">
         <div className="max-w-7xl mx-auto py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex flex-col items-center md:items-start gap-2">
             <span className="font-bold text-neutral-900">MailFail</span>
-            <span className="text-xs text-neutral-500">© 2024 MailFail Inc. Built for developers.</span>
+            <span className="text-xs text-neutral-500">© 2026 MailFail. Built for developers.</span>
           </div>
           <div className="flex items-center gap-6">
-            {["Privacy", "Terms", "GitHub", "Status", "Twitter"].map((item) => (
-              <a key={item} className="text-xs text-neutral-500 hover:underline" href="#">
-                {item}
-              </a>
-            ))}
+            <a className="text-xs text-neutral-500 hover:underline" href="#features">Features</a>
+            <a className="text-xs text-neutral-500 hover:underline" href="#how-it-works">How it works</a>
+            <a className="text-xs text-neutral-500 hover:underline" href="#docs">Docs</a>
           </div>
         </div>
       </footer>
