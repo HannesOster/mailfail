@@ -73,7 +73,7 @@ function InboxCard({
     }
   }
 
-  const copyEnv = `EMAIL_SMTP_HOST=${smtpHost}\nEMAIL_SMTP_PORT=2525\nEMAIL_SMTP_USERNAME=${inbox.smtpUser}\nEMAIL_SMTP_PASSWORD=${inbox.smtpPass}`;
+  const copyEnv = `SMTP_HOST=${smtpHost}\nSMTP_PORT=2525\nSMTP_USER=${inbox.smtpUser}\nSMTP_PASS=${inbox.smtpPass}`;
   const envBlock = showPass ? copyEnv : copyEnv.replace(inbox.smtpPass, "•".repeat(24));
 
   return (
@@ -103,7 +103,7 @@ function InboxCard({
         <div className="absolute top-3 right-3 flex items-center gap-2">
           <button
             onClick={() => setShowPass((v) => !v)}
-            className="text-neutral-500 hover:text-white transition-colors p-1"
+            className="text-neutral-500 dark:text-zinc-400 hover:text-white dark:hover:text-zinc-100 transition-colors p-1"
             title={showPass ? "Hide password" : "Show password"}
           >
             {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -115,7 +115,7 @@ function InboxCard({
               if (timerRef.current) clearTimeout(timerRef.current);
               timerRef.current = setTimeout(() => setCopied(false), 2000);
             }}
-            className="text-neutral-500 hover:text-white transition-colors p-1"
+            className="text-neutral-500 dark:text-zinc-400 hover:text-white dark:hover:text-zinc-100 transition-colors p-1"
             title="Copy all as .env"
           >
             {copied ? (
@@ -226,7 +226,7 @@ export function InboxListClient({
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="bg-neutral-900 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-neutral-800 transition-all flex items-center gap-2"
+          className="bg-neutral-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-5 py-2.5 rounded-lg font-medium hover:bg-neutral-800 dark:hover:bg-zinc-200 transition-all flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
           New Inbox
@@ -273,7 +273,7 @@ export function InboxListClient({
 
       <div className="space-y-6">
         {inboxes.length === 0 ? (
-          <div className="text-center py-16 text-neutral-400">
+          <div className="text-center py-16 text-neutral-400 dark:text-zinc-500">
             <Inbox className="w-12 h-12 mx-auto mb-4 text-neutral-200 dark:text-zinc-700" />
             <p className="font-medium text-neutral-500 dark:text-zinc-400">No inboxes yet</p>
             <p className="text-sm mt-1 dark:text-zinc-500">Create your first inbox to start catching test emails.</p>

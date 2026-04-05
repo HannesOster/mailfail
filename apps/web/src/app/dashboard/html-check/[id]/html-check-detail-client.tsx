@@ -59,7 +59,7 @@ export function HtmlCheckDetailClient({
       {/* Back link */}
       <Link
         href="/dashboard/html-check"
-        className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-900 mb-6 transition-colors"
+        className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 mb-6 transition-colors"
       >
         <ChevronLeft className="w-4 h-4" />
         Back to HTML Checks
@@ -67,10 +67,10 @@ export function HtmlCheckDetailClient({
 
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#0A0A0A]">{check.name}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">{check.name}</h1>
           <div className="flex items-center gap-3 mt-1">
-            <span className="text-xs text-[#525252] font-mono">ID: {check.id.slice(0, 12)}</span>
-            <span className="text-xs text-[#525252]">
+            <span className="text-xs text-zinc-600 dark:text-zinc-400 font-mono">ID: {check.id.slice(0, 12)}</span>
+            <span className="text-xs text-zinc-600 dark:text-zinc-400">
               Source: <span className="font-semibold capitalize">{check.source}</span>
             </span>
             {check.sourceUrl && (
@@ -107,15 +107,15 @@ export function HtmlCheckDetailClient({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* HTML Preview */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="flex border-b border-zinc-200 gap-6">
+          <div className="flex border-b border-zinc-200 dark:border-zinc-700 gap-6">
             {(["html", "validation"] as Tab[]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
                 className={`px-1 py-3 text-sm font-medium border-b-2 -mb-[2px] capitalize transition-all ${
                   tab === t
-                    ? "border-zinc-900 text-zinc-900"
-                    : "border-transparent text-zinc-500 hover:text-zinc-900"
+                    ? "border-zinc-900 text-zinc-900 dark:border-zinc-100 dark:text-zinc-100"
+                    : "border-transparent text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
                 }`}
               >
                 {t === "html" ? "HTML Preview" : "Validation"}
@@ -124,10 +124,10 @@ export function HtmlCheckDetailClient({
           </div>
 
           {tab === "html" && (
-            <div className="bg-zinc-100/50 p-4 rounded-xl border border-zinc-200 min-h-[500px] shadow-inner">
+            <div className="bg-zinc-100/50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 min-h-[500px] shadow-inner">
               <iframe
                 srcDoc={check.htmlContent}
-                className="w-full h-[600px] bg-white rounded-lg border border-zinc-200 shadow"
+                className="w-full h-[600px] bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow"
                 sandbox="allow-same-origin"
                 title="HTML preview"
               />
@@ -143,7 +143,7 @@ export function HtmlCheckDetailClient({
                   recheckLoading={recheckLoading}
                 />
               ) : (
-                <div className="bg-white border border-zinc-200 rounded-xl p-8 text-center">
+                <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl p-8 text-center">
                   <p className="text-zinc-500 text-sm">No validation results available.</p>
                 </div>
               )}
@@ -160,7 +160,7 @@ export function HtmlCheckDetailClient({
               recheckLoading={recheckLoading}
             />
           ) : (
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl p-6 text-center">
               <p className="text-zinc-400 text-sm">Validation pending...</p>
             </div>
           )}

@@ -45,11 +45,11 @@ export function ApiKeySection({ initialApiKey }: { initialApiKey: string | null 
     : null;
 
   return (
-    <section className="bg-white border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
+    <section className="bg-white border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700 rounded-lg overflow-hidden shadow-sm">
       <div className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <Key className="w-4 h-4 text-zinc-500" />
-          <h3 className="text-sm font-semibold text-zinc-900">API Key</h3>
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">API Key</h3>
         </div>
 
         {apiKey ? (
@@ -58,19 +58,19 @@ export function ApiKeySection({ initialApiKey }: { initialApiKey: string | null 
               Use this key as a Bearer token to authenticate API requests.
             </p>
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex-1 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 font-mono text-xs text-zinc-700 truncate select-all">
+              <div className="flex-1 bg-zinc-50 border border-zinc-200 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300 rounded-lg px-3 py-2 font-mono text-xs text-zinc-700 truncate select-all">
                 {visible ? apiKey : maskedKey}
               </div>
               <button
                 onClick={() => setVisible((v) => !v)}
-                className="p-2 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
+                className="p-2 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 dark:hover:text-zinc-200 dark:hover:bg-zinc-800 rounded-md transition-colors"
                 title={visible ? "Hide key" : "Show key"}
               >
                 {visible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
               <button
                 onClick={handleCopy}
-                className="p-2 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
+                className="p-2 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 dark:hover:text-zinc-200 dark:hover:bg-zinc-800 rounded-md transition-colors"
                 title="Copy key"
               >
                 {copied ? (
@@ -83,7 +83,7 @@ export function ApiKeySection({ initialApiKey }: { initialApiKey: string | null 
             <button
               onClick={() => handleGenerate(true)}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium border border-zinc-300 text-zinc-600 rounded-lg hover:bg-zinc-50 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium border border-zinc-300 text-zinc-600 hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-400 dark:hover:bg-zinc-800 rounded-lg transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
               Regenerate Key
@@ -97,7 +97,7 @@ export function ApiKeySection({ initialApiKey }: { initialApiKey: string | null 
             <button
               onClick={() => handleGenerate(false)}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 rounded-lg transition-colors disabled:opacity-50"
             >
               <Key className={`w-4 h-4 ${loading ? "animate-pulse" : ""}`} />
               {loading ? "Generating…" : "Generate API Key"}
