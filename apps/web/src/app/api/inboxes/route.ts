@@ -2,12 +2,12 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, requireAuthFromRequest } from "@/lib/auth";
 import { listInboxes, createInbox } from "@mailfail/db/src/queries/inboxes";
 import { checkInboxLimit } from "@/lib/limits";
 
-export async function GET() {
-  const { user } = await requireAuth();
+export async function GET(request: Request) {
+  const { user } = await requireAuthFromRequest(request);
   const inboxes = await listInboxes(db, user.id);
   return NextResponse.json(inboxes);
 }
