@@ -59,10 +59,9 @@ type ValidationData = {
 type Tab = "html" | "text" | "raw" | "validation";
 
 export function EmailDetailPage() {
-  const { id, mailId } = useParams<{ id: string; mailId: string }>();
+  const { mailId } = useParams<{ mailId: string }>();
   const navigate = useNavigate();
   const [email, setEmail] = useState<Email | null>(null);
-  const [inboxName, setInboxName] = useState("");
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("html");
   const [validation, setValidation] = useState<ValidationData>(null);
@@ -77,34 +76,35 @@ export function EmailDetailPage() {
   const [forwardError, setForwardError] = useState("");
 
   useEffect(() => {
-    if (!id || !mailId) return;
-    Promise.all([
-      fetch(`/api/inboxes/${id}`).then((r) => r.json()),
-      fetch(`/api/inboxes/${id}/emails/${mailId}`).then((r) => r.json()),
-    ])
-      .then(([inboxData, emailData]) => {
-        setInboxName(inboxData.name);
+    if (!mailId) return;
+    fetch(`/api/emails/${mailId}`)
+      .then((r) => r.json())
+      .then((emailData) => {
         setEmail(emailData);
-        // Try to load validation
-        fetch(`/api/inboxes/${id}/emails/${mailId}/recheck`, { method: "POST" })
-          .then((r) => (r.ok ? r.json() : null))
-          .then((v) => { if (v) setValidation(v); })
-          .catch(() => {});
+        if (emailData.validation) {
+          setValidation(emailData.validation);
+        } else {
+          // Try to run validation
+          fetch(`/api/emails/${mailId}/recheck`, { method: "POST" })
+            .then((r) => (r.ok ? r.json() : null))
+            .then((v) => { if (v) setValidation(v); })
+            .catch(() => {});
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [id, mailId]);
+  }, [mailId]);
 
   async function handleDelete() {
     if (!confirm("Delete this email?")) return;
-    await fetch(`/api/inboxes/${id}/emails/${mailId}`, { method: "DELETE" });
-    navigate(`/inboxes/${id}`);
+    await fetch(`/api/emails/${mailId}`, { method: "DELETE" });
+    navigate("/");
   }
 
   async function handleRecheck() {
     setRecheckLoading(true);
     try {
-      const res = await fetch(`/api/inboxes/${id}/emails/${mailId}/recheck`, {
+      const res = await fetch(`/api/emails/${mailId}/recheck`, {
         method: "POST",
       });
       if (res.ok) {
@@ -123,7 +123,7 @@ export function EmailDetailPage() {
     setForwardStatus("idle");
     setForwardError("");
     try {
-      const res = await fetch(`/api/inboxes/${id}/emails/${mailId}/forward`, {
+      const res = await fetch(`/api/emails/${mailId}/forward`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ to: forwardTo.trim() }),
@@ -168,9 +168,7 @@ export function EmailDetailPage() {
     <div className="max-w-7xl mx-auto">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider mb-6">
-        <Link to="/inboxes" className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">Inboxes</Link>
-        <span className="text-zinc-300 dark:text-zinc-600">/</span>
-        <Link to={`/inboxes/${id}`} className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">{inboxName}</Link>
+        <Link to="/" className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">Inbox</Link>
         <span className="text-zinc-300 dark:text-zinc-600">/</span>
         <span className="text-zinc-900 dark:text-zinc-100 font-bold truncate max-w-[200px]">{email.subject}</span>
       </div>

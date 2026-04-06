@@ -1,7 +1,7 @@
 {
-  "name": "@mailfail/cli",
+  "name": "mailfail",
   "version": "1.0.0",
-  "private": true,
+  "description": "Local email catching & validation tool for developers. Like Mailtrap, but self-hosted.",
   "type": "module",
   "bin": {
     "mailfail": "./dist/cli.js"
@@ -10,24 +10,41 @@
     "dev": "tsx src/cli.ts",
     "build": "bash scripts/build.sh",
     "build:ui": "cd ui && npx vite build",
-    "build:server": "tsup"
+    "build:server": "tsup",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "email",
+    "smtp",
+    "testing",
+    "mailtrap",
+    "mailhog",
+    "mailpit",
+    "development",
+    "cli"
+  ],
+  "author": "Johannes Osterkamp",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johannesosterkamp/mailfail"
   },
   "dependencies": {
+    "better-sqlite3": "^11",
+    "smtp-server": "^3"
+  },
+  "devDependencies": {
     "@mailfail/db": "workspace:*",
     "@mailfail/shared": "workspace:*",
     "@mailfail/smtp": "workspace:*",
     "@mailfail/validation": "workspace:*",
-    "better-sqlite3": "^11",
-    "commander": "^13",
-    "hono": "^4",
     "@hono/node-server": "^1",
-    "smtp-server": "^3",
-    "open": "^10",
-    "resend": "^4"
-  },
-  "devDependencies": {
     "@types/better-sqlite3": "^7",
     "@types/smtp-server": "^3",
+    "commander": "^13",
+    "hono": "^4",
+    "open": "^10",
+    "resend": "^4",
     "tsup": "^8",
     "tsx": "^4",
     "typescript": "^5"

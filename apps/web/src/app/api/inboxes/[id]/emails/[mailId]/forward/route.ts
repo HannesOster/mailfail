@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireAuth } from "@/lib/auth";
+import { requireAuthFromRequest } from "@/lib/auth";
 import { getInbox } from "@mailfail/db/src/queries/inboxes";
 import { getEmail } from "@mailfail/db/src/queries/emails";
 
@@ -10,7 +10,7 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string; mailId: string }> },
 ) {
-  const { user } = await requireAuth();
+  const { user } = await requireAuthFromRequest(request);
   const { id, mailId } = await params;
 
   const inbox = await getInbox(db, id, user.id);

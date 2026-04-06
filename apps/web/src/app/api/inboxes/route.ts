@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const { user, clerkUserId } = await requireAuth();
+  const { user, clerkUserId } = await requireAuthFromRequest(request);
 
   const limit = await checkInboxLimit(clerkUserId, user.id);
   if (!limit.allowed) {

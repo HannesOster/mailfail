@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { RefreshCw, Trash2, Search, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import { RefreshCw, Trash2, Search } from "lucide-react";
 import { timeAgo } from "../lib/utils";
-import { useInboxStream } from "../hooks/use-inbox-stream";
+import { useEmailStream } from "../hooks/use-inbox-stream";
+import { Welcome } from "../components/welcome";
 
 type OverallScore = "green" | "yellow" | "red";
 
@@ -24,11 +25,6 @@ type ValidationEntry = {
   emailId: string | null;
   overallScore: OverallScore;
   spamScore: SpamScoreResult;
-};
-
-type Inbox = {
-  id: string;
-  name: string;
 };
 
 function SpamBadge({ score }: { score: number }) {
@@ -66,29 +62,21 @@ function OverallBadge({ score }: { score: string }) {
   return <span className="w-3 h-3 bg-red-500 rounded-full inline-block" title="Issues" />;
 }
 
-export function InboxDetailPage() {
-  const { id } = useParams<{ id: string }>();
-  const [inbox, setInbox] = useState<Inbox | null>(null);
+export function EmailListPage() {
   const [emails, setEmails] = useState<Email[]>([]);
   const [validations, setValidations] = useState<ValidationEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState("");
-  const newEmailTrigger = useInboxStream(id!);
+  const newEmailTrigger = useEmailStream();
 
   useEffect(() => {
-    if (!id) return;
-    Promise.all([
-      fetch(`/api/inboxes/${id}`).then((r) => r.json()),
-      fetch(`/api/inboxes/${id}/emails`).then((r) => r.json()),
-    ])
-      .then(([inboxData, emailsData]) => {
-        setInbox(inboxData);
-        setEmails(emailsData);
-      })
+    fetch("/api/emails")
+      .then((r) => r.json())
+      .then((data) => setEmails(data))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     if (newEmailTrigger === 0) return;
@@ -97,10 +85,9 @@ export function InboxDetailPage() {
   }, [newEmailTrigger]);
 
   async function handleRefresh() {
-    if (!id) return;
     setRefreshing(true);
     try {
-      const res = await fetch(`/api/inboxes/${id}/emails`);
+      const res = await fetch("/api/emails");
       if (res.ok) {
         const data = await res.json();
         setEmails(data);
@@ -111,9 +98,8 @@ export function InboxDetailPage() {
   }
 
   async function handleDeleteAll() {
-    if (!id) return;
     if (!confirm("Delete all emails in this inbox?")) return;
-    await fetch(`/api/inboxes/${id}/emails`, { method: "DELETE" });
+    await fetch("/api/emails", { method: "DELETE" });
     setEmails([]);
     setValidations([]);
   }
@@ -136,10 +122,8 @@ export function InboxDetailPage() {
     );
   }
 
-  if (!inbox) {
-    return (
-      <div className="text-center py-16 text-zinc-400 dark:text-zinc-500 text-sm">Inbox not found.</div>
-    );
+  if (emails.length === 0) {
+    return <Welcome />;
   }
 
   return (
@@ -147,7 +131,7 @@ export function InboxDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h1 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{inbox.name}</h1>
+          <h1 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Inbox</h1>
           <div className="flex items-center gap-1.5 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full text-[11px] font-bold border border-green-200/50 dark:border-green-800/50">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             LIVE
@@ -187,26 +171,7 @@ export function InboxDetailPage() {
           </div>
         </div>
 
-        {emails.length === 0 ? (
-          /* Empty state */
-          <div className="text-center py-16 px-8">
-            <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Mail className="w-8 h-8 text-zinc-400" />
-            </div>
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">No emails yet</h3>
-            <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-8 max-w-md mx-auto">
-              Send a test email using the SMTP credentials. It will appear here instantly.
-            </p>
-            <div className="bg-zinc-950 rounded-xl p-5 max-w-md mx-auto text-left">
-              <div className="font-mono text-sm space-y-1.5">
-                <div><span className="text-zinc-500">SMTP_HOST=</span><span className="text-zinc-200">localhost</span></div>
-                <div><span className="text-zinc-500">SMTP_PORT=</span><span className="text-zinc-200">2525</span></div>
-                <div><span className="text-zinc-500">SMTP_USER=</span><span className="text-amber-300">dev</span></div>
-                <div><span className="text-zinc-500">SMTP_PASS=</span><span className="text-amber-300">dev</span></div>
-              </div>
-            </div>
-          </div>
-        ) : filteredEmails.length === 0 && search ? (
+        {filteredEmails.length === 0 && search ? (
           /* No search results */
           <div className="text-center py-12 text-zinc-500 dark:text-zinc-400 text-sm">
             No emails matching &ldquo;{search}&rdquo;
@@ -245,7 +210,7 @@ export function InboxDetailPage() {
                       </td>
                       <td className={`py-3 px-4 ${!email.isRead ? "font-semibold text-zinc-900 dark:text-zinc-100" : "text-zinc-600 dark:text-zinc-400"}`}>
                         <Link
-                          to={`/inboxes/${id}/${email.id}`}
+                          to={`/emails/${email.id}`}
                           className="hover:underline absolute inset-0"
                         />
                         {email.from}

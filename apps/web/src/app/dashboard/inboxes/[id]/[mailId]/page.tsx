@@ -31,7 +31,7 @@ export default async function EmailDetailPage({
         inboxName={inbox.name}
         email={email}
         initialValidation={validation}
-        smtpHost={process.env.SMTP_HOST ?? "smtp.mailfail.dev"}
+        smtpHost={process.env.SMTP_HOST ?? "localhost"}
         smtpUser={inbox.smtpUser}
       />
     </div>

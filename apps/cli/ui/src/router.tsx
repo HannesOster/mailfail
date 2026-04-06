@@ -1,8 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { SidebarNav } from "./components/sidebar-nav";
 import { ThemeToggle } from "./components/theme-toggle";
-import { InboxListPage } from "./pages/inbox-list";
-import { InboxDetailPage } from "./pages/inbox-detail";
+import { EmailListPage } from "./pages/email-list";
 import { EmailDetailPage } from "./pages/email-detail";
 
 export function AppRouter() {
@@ -15,10 +14,9 @@ export function AppRouter() {
             <ThemeToggle />
           </div>
           <Routes>
-            <Route path="/" element={<Navigate to="/inboxes" replace />} />
-            <Route path="/inboxes" element={<InboxListPage />} />
-            <Route path="/inboxes/:id" element={<InboxDetailPage />} />
-            <Route path="/inboxes/:id/:mailId" element={<EmailDetailPage />} />
+            <Route path="/" element={<EmailListPage />} />
+            <Route path="/emails/:mailId" element={<EmailDetailPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </main>

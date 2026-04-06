@@ -11,16 +11,6 @@ import * as validationQueries from "@mailfail/db/src/queries/sqlite-validation";
 import { runValidation } from "@mailfail/validation";
 import type { Readable } from "stream";
 
-function extractRouteKey(toAddresses: string[]): string {
-  if (toAddresses.length === 0) return "catchall";
-  const first = toAddresses[0];
-  // Extract local-part from "Name <email@domain>" or "email@domain"
-  const match = first.match(/<([^>]+)>/) || [null, first];
-  const email = match[1] || first;
-  const localPart = email.split("@")[0]?.toLowerCase().trim();
-  return localPart || "catchall";
-}
-
 export function createLocalSmtpServer(db: SqliteDatabase, storage: Storage) {
   const server = new SMTPServer({
     authOptional: false,
@@ -56,8 +46,7 @@ async function handleLocalMessage(
 ) {
   const parsed = await parseEmailStream(stream);
 
-  const routeKey = extractRouteKey(parsed.to);
-  const inbox = inboxQueries.getOrCreateInboxByRouteKey(db, routeKey);
+  const inbox = inboxQueries.getOrCreateInboxByRouteKey(db, "default");
 
   const email = emailQueries.insertEmail(db, {
     inboxId: inbox.id,

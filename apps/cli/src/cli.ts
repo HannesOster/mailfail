@@ -6,7 +6,28 @@ import { initDatabase } from "./db.js";
 import { createStorage } from "./storage.js";
 import { createLocalSmtpServer } from "./smtp.js";
 import { createApp } from "./server.js";
+import fs from "fs";
+import path from "path";
+
 const VERSION = "1.0.0";
+
+// Load .env from data directory (~/.mailfail/.env)
+function loadEnvFile(dataDir: string) {
+  const envPath = path.join(dataDir, ".env");
+  if (!fs.existsSync(envPath)) return;
+  const content = fs.readFileSync(envPath, "utf-8");
+  for (const line of content.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eqIdx = trimmed.indexOf("=");
+    if (eqIdx === -1) continue;
+    const key = trimmed.slice(0, eqIdx).trim();
+    const value = trimmed.slice(eqIdx + 1).trim();
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  }
+}
 
 function checkPort(port: number, name: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -54,6 +75,9 @@ const program = new Command()
       console.error(`\n  \x1b[31mError:\x1b[0m ${err.message}\n`);
       process.exit(1);
     }
+
+    // Load env file from data directory
+    loadEnvFile(config.dataDir);
 
     // Init database
     const db = initDatabase(config.dataDir);

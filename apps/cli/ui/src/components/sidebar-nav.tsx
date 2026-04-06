@@ -3,7 +3,7 @@ import { Mail } from "lucide-react";
 
 export function SidebarNav() {
   const { pathname } = useLocation();
-  const isInboxActive = pathname === "/" || pathname.startsWith("/inboxes");
+  const isInboxActive = pathname === "/" || pathname.startsWith("/emails");
 
   return (
     <aside className="fixed left-0 top-0 h-full flex flex-col py-6 px-4 bg-zinc-950 w-64 border-r border-zinc-800 z-50">
@@ -21,7 +21,7 @@ export function SidebarNav() {
 
       <nav className="flex-1 space-y-1">
         <Link
-          to="/inboxes"
+          to="/"
           className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             isInboxActive
               ? "bg-zinc-900 text-white font-semibold"
@@ -29,7 +29,7 @@ export function SidebarNav() {
           }`}
         >
           <Mail className="w-[18px] h-[18px]" />
-          <span>Inboxes</span>
+          <span>Inbox</span>
         </Link>
       </nav>
     </aside>

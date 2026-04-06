@@ -18,7 +18,7 @@ export default async function DashboardPage() {
       inbox={inbox}
       initialEmails={emails}
       initialValidations={validations}
-      smtpHost={process.env.SMTP_HOST ?? "smtp.mailfail.dev"}
+      smtpHost={process.env.SMTP_HOST ?? "localhost"}
     />
   );
 }

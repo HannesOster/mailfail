@@ -2,17 +2,17 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireAuth } from "@/lib/auth";
+import { requireAuthFromRequest } from "@/lib/auth";
 import { getInbox } from "@mailfail/db/src/queries/inboxes";
 import { getEmail } from "@mailfail/db/src/queries/emails";
 import { upsertValidationResult } from "@mailfail/db/src/queries/validation";
 import { runValidation } from "@mailfail/validation";
 
 export async function POST(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string; mailId: string }> },
 ) {
-  const { user } = await requireAuth();
+  const { user } = await requireAuthFromRequest(request);
   const { id, mailId } = await params;
 
   const inbox = await getInbox(db, id, user.id);

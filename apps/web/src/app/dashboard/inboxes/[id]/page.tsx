@@ -25,7 +25,7 @@ export default async function InboxDetailPage({
       <InboxDetailClient
         inbox={inbox}
         initialEmails={emails}
-        smtpHost={process.env.SMTP_HOST ?? "smtp.mailfail.dev"}
+        smtpHost={process.env.SMTP_HOST ?? "localhost"}
       />
     </div>
   );

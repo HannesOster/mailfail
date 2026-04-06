@@ -64,7 +64,7 @@ export function InboxDetailClient({
   }
 
   function copySmtp() {
-    const text = `Host: ${smtpHost}\nPort: 2525\nUsername: ${inbox.smtpUser}\nPassword: ${inbox.smtpPass}`;
+    const text = `SMTP_HOST=${smtpHost}\nSMTP_PORT=2525\nSMTP_USER=${inbox.smtpUser}\nSMTP_PASS=${inbox.smtpPass}`;
     copyToClipboard(text);
   }
 

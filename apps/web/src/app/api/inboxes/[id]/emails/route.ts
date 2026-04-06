@@ -27,10 +27,10 @@ export async function GET(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const { user } = await requireAuth();
+  const { user } = await requireAuthFromRequest(request);
   const { id } = await params;
 
   const inbox = await getInbox(db, id, user.id);
