@@ -1,4 +1,3 @@
-import { simpleParser } from "mailparser";
 import type { Readable } from "stream";
 import type { SMTPServerSession } from "smtp-server";
 import { Redis } from "@upstash/redis";
@@ -9,14 +8,8 @@ import { PLAN_LIMITS } from "@mailfail/shared";
 import type { SseEvent } from "@mailfail/shared";
 import { runValidation } from "@mailfail/validation";
 import { put } from "@vercel/blob";
-
-async function streamToBuffer(stream: Readable): Promise<Buffer> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of stream) {
-    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
-  }
-  return Buffer.concat(chunks);
-}
+import { parseEmailStream } from "@mailfail/smtp";
+import type { ParsedEmail } from "@mailfail/smtp";
 
 export async function handleMessage(
   stream: Readable,
@@ -48,12 +41,9 @@ export async function handleMessage(
     }
   }
 
-  const rawBuffer = await streamToBuffer(stream);
-  const rawSource = rawBuffer.toString("utf-8");
-
-  let parsed: Awaited<ReturnType<typeof simpleParser>>;
+  let parsedEmail: ParsedEmail;
   try {
-    parsed = await simpleParser(rawBuffer);
+    parsedEmail = await parseEmailStream(stream);
   } catch (err) {
     console.error("Failed to parse email", err);
     throw new Error("Failed to parse email message");
@@ -66,15 +56,15 @@ export async function handleMessage(
   try {
     email = await insertEmail(db, {
       inboxId: inbox.id,
-      from: parsed.from?.text ?? "unknown",
-      to: parsed.to ? (Array.isArray(parsed.to) ? parsed.to.map((a) => a.text) : [parsed.to.text]) : [],
-      cc: parsed.cc ? (Array.isArray(parsed.cc) ? parsed.cc.map((a) => a.text) : [parsed.cc.text]) : [],
-      bcc: parsed.bcc ? (Array.isArray(parsed.bcc) ? parsed.bcc.map((a) => a.text) : [parsed.bcc.text]) : [],
-      subject: parsed.subject ?? "(no subject)",
-      htmlBody: parsed.html || null,
-      textBody: parsed.text || null,
-      rawSource,
-      headers: Object.fromEntries(parsed.headers) as Record<string, string>,
+      from: parsedEmail.from,
+      to: parsedEmail.to,
+      cc: parsedEmail.cc,
+      bcc: parsedEmail.bcc,
+      subject: parsedEmail.subject,
+      htmlBody: parsedEmail.htmlBody,
+      textBody: parsedEmail.textBody,
+      rawSource: parsedEmail.rawSource,
+      headers: parsedEmail.headers,
     });
   } catch (err) {
     console.error("Failed to insert email into database", err);
@@ -121,21 +111,21 @@ export async function handleMessage(
   }
 
   // Process attachments (fire and don't block SMTP response)
-  if (parsed.attachments && parsed.attachments.length > 0) {
+  if (parsedEmail.attachments && parsedEmail.attachments.length > 0) {
     const { insertAttachment } = await import("@mailfail/db/src/queries/attachments");
 
-    for (const att of parsed.attachments) {
+    for (const att of parsedEmail.attachments) {
       try {
         const blob = await put(
-          `attachments/${email.id}/${att.filename || "unnamed"}`,
+          `attachments/${email.id}/${att.filename}`,
           att.content,
           { access: "public", contentType: att.contentType },
         );
 
         await insertAttachment(db, {
           emailId: email.id,
-          filename: att.filename || "unnamed",
-          mimeType: att.contentType || "application/octet-stream",
+          filename: att.filename,
+          mimeType: att.contentType,
           size: att.size,
           storagePath: blob.url,
         });
@@ -146,13 +136,13 @@ export async function handleMessage(
   }
 
   // Run validation asynchronously — don't block the SMTP response
-  const htmlContent = parsed.html || parsed.text || "";
+  const htmlContent = parsedEmail.htmlBody || parsedEmail.textBody || "";
   if (htmlContent) {
     const { upsertValidationResult } = await import("@mailfail/db/src/queries/validation");
 
     runValidation(htmlContent, {
-      subject: parsed.subject,
-      hasPlainText: !!parsed.text,
+      subject: parsedEmail.subject,
+      hasPlainText: !!parsedEmail.textBody,
     })
       .then(async (result) => {
         try {

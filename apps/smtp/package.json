@@ -1,5 +1,5 @@
 {
-  "name": "@mailfail/smtp",
+  "name": "@mailfail/smtp-server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mailfail/db": "workspace:*",
+    "@mailfail/smtp": "workspace:*",
     "@mailfail/shared": "workspace:*",
     "@mailfail/validation": "workspace:*",
     "@vercel/blob": "^0.27",
