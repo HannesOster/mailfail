@@ -1,60 +1,32 @@
 #!/bin/bash
 
 # MailFail — Start Script
-# Startet Web-App (Port 3333) + SMTP-Server (Port 2525)
+# Startet das lokale CLI Tool (SMTP + Web UI)
+
+cd "$(dirname "$0")"
 
 # Load nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm use 22 > /dev/null 2>&1
 
-cd "$(dirname "$0")"
+# Check if CLI is built
+if [ ! -f "apps/cli/dist/cli.js" ]; then
+  echo "  Building CLI..."
 
-# Kill any existing processes on our ports
-lsof -ti:3333 | xargs kill -9 2>/dev/null
-lsof -ti:2525 | xargs kill -9 2>/dev/null
-
-echo ""
-echo "  MailFail"
-echo "  ────────────────────────────"
-echo "  Web:   http://localhost:3333"
-echo "  SMTP:  localhost:2525"
-echo "  ────────────────────────────"
-echo ""
-
-# Start SMTP server in background
-(cd apps/smtp && pnpm dev > /tmp/mailfail-smtp.log 2>&1) &
-SMTP_PID=$!
-
-# Start web app in background
-(cd apps/web && PORT=3333 pnpm dev > /tmp/mailfail-web.log 2>&1) &
-WEB_PID=$!
-
-# Wait for web server to be ready
-echo "  Starting..."
-READY=0
-for i in {1..30}; do
-  if curl -s http://localhost:3333 > /dev/null 2>&1; then
-    READY=1
-    break
+  if ! command -v pnpm &>/dev/null; then
+    echo "  ERROR: pnpm nicht gefunden. Bitte installieren: npm i -g pnpm"
+    exit 1
   fi
-  sleep 1
-done
 
-if [ $READY -eq 0 ]; then
-  echo "  ERROR: Web server did not start within 30 seconds."
-  kill $SMTP_PID $WEB_PID 2>/dev/null
-  exit 1
+  if [ ! -d "node_modules" ]; then
+    pnpm install --silent 2>/dev/null
+  fi
+
+  cd apps/cli
+  bash scripts/build.sh
+  cd ../..
 fi
 
-echo "  Ready!"
-echo ""
-
-# Open in browser
-open http://localhost:3333/dashboard
-
-# Handle Ctrl+C — kill both processes
-trap "echo ''; echo '  Stopping MailFail...'; kill $SMTP_PID $WEB_PID 2>/dev/null; exit 0" INT TERM
-
-# Keep script running
-wait
+# Start CLI tool — passes all arguments through
+exec node apps/cli/dist/cli.js --open "$@"
