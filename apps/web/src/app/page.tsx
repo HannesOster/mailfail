@@ -1,368 +1,525 @@
-import Link from "next/link";
-import { ArrowRight, Mail, CheckCircle, Zap, Check } from "lucide-react";
-import { BILLING_ENABLED } from "@mailfail/shared";
+import { CopyButton } from "@/components/copy-button";
 
 export default function LandingPage() {
   return (
-    <div className="antialiased bg-white text-[#0A0A0A]">
-      {/* Top Nav */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-neutral-200">
-        <div className="flex items-center justify-between px-6 h-14 max-w-7xl mx-auto">
-          <div className="text-lg font-bold tracking-tighter text-neutral-900">MailFail</div>
-          <div className="hidden md:flex items-center gap-8">
-            <a className="text-neutral-900 font-semibold text-sm transition-colors" href="#features">Features</a>
-            {BILLING_ENABLED && <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#pricing">Pricing</a>}
-            <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#docs">Docs</a>
-            <a className="text-neutral-500 font-medium text-sm hover:text-neutral-900 transition-colors" href="#how-it-works">How it works</a>
+    <div className="selection:bg-cyan-500/30">
+      {/* TopNavBar */}
+      <nav className="fixed top-0 w-full z-50 bg-[#131315]/60 backdrop-blur-xl shadow-[0_20px_50px_-12px_rgba(6,182,212,0.08)]">
+        <div className="flex justify-between items-center max-w-7xl mx-auto px-8 py-4">
+          <div className="flex items-center gap-2 text-xl font-bold text-white font-[Inter]">
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+              <span
+                className="material-symbols-outlined text-[#131315] text-xl"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                mail
+              </span>
+            </div>
+            MailFail
+          </div>
+          <div className="hidden md:flex gap-8 items-center font-['Space_Grotesk'] text-sm uppercase tracking-widest">
+            <a
+              className="text-cyan-400 border-b-2 border-cyan-400 pb-1"
+              href="#features"
+            >
+              Features
+            </a>
+            <a
+              className="text-zinc-400 hover:text-white transition-colors"
+              href="#how-it-works"
+            >
+              How It Works
+            </a>
+            <a
+              className="text-zinc-400 hover:text-white transition-colors"
+              href="#validation"
+            >
+              Validation
+            </a>
+            <a
+              className="text-zinc-400 hover:text-white transition-colors"
+              href="#comparison"
+            >
+              Comparison
+            </a>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/sign-in" className="text-neutral-900 text-sm font-medium transition-colors">
-              Login
-            </Link>
-            <Link
-              href="/dashboard"
-              className="bg-neutral-900 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-neutral-800 transition-transform active:scale-95 duration-100"
+            <a
+              href="https://github.com/johannesosterkamp/mailfail"
+              className="text-zinc-400 hover:text-cyan-300 transition-all duration-300"
+              aria-label="View on GitHub"
             >
-              Sign Up
-            </Link>
+              <span className="material-symbols-outlined">terminal</span>
+            </a>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-40 -z-10 [mask-image:linear-gradient(to_bottom,white,transparent)]"
-          style={{
-            backgroundImage: "radial-gradient(#E5E5E5 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-            Stop sending test emails to real people
-          </h1>
-          <p className="text-xl text-neutral-500 max-w-2xl mx-auto mb-10">
-            Get SMTP credentials in seconds. Catch every test email. Check for spam, broken links, and compatibility.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Link
-              href="/dashboard"
-              className="bg-neutral-900 text-white px-8 py-3 rounded-lg font-medium hover:bg-neutral-800 transition-all flex items-center gap-2"
-            >
-              Get Started Free
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* SMTP Snippet */}
-          <div className="max-w-xl mx-auto bg-neutral-50 border border-neutral-200 rounded-xl p-4 shadow-sm text-left">
-            <div className="flex items-center gap-2 mb-3 border-b border-neutral-200 pb-2">
-              <div className="w-3 h-3 rounded-full bg-neutral-200" />
-              <div className="w-3 h-3 rounded-full bg-neutral-200" />
-              <div className="w-3 h-3 rounded-full bg-neutral-200" />
-              <span className="text-[10px] text-neutral-400 font-mono ml-2">.env</span>
-            </div>
-            <div className="font-mono text-sm space-y-1 text-neutral-700">
-              <div><span className="text-neutral-400">SMTP_HOST</span>=smtp.mailfail.dev</div>
-              <div><span className="text-neutral-400">SMTP_PORT</span>=2525</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section id="features" className="py-24 bg-neutral-50/50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-xl border border-neutral-200 hover:border-neutral-300 transition-colors">
-              <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center mb-6">
-                <Mail className="w-5 h-5 text-neutral-600" />
-              </div>
-              <h3 className="text-lg font-bold mb-3">SMTP Catching</h3>
-              <p className="text-neutral-500 text-sm leading-relaxed">
-                Catch all outgoing emails with unique SMTP credentials for your inbox. Never worry about accidentally emailing real customers during development.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl border border-neutral-200 hover:border-neutral-300 transition-colors">
-              <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center mb-6">
-                <CheckCircle className="w-5 h-5 text-neutral-600" />
-              </div>
-              <h3 className="text-lg font-bold mb-3">Smart Validation</h3>
-              <p className="text-neutral-500 text-sm leading-relaxed">
-                Automatic link checking, spam scoring, HTML validation, and accessibility audits. Ensure every email you send is perfect.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl border border-neutral-200 hover:border-neutral-300 transition-colors">
-              <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center mb-6">
-                <Zap className="w-5 h-5 text-neutral-600" />
-              </div>
-              <h3 className="text-lg font-bold mb-3">Real-Time Inbox</h3>
-              <p className="text-neutral-500 text-sm leading-relaxed">
-                Emails appear instantly via Server-Sent Events, no refresh needed. Experience a fluid workflow that keeps pace with your tests.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Validation Preview */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-6 tracking-tight">Ship emails with confidence</h2>
-            <p className="text-neutral-500 mb-8 leading-relaxed">
-              Our validation engine automatically runs a suite of tests on every incoming email. From broken links to HTML structure and spam scores, we help you catch issues before your users do.
+      <main className="pt-32 pb-24 overflow-x-hidden">
+        {/* Hero Section */}
+        <section className="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="relative">
+            <div className="absolute -top-24 -left-24 w-96 h-96 bg-cyan-500/10 blur-[120px] rounded-full -z-10" />
+            <h1 className="text-6xl md:text-7xl font-extrabold text-white tracking-tighter leading-[1.1] mb-6">
+              Catch every email.{" "}
+              <span className="text-cyan-400">Validate</span> before you ship.
+            </h1>
+            <p className="text-xl text-zinc-400 mb-10 max-w-lg leading-relaxed">
+              Stop sending test emails to real inboxes. MailFail catches every
+              email your app sends during development — with built-in validation
+              for links, images, spam, HTML, and accessibility.
             </p>
-            <ul className="space-y-4">
-              <li className="flex items-center gap-3 text-sm font-medium">
-                <CheckCircle className="w-5 h-5 text-green-500 fill-green-500" />
-                Automatic HTML element audits
-              </li>
-              <li className="flex items-center gap-3 text-sm font-medium">
-                <CheckCircle className="w-5 h-5 text-green-500 fill-green-500" />
-                SpamAssassin™ scoring integration
-              </li>
-              <li className="flex items-center gap-3 text-sm font-medium">
-                <CheckCircle className="w-5 h-5 text-green-500 fill-green-500" />
-                Accessibility (WCAG) compliance check
-              </li>
-            </ul>
-          </div>
-
-          {/* Mock Validation Card */}
-          <div className="bg-white border border-neutral-200 rounded-xl shadow-2xl overflow-hidden">
-            <div className="bg-neutral-50 px-6 py-4 border-b border-neutral-200 flex justify-between items-center">
-              <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#EF4444]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#EAB308]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#22C55E]" />
-              </div>
-              <span className="text-xs font-mono text-neutral-400">Validation Report: #8821</span>
-            </div>
-            <div className="p-8">
-              <div className="space-y-6">
-                {[
-                  { label: "Links", badge: "✓ Pass", color: "text-green-600 bg-green-50 border-green-100" },
-                  { label: "Images", badge: "✓ Pass", color: "text-green-600 bg-green-50 border-green-100" },
-                  { label: "Spam Score", badge: "2/10 (Safe)", color: "text-neutral-900 font-mono" },
-                  { label: "HTML Structure", badge: "1 warning", color: "text-amber-600 bg-amber-50 border-amber-100" },
-                  { label: "Compatibility", badge: "3 info", color: "text-neutral-500 bg-neutral-50 border-neutral-100" },
-                  { label: "Accessibility", badge: "✓ Pass", color: "text-green-600 bg-green-50 border-green-100" },
-                ].map((item, i) => (
-                  <div key={i} className={`flex items-center justify-between ${i < 5 ? "border-b border-neutral-100 pb-4" : ""}`}>
-                    <span className="text-sm font-medium text-neutral-600">{item.label}</span>
-                    <span className={`px-2 py-0.5 rounded text-xs border ${item.color}`}>{item.badge}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#install"
+                className="bg-gradient-to-br from-cyan-400 to-cyan-600 text-[#003640] font-bold px-8 py-4 rounded-xl shadow-lg shadow-cyan-500/20 hover:scale-105 active:scale-95 transition-transform"
+              >
+                Get Started
+              </a>
+              <a
+                href="https://github.com/johannesosterkamp/mailfail"
+                className="bg-[#2a2a2c] text-zinc-300 border border-[#3d494c]/20 px-8 py-4 rounded-xl hover:bg-[#39393b] hover:text-white transition-colors"
+              >
+                View on GitHub
+              </a>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      {BILLING_ENABLED && (
-        <section id="pricing" className="py-24 bg-neutral-50/50">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold tracking-tight mb-4">Simple Pricing</h2>
-              <p className="text-neutral-500">Scale your testing as you grow.</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Free */}
-              <div className="bg-white border border-neutral-200 rounded-2xl p-8 flex flex-col hover:shadow-lg transition-shadow">
-                <div className="mb-8">
-                  <h3 className="font-bold text-xl mb-1">FREE</h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold tracking-tighter">$0</span>
-                    <span className="text-neutral-400 text-sm">/month</span>
-                  </div>
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-transparent blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
+            <div className="relative bg-[#0e0e10] border border-[#3d494c]/30 rounded-xl overflow-hidden shadow-2xl">
+              <div className="bg-[#1c1b1d] px-4 py-2 flex items-center gap-2 border-b border-[#3d494c]/20">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
                 </div>
-                <ul className="space-y-4 mb-8 flex-grow">
-                  {["1 Inbox", "100 emails / month", "20 HTML checks / month", "7-day retention"].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm text-neutral-600">
-                      <Check className="w-4 h-4 text-neutral-400" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/dashboard"
-                  className="w-full border border-neutral-900 py-3 rounded-lg font-bold text-sm hover:bg-neutral-900 hover:text-white transition-all text-center block"
-                >
-                  Get Started
-                </Link>
+                <div className="text-[10px] font-['JetBrains_Mono'] text-zinc-500 ml-4">
+                  zsh — 80x24
+                </div>
               </div>
-
-              {/* Pro */}
-              <div className="bg-neutral-900 text-white border border-neutral-800 rounded-2xl p-8 flex flex-col relative overflow-hidden">
-                <div className="absolute top-4 right-4 bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
-                  Coming Soon
+              <div className="p-6 font-['JetBrains_Mono'] text-sm leading-relaxed">
+                <div className="flex gap-3 mb-4">
+                  <span className="text-cyan-400">$</span>
+                  <span className="text-zinc-200">npx mailfail</span>
                 </div>
-                <div className="mb-8">
-                  <h3 className="font-bold text-xl mb-1">PRO</h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold tracking-tighter">$19</span>
-                    <span className="text-neutral-400 text-sm">/month</span>
-                  </div>
+                <div className="text-zinc-300 mb-4">
+                  &nbsp;&nbsp;MailFail v1.0.0
                 </div>
-                <ul className="space-y-4 mb-8 flex-grow">
-                  {["Unlimited inboxes", "Unlimited emails", "Unlimited HTML checks", "30-day retention"].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm text-neutral-300">
-                      <Check className="w-4 h-4 text-neutral-500" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <button className="w-full bg-white text-neutral-900 py-3 rounded-lg font-bold text-sm hover:bg-neutral-100 transition-all">
-                  Join Waitlist
-                </button>
+                <div className="text-zinc-400 mb-1">
+                  &nbsp;&nbsp;SMTP&nbsp;&nbsp;→ localhost:2525
+                </div>
+                <div className="text-zinc-400 mb-4">
+                  &nbsp;&nbsp;UI&nbsp;&nbsp;&nbsp;&nbsp;→{" "}
+                  <span className="underline decoration-cyan-500/30">
+                    http://localhost:3333
+                  </span>
+                </div>
+                <div className="text-zinc-500 mb-1">
+                  &nbsp;&nbsp;SMTP_HOST=localhost
+                </div>
+                <div className="text-zinc-500 mb-1">
+                  &nbsp;&nbsp;SMTP_PORT=2525
+                </div>
+                <div className="text-zinc-500 mb-1">
+                  &nbsp;&nbsp;SMTP_USER=dev
+                </div>
+                <div className="text-zinc-500 mb-4">
+                  &nbsp;&nbsp;SMTP_PASS=dev
+                </div>
+                <div className="text-green-400 mb-2">
+                  &nbsp;&nbsp;Ready to catch emails!
+                </div>
+                <div className="mt-2 text-zinc-600 animate-pulse">_</div>
               </div>
             </div>
           </div>
         </section>
-      )}
 
-      {/* How it works */}
-      <section id="how-it-works" className="py-24 bg-neutral-50/50">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold tracking-tight mb-16 text-center">How it works</h2>
-          <div className="space-y-12">
-            {[
-              {
-                step: "1",
-                title: "Sign up — get your inbox",
-                description: "Sign up and your inbox is ready instantly. Copy your unique SMTP credentials from the dashboard.",
-              },
-              {
-                step: "2",
-                title: "Paste in your .env",
-                description: "Swap your production SMTP credentials with the MailFail credentials. Your app sends emails to MailFail instead of real recipients.",
-              },
-              {
-                step: "3",
-                title: "Catch and inspect",
-                description: "Every test email appears in your inbox in real-time. View HTML preview, check links, inspect headers, and see the full validation report.",
-              },
-              {
-                step: "4",
-                title: "Go to production",
-                description: "When you're ready, swap the credentials back to your production provider. No code changes needed — just update your .env.",
-              },
-            ].map((item) => (
-              <div key={item.step} className="flex gap-6 items-start">
-                <div className="w-10 h-10 bg-neutral-900 text-white rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0">
-                  {item.step}
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg mb-1">{item.title}</h3>
-                  <p className="text-neutral-500 text-sm leading-relaxed">{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Docs / Quick Start */}
-      <section id="docs" className="py-24">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold tracking-tight mb-6 text-center">Quick Start</h2>
-          <p className="text-neutral-500 text-center mb-12">Get up and running in under a minute.</p>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* SMTP Config */}
-            <div className="bg-white border border-neutral-200 rounded-xl p-6">
-              <h3 className="font-bold mb-4 flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                SMTP Configuration
-              </h3>
-              <p className="text-neutral-500 text-sm mb-4">Add these environment variables to your project:</p>
-              <div className="bg-neutral-900 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
-                <div><span className="text-neutral-500">EMAIL_SMTP_HOST=</span>localhost</div>
-                <div><span className="text-neutral-500">EMAIL_SMTP_PORT=</span>2525</div>
-                <div><span className="text-neutral-500">EMAIL_SMTP_USERNAME=</span><span className="text-amber-400">your-inbox-username</span></div>
-                <div><span className="text-neutral-500">EMAIL_SMTP_PASSWORD=</span><span className="text-amber-400">your-inbox-password</span></div>
-              </div>
-            </div>
-
-            {/* Nodemailer Example */}
-            <div className="bg-white border border-neutral-200 rounded-xl p-6">
-              <h3 className="font-bold mb-4 flex items-center gap-2">
-                <Zap className="w-4 h-4" />
-                Nodemailer Example
-              </h3>
-              <p className="text-neutral-500 text-sm mb-4">Works with any SMTP client. Here's Nodemailer:</p>
-              <div className="bg-neutral-900 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
-                <div><span className="text-blue-400">const</span> transport = nodemailer.createTransport({"{"}</div>
-                <div className="pl-4">host: process.env.<span className="text-amber-400">EMAIL_SMTP_HOST</span>,</div>
-                <div className="pl-4">port: process.env.<span className="text-amber-400">EMAIL_SMTP_PORT</span>,</div>
-                <div className="pl-4">auth: {"{"}</div>
-                <div className="pl-8">user: process.env.<span className="text-amber-400">EMAIL_SMTP_USERNAME</span>,</div>
-                <div className="pl-8">pass: process.env.<span className="text-amber-400">EMAIL_SMTP_PASSWORD</span>,</div>
-                <div className="pl-4">{"}"},</div>
-                <div>{"}"});</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Validation Checks */}
-          <div className="mt-8 bg-white border border-neutral-200 rounded-xl p-6">
-            <h3 className="font-bold mb-4 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4" />
-              Validation Checks
+        {/* Features Bento Grid */}
+        <section className="max-w-7xl mx-auto px-8 mt-48" id="features">
+          <div className="text-center mb-20">
+            <h2 className="text-zinc-500 font-['Space_Grotesk'] uppercase tracking-[0.3em] text-sm mb-4">
+              Core Engine
+            </h2>
+            <h3 className="text-4xl font-bold text-white font-[Inter] tracking-tight">
+              Built for development speed.
             </h3>
-            <p className="text-neutral-500 text-sm mb-6">Every email and HTML upload is automatically checked for:</p>
-            <div className="grid md:grid-cols-3 gap-4">
-              {[
-                { name: "Link Check", desc: "Verifies all links are reachable, follows redirects, flags broken URLs" },
-                { name: "Image Check", desc: "Tests image reachability, flags oversized files and missing dimensions" },
-                { name: "Spam Score", desc: "Checks for unsubscribe links, image-to-text ratio, trigger words" },
-                { name: "HTML Validation", desc: "Detects unclosed tags, missing alt attributes, deprecated elements" },
-                { name: "Client Compatibility", desc: "Flags CSS not supported in Outlook, Gmail, Yahoo, Apple Mail" },
-                { name: "Accessibility", desc: "WCAG contrast checks, heading structure, descriptive link text" },
-              ].map((check) => (
-                <div key={check.name} className="p-4 bg-neutral-50 rounded-lg border border-neutral-100">
-                  <h4 className="font-semibold text-sm mb-1">{check.name}</h4>
-                  <p className="text-neutral-500 text-xs leading-relaxed">{check.desc}</p>
-                </div>
-              ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Zero Config */}
+            <div className="bg-[#1c1b1d] p-8 rounded-xl border border-[#3d494c]/10 hover:border-cyan-500/20 transition-colors group">
+              <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <span
+                  className="material-symbols-outlined text-cyan-400"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  bolt
+                </span>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-3 font-[Inter]">
+                Zero Config
+              </h4>
+              <p className="text-zinc-400 leading-relaxed">
+                No Docker, no databases, no cloud subscriptions. Just a single
+                command to start catching emails locally.
+              </p>
+            </div>
+            {/* Email Validation */}
+            <div className="bg-[#1c1b1d] p-8 rounded-xl border border-[#3d494c]/10 hover:border-cyan-500/20 transition-colors group">
+              <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <span
+                  className="material-symbols-outlined text-cyan-400"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  fact_check
+                </span>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-3 font-[Inter]">
+                Email Validation
+              </h4>
+              <p className="text-zinc-400 leading-relaxed">
+                Auto-check broken links, image alt tags, spam scores, and HTML
+                accessibility issues in every outgoing mail.
+              </p>
+            </div>
+            {/* Real-Time */}
+            <div className="bg-[#1c1b1d] p-8 rounded-xl border border-[#3d494c]/10 hover:border-cyan-500/20 transition-colors group">
+              <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <span
+                  className="material-symbols-outlined text-cyan-400"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  sync
+                </span>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-3 font-[Inter]">
+                Real-Time UI
+              </h4>
+              <p className="text-zinc-400 leading-relaxed">
+                Powered by Server-Sent Events (SSE) for an instant, responsive
+                UI that updates the moment an email is sent.
+              </p>
             </div>
           </div>
+        </section>
 
-          {/* HTML Check */}
-          <div className="mt-8 bg-white border border-neutral-200 rounded-xl p-6">
-            <h3 className="font-bold mb-4 flex items-center gap-2">
-              <ArrowRight className="w-4 h-4" />
-              Standalone HTML Check
+        {/* How It Works Section */}
+        <section
+          className="max-w-7xl mx-auto px-8 mt-48 py-24 bg-[#0e0e10] rounded-[2rem] border border-[#3d494c]/10"
+          id="how-it-works"
+        >
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-bold text-white font-[Inter] tracking-tight">
+              The Three-Step Workflow
             </h3>
-            <p className="text-neutral-500 text-sm mb-4">
-              Don't want to use SMTP? You can also validate HTML directly:
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 px-8">
+            <div className="relative text-center lg:text-left">
+              <div className="text-6xl font-bold text-zinc-800 font-['Space_Grotesk'] mb-4">
+                01
+              </div>
+              <h5 className="text-xl font-bold text-white mb-2">Install</h5>
+              <p className="text-zinc-500">
+                Run{" "}
+                <code className="text-cyan-300 bg-[#2a2a2c] px-1.5 py-0.5 rounded">
+                  npx mailfail
+                </code>{" "}
+                to start catching emails instantly.
+              </p>
+            </div>
+            <div className="relative text-center lg:text-left">
+              <div className="text-6xl font-bold text-zinc-800 font-['Space_Grotesk'] mb-4">
+                02
+              </div>
+              <h5 className="text-xl font-bold text-white mb-2">Configure</h5>
+              <p className="text-zinc-500">
+                Update your app&apos;s SMTP settings to point to localhost on
+                port 2525.
+              </p>
+            </div>
+            <div className="relative text-center lg:text-left">
+              <div className="text-6xl font-bold text-zinc-800 font-['Space_Grotesk'] mb-4">
+                03
+              </div>
+              <h5 className="text-xl font-bold text-white mb-2">Send</h5>
+              <p className="text-zinc-500">
+                Trigger any email action and watch it pop up in the MailFail
+                dashboard instantly.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Validation Detail Section */}
+        <section
+          className="max-w-7xl mx-auto px-8 mt-48 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+          id="validation"
+        >
+          <div>
+            <h3 className="text-4xl font-bold text-white font-[Inter] tracking-tight mb-6">
+              Validation Reports
+            </h3>
+            <p className="text-zinc-400 mb-8 leading-relaxed text-lg">
+              Don&apos;t just catch emails — validate them. MailFail
+              automatically scans your templates for common pitfalls that cause
+              emails to end up in spam or look broken in different clients.
             </p>
-            <ul className="space-y-2 text-sm text-neutral-600">
-              <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Upload an .html file</li>
-              <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Paste raw HTML</li>
-              <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Fetch from a URL</li>
+            <ul className="space-y-4">
+              <li className="flex items-center gap-3 text-zinc-300">
+                <span className="material-symbols-outlined text-green-400 text-lg">
+                  check_circle
+                </span>
+                Link sanity and redirect verification
+              </li>
+              <li className="flex items-center gap-3 text-zinc-300">
+                <span className="material-symbols-outlined text-green-400 text-lg">
+                  check_circle
+                </span>
+                SpamAssassin score simulation
+              </li>
+              <li className="flex items-center gap-3 text-zinc-300">
+                <span className="material-symbols-outlined text-green-400 text-lg">
+                  check_circle
+                </span>
+                HTML structure &amp; Accessibility audits
+              </li>
             </ul>
-            <p className="text-neutral-400 text-xs mt-4">
-              Perfect for validating newsletters, email templates, or transactional emails without setting up SMTP.
-            </p>
           </div>
-        </div>
-      </section>
+          <div className="bg-[#2a2a2c] rounded-2xl p-8 border border-[#3d494c]/30 shadow-2xl relative overflow-hidden">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex flex-col">
+                <span className="text-sm font-['Space_Grotesk'] text-zinc-500 uppercase tracking-wider">
+                  Analysis Result
+                </span>
+                <span className="text-2xl font-bold text-white">
+                  Validation Report
+                </span>
+              </div>
+              <div className="px-3 py-1 bg-yellow-500/10 text-yellow-500 rounded-full text-xs font-bold font-['Space_Grotesk'] uppercase tracking-tighter">
+                Needs Review
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
+                    <span className="material-symbols-outlined text-green-500 text-xl">
+                      link
+                    </span>
+                  </div>
+                  <span className="text-zinc-200 font-medium">Link Status</span>
+                </div>
+                <span className="text-xs font-['JetBrains_Mono'] text-green-500">
+                  200 OK
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
+                    <span className="material-symbols-outlined text-red-500 text-xl">
+                      image
+                    </span>
+                  </div>
+                  <span className="text-zinc-200 font-medium">
+                    Image Alt Tags
+                  </span>
+                </div>
+                <span className="text-xs font-['JetBrains_Mono'] text-red-500">
+                  2 MISSING
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
+                    <span className="material-symbols-outlined text-yellow-500 text-xl">
+                      warning
+                    </span>
+                  </div>
+                  <span className="text-zinc-200 font-medium">Spam Score</span>
+                </div>
+                <span className="text-xs font-['JetBrains_Mono'] text-yellow-500">
+                  2.4 / 5.0
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
+                    <span className="material-symbols-outlined text-green-500 text-xl">
+                      html
+                    </span>
+                  </div>
+                  <span className="text-zinc-200 font-medium">
+                    HTML Structure
+                  </span>
+                </div>
+                <span className="text-xs font-['JetBrains_Mono'] text-green-500">
+                  VALID
+                </span>
+              </div>
+            </div>
+            <div className="mt-8 pt-8 border-t border-[#3d494c]/20">
+              <button className="w-full py-3 bg-[#0e0e10] text-zinc-300 rounded-xl hover:bg-[#39393b] transition-colors font-medium">
+                View Detailed Log
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Comparison Table */}
+        <section className="max-w-7xl mx-auto px-8 mt-48" id="comparison">
+          <div className="text-center mb-20">
+            <h3 className="text-4xl font-bold text-white font-[Inter] tracking-tight">
+              How we stack up
+            </h3>
+          </div>
+          <div className="overflow-x-auto rounded-2xl border border-[#3d494c]/10 bg-[#1c1b1d]">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[#3d494c]/20">
+                  <th className="p-6 font-['Space_Grotesk'] text-xs uppercase tracking-widest text-zinc-500">
+                    Feature
+                  </th>
+                  <th className="p-6 font-['Space_Grotesk'] text-xs uppercase tracking-widest text-cyan-400 bg-cyan-500/5">
+                    MailFail
+                  </th>
+                  <th className="p-6 font-['Space_Grotesk'] text-xs uppercase tracking-widest text-zinc-500">
+                    Mailtrap
+                  </th>
+                  <th className="p-6 font-['Space_Grotesk'] text-xs uppercase tracking-widest text-zinc-500">
+                    Mailpit
+                  </th>
+                  <th className="p-6 font-['Space_Grotesk'] text-xs uppercase tracking-widest text-zinc-500">
+                    Mailhog
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                <tr className="border-b border-[#3d494c]/10">
+                  <td className="p-6 text-white font-medium">Free &amp; Local</td>
+                  <td className="p-6 bg-cyan-500/5">
+                    <span className="material-symbols-outlined text-cyan-400">
+                      check
+                    </span>
+                  </td>
+                  <td className="p-6 text-zinc-600">Limited</td>
+                  <td className="p-6">
+                    <span className="material-symbols-outlined text-zinc-400">
+                      check
+                    </span>
+                  </td>
+                  <td className="p-6">
+                    <span className="material-symbols-outlined text-zinc-400">
+                      check
+                    </span>
+                  </td>
+                </tr>
+                <tr className="border-b border-[#3d494c]/10">
+                  <td className="p-6 text-white font-medium">
+                    Email Validation
+                  </td>
+                  <td className="p-6 bg-cyan-500/5">
+                    <span className="material-symbols-outlined text-cyan-400">
+                      check
+                    </span>
+                  </td>
+                  <td className="p-6 text-zinc-600">&mdash;</td>
+                  <td className="p-6 text-zinc-600">&mdash;</td>
+                  <td className="p-6 text-zinc-600">&mdash;</td>
+                </tr>
+                <tr className="border-b border-[#3d494c]/10">
+                  <td className="p-6 text-white font-medium">Real-Time UI</td>
+                  <td className="p-6 bg-cyan-500/5">
+                    <span className="material-symbols-outlined text-cyan-400">
+                      check
+                    </span>
+                  </td>
+                  <td className="p-6 text-zinc-600">Delayed</td>
+                  <td className="p-6">
+                    <span className="material-symbols-outlined text-zinc-400">
+                      check
+                    </span>
+                  </td>
+                  <td className="p-6 text-zinc-600">&mdash;</td>
+                </tr>
+                <tr className="border-b border-[#3d494c]/10">
+                  <td className="p-6 text-white font-medium">Zero Config</td>
+                  <td className="p-6 bg-cyan-500/5">
+                    <span className="material-symbols-outlined text-cyan-400">
+                      check
+                    </span>
+                  </td>
+                  <td className="p-6 text-zinc-600">Account Req.</td>
+                  <td className="p-6 text-zinc-600">Docker Req.</td>
+                  <td className="p-6 text-zinc-600">Docker Req.</td>
+                </tr>
+                <tr>
+                  <td className="p-6 text-white font-medium">
+                    Active Development
+                  </td>
+                  <td className="p-6 bg-cyan-500/5 text-cyan-400 font-bold">
+                    Vibrant
+                  </td>
+                  <td className="p-6 text-zinc-400">Stable</td>
+                  <td className="p-6 text-zinc-400">Stable</td>
+                  <td className="p-6 text-zinc-400">Legacy</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* Bottom CTA / Install */}
+        <section className="max-w-7xl mx-auto px-8 mt-48" id="install">
+          <div className="bg-gradient-to-br from-cyan-500/10 to-transparent border border-cyan-500/20 rounded-[2.5rem] p-12 text-center relative overflow-hidden group">
+            <div className="absolute -top-12 -right-12 w-64 h-64 bg-cyan-500/5 blur-[80px] group-hover:bg-cyan-500/10 transition-colors" />
+            <h3 className="text-4xl font-extrabold text-white mb-6">
+              Ready to catch emails?
+            </h3>
+            <p className="text-zinc-400 mb-10 max-w-lg mx-auto">
+              Stop sending test emails to your real inbox. Get started with
+              MailFail in seconds.
+            </p>
+            <div className="max-w-md mx-auto relative">
+              <div className="bg-[#0e0e10] p-6 rounded-2xl flex items-center justify-between border border-[#3d494c]/20 ethereal-glow">
+                <code className="font-['JetBrains_Mono'] text-cyan-300 text-lg">
+                  npx mailfail
+                </code>
+                <CopyButton text="npx mailfail" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-neutral-200 bg-white">
-        <div className="max-w-7xl mx-auto py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <span className="font-bold text-neutral-900">MailFail</span>
-            <span className="text-xs text-neutral-500">© 2026 MailFail. Built for developers.</span>
+      <footer className="w-full py-12 bg-[#131315] border-t border-zinc-800/20">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-white font-bold">MailFail</div>
+          <div className="font-[Inter] text-sm text-zinc-500 flex flex-wrap justify-center gap-8">
+            <span className="font-['Space_Grotesk'] uppercase tracking-widest text-xs">
+              &copy; 2026 MailFail
+            </span>
+            <a
+              className="hover:text-white transition-colors"
+              href="https://johannesosterkamp.de"
+            >
+              Made by Johannes Osterkamp
+            </a>
+            <a
+              className="hover:text-white transition-colors"
+              href="https://github.com/johannesosterkamp/mailfail/blob/main/LICENSE"
+            >
+              MIT License
+            </a>
           </div>
-          <div className="flex items-center gap-6">
-            <a className="text-xs text-neutral-500 hover:underline" href="#features">Features</a>
-            <a className="text-xs text-neutral-500 hover:underline" href="#how-it-works">How it works</a>
-            <a className="text-xs text-neutral-500 hover:underline" href="#docs">Docs</a>
+          <div className="flex gap-4">
+            <a
+              href="https://github.com/johannesosterkamp/mailfail"
+              className="text-zinc-500 hover:text-cyan-400 transition-colors"
+              aria-label="GitHub"
+            >
+              <span className="material-symbols-outlined">terminal</span>
+            </a>
           </div>
         </div>
       </footer>

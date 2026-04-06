@@ -1,28 +1,41 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MailFail — Email Testing for Developers",
-  description: "Catch, inspect, and validate test emails. Get SMTP credentials in seconds. Check for spam, broken links, and compatibility.",
+  title: "MailFail — Local Email Catching & Validation for Developers",
+  description:
+    "Stop sending test emails to real inboxes. MailFail catches every email your app sends during development with built-in validation.",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.ico",
   },
   openGraph: {
-    title: "MailFail — Email Testing for Developers",
-    description: "Stop sending test emails to real people. Get SMTP credentials in seconds.",
+    title: "MailFail — Local Email Catching & Validation for Developers",
+    description:
+      "Stop sending test emails to real inboxes. MailFail catches every email your app sends during development with built-in validation.",
     type: "website",
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-        <body>{children}</body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className="dark">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-[#09090b] text-zinc-200 antialiased font-[Inter]">
+        {children}
+      </body>
+    </html>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Trash2, RefreshCw, Forward, X, Send } from "lucide-react";
+import { Trash2, RefreshCw, Forward, X, Send, Monitor, Smartphone } from "lucide-react";
 import { formatDate } from "../lib/utils";
 import { ValidationResult } from "../components/validation-result";
 
@@ -84,7 +84,6 @@ export function EmailDetailPage() {
         if (emailData.validation) {
           setValidation(emailData.validation);
         } else {
-          // Try to run validation
           fetch(`/api/emails/${mailId}/recheck`, { method: "POST" })
             .then((r) => (r.ok ? r.json() : null))
             .then((v) => { if (v) setValidation(v); })
@@ -154,277 +153,325 @@ export function EmailDetailPage() {
 
   if (loading) {
     return (
-      <div className="text-center py-16 text-zinc-400 dark:text-zinc-500 text-sm">Loading...</div>
+      <div className="text-center py-16 text-[#7b7a81] text-sm">Loading...</div>
     );
   }
 
   if (!email) {
     return (
-      <div className="text-center py-16 text-zinc-400 dark:text-zinc-500 text-sm">Email not found.</div>
+      <div className="text-center py-16 text-[#7b7a81] text-sm">Email not found.</div>
     );
   }
 
-  return (
-    <div className="max-w-7xl mx-auto">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider mb-6">
-        <Link to="/" className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">Inbox</Link>
-        <span className="text-zinc-300 dark:text-zinc-600">/</span>
-        <span className="text-zinc-900 dark:text-zinc-100 font-bold truncate max-w-[200px]">{email.subject}</span>
-      </div>
+  const spamData = validation?.spamScore;
+  const spamScore = spamData?.score ?? 0;
+  const isLow = spamScore <= 3;
+  const isMed = spamScore > 3 && spamScore <= 6;
 
-      {/* Prominent Spam Score Banner */}
-      {validation && (() => {
-        const spamData = validation.spamScore;
-        const score = spamData?.score ?? 0;
-        const isLow = score <= 3;
-        const isMed = score > 3 && score <= 6;
-        const tips: string[] = [];
-        const details = spamData?.details ?? [];
-        if (details.some((d) => /unsubscribe/i.test(d.message))) tips.push("Add an unsubscribe link to reduce spam score");
-        if (details.some((d) => /text/i.test(d.message) || /plain/i.test(d.message))) tips.push("Add a plain-text alternative");
-        if (details.some((d) => /caps/i.test(d.message) || /subject/i.test(d.message))) tips.push("Avoid ALL CAPS in subject line");
-        if (details.some((d) => /image/i.test(d.message) || /ratio/i.test(d.message))) tips.push("Improve image-to-text ratio");
-        return (
-          <div className={`mb-6 rounded-xl p-4 border flex items-start gap-4 ${
-            isLow
-              ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800/50"
-              : isMed
-              ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800/50"
-              : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800/50"
-          }`}>
-            <div className={`text-3xl font-extrabold tabular-nums leading-none ${
-              isLow ? "text-green-600 dark:text-green-400" : isMed ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
-            }`}>
-              {score}
+  return (
+    <div className="flex-1 flex flex-col">
+      {/* Breadcrumb */}
+      <nav className="font-label text-[10px] tracking-[0.2em] text-[#7b7a81] mb-2 uppercase">
+        <Link to="/" className="hover:text-[#323238] dark:hover:text-zinc-100 transition-colors">
+          Inbox
+        </Link>
+        {" / "}
+        <span className="text-[#323238] dark:text-zinc-100">{email.subject?.toUpperCase()}</span>
+      </nav>
+
+      {/* Title */}
+      <h2 className="text-4xl font-extrabold tracking-tighter text-[#0e0e10] dark:text-zinc-100 mb-8">
+        {email.subject}
+      </h2>
+
+      {/* Spam Score Banner */}
+      {validation && (
+        <section className={`mb-8 p-6 rounded-xl flex items-center justify-between ambient-shadow border ${
+          isLow
+            ? "bg-[#f2faf4] border-[#d1e7d8] dark:bg-green-950/20 dark:border-green-800/50"
+            : isMed
+            ? "bg-[#fffbf0] border-[#f0e0b0] dark:bg-amber-950/20 dark:border-amber-800/50"
+            : "bg-[#fef2f2] border-[#f0c8c8] dark:bg-red-950/20 dark:border-red-800/50"
+        }`}>
+          <div className="flex items-center gap-8">
+            <div className="flex items-baseline gap-1">
+              <span className={`text-6xl font-black font-label ${
+                isLow ? "text-[#2e7d32]" : isMed ? "text-[#f59e0b]" : "text-[#dc2626]"
+              }`}>
+                {spamScore}
+              </span>
+              <span className={`text-xs font-bold uppercase tracking-widest ${
+                isLow ? "text-[#2e7d32]/70" : isMed ? "text-[#f59e0b]/70" : "text-[#dc2626]/70"
+              }`}>
+                /10
+              </span>
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className={`text-sm font-bold ${
-                  isLow ? "text-green-700 dark:text-green-300" : isMed ? "text-amber-700 dark:text-amber-300" : "text-red-700 dark:text-red-300"
-                }`}>
-                  Spam Risk: {isLow ? "Low" : isMed ? "Medium" : "High"}
-                </span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide ${
+            <div className={`h-12 w-px ${
+              isLow ? "bg-[#d1e7d8]" : isMed ? "bg-[#f0e0b0]" : "bg-[#f0c8c8]"
+            }`} />
+            <div>
+              <h3 className={`text-lg font-bold mb-1 flex items-center gap-2 ${
+                isLow ? "text-[#1b5e20]" : isMed ? "text-[#92400e]" : "text-[#991b1b]"
+              }`}>
+                Spam Risk: {isLow ? "Low" : isMed ? "Medium" : "High"}
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-label border ${
                   isLow
-                    ? "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300"
+                    ? "bg-[#e8f5e9] text-[#2e7d32] border-[#c8e6c9]"
                     : isMed
-                    ? "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300"
-                    : "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300"
+                    ? "bg-[#fef3c7] text-[#92400e] border-[#fde68a]"
+                    : "bg-[#fee2e2] text-[#991b1b] border-[#fecaca]"
                 }`}>
-                  {score}/10
+                  {isLow ? "HEALTHY" : isMed ? "CAUTION" : "RISKY"}
                 </span>
-              </div>
-              {tips.length > 0 && (
-                <ul className="space-y-0.5">
-                  {tips.map((tip) => (
-                    <li key={tip} className="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
-                      <span className="text-zinc-400">&rsaquo;</span> {tip}
+              </h3>
+              {spamData && spamData.details.length > 0 && (
+                <ul className={`flex flex-wrap gap-x-6 gap-y-1 text-sm ${
+                  isLow ? "text-[#388e3c]" : isMed ? "text-[#b45309]" : "text-[#dc2626]"
+                }`}>
+                  {spamData.details.slice(0, 3).map((d, i) => (
+                    <li key={i} className="flex items-center gap-1.5">
+                      <span className="text-xs">&#8250;</span> {d.message}
                     </li>
                   ))}
                 </ul>
               )}
             </div>
           </div>
-        );
-      })()}
-
-      {/* Metadata Row */}
-      <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm mb-6">
-        <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-[13px] font-mono">
-          <div className="flex items-center gap-2">
-            <span className="text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter text-[10px] font-bold">From</span>
-            <span className="text-zinc-800 dark:text-zinc-200">{email.from}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter text-[10px] font-bold">To</span>
-            <span className="text-zinc-800 dark:text-zinc-200">{email.to.join(", ")}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter text-[10px] font-bold">Received</span>
-            <span className="text-zinc-600 dark:text-zinc-400">{formatDate(new Date(email.receivedAt))}</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowForward((v) => !v)}
-            className="flex items-center gap-2 px-3 py-1.5 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded transition-colors text-sm font-medium border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600"
-          >
-            <Forward className="w-4 h-4" />
-            Forward
-          </button>
-          <button
-            onClick={handleDelete}
-            className="flex items-center gap-2 px-3 py-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded transition-colors text-sm font-medium border border-transparent hover:border-red-100 dark:hover:border-red-900/50"
-          >
-            <Trash2 className="w-4 h-4" />
-            Delete
-          </button>
-        </div>
-      </section>
-
-      {/* Forward Dialog */}
-      {showForward && (
-        <div className="mb-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Forward className="w-4 h-4" />
-              Forward Email
-            </h4>
-            <button
-              onClick={() => { setShowForward(false); setForwardTo(""); setForwardStatus("idle"); setForwardError(""); }}
-              className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1 rounded transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <form onSubmit={handleForward} className="flex gap-2">
-            <input
-              autoFocus
-              type="email"
-              value={forwardTo}
-              onChange={(e) => setForwardTo(e.target.value)}
-              placeholder="recipient@example.com"
-              className="flex-1 px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-400 focus:border-zinc-900 dark:focus:border-zinc-400 outline-none transition-all bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
-            />
-            <button
-              type="submit"
-              disabled={forwarding || !forwardTo.trim()}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
-            >
-              <Send className="w-4 h-4" />
-              {forwarding ? "Sending..." : "Send"}
-            </button>
-          </form>
-          {forwardStatus === "success" && (
-            <p className="mt-2 text-xs text-green-600 dark:text-green-400">Email forwarded successfully.</p>
-          )}
-          {forwardStatus === "error" && (
-            <p className="mt-2 text-xs text-red-500">{forwardError}</p>
-          )}
-        </div>
+        </section>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Main Preview Column */}
-        <div className="lg:col-span-8 space-y-4">
-          {/* Tabs */}
-          <div className="flex border-b border-zinc-200 dark:border-zinc-800 gap-6">
-            {tabs.map(({ id: tabId, label }) => (
+      {/* Metadata & Forward */}
+      <div className="mb-8">
+        <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl ghost-border ambient-shadow">
+          <div className="flex flex-wrap gap-y-4 justify-between items-start mb-0">
+            <div className="space-y-3">
+              <div className="flex items-center gap-4">
+                <span className="w-12 text-[10px] font-bold uppercase tracking-widest text-[#7b7a81] font-label">From:</span>
+                <span className="font-label text-sm font-medium text-[#0e0e10] dark:text-zinc-100 bg-[#f6f2f7] dark:bg-zinc-800 px-2 py-1 rounded">
+                  {email.from}
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="w-12 text-[10px] font-bold uppercase tracking-widest text-[#7b7a81] font-label">To:</span>
+                <span className="font-label text-sm font-medium text-[#0e0e10] dark:text-zinc-100">
+                  {email.to.join(", ")}
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="w-12 text-[10px] font-bold uppercase tracking-widest text-[#7b7a81] font-label">Date:</span>
+                <span className="font-label text-sm text-[#5f5e65] dark:text-zinc-400">
+                  {formatDate(new Date(email.receivedAt))}
+                </span>
+              </div>
+            </div>
+            <div className="flex gap-2">
               <button
-                key={tabId}
-                onClick={() => setTab(tabId)}
-                className={`px-1 py-3 text-sm font-medium border-b-2 -mb-[2px] transition-all ${
-                  tab === tabId
-                    ? "border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100"
-                    : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-                }`}
+                onClick={() => setShowForward((v) => !v)}
+                className="px-4 py-2 rounded border border-[rgba(123,122,129,0.3)] text-xs font-bold uppercase tracking-widest hover:bg-[#f0edf2] dark:hover:bg-zinc-800 transition-all flex items-center gap-2 text-[#323238] dark:text-zinc-300"
               >
-                {label}
-                {tabId === "validation" && validation && (
-                  <span
-                    className={`ml-1.5 inline-block w-2 h-2 rounded-full ${
-                      validation.overallScore === "green"
-                        ? "bg-green-500"
-                        : validation.overallScore === "yellow"
-                        ? "bg-amber-500"
-                        : "bg-red-500"
-                    }`}
-                  />
-                )}
+                <Forward className="w-4 h-4" /> Forward
               </button>
-            ))}
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 rounded border border-red-200/30 dark:border-red-900/30 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-widest hover:bg-red-50/50 dark:hover:bg-red-950/20 transition-all flex items-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" /> Delete
+              </button>
+            </div>
           </div>
 
-          {/* Tab Content */}
-          {tab === "html" && (
-            <div className="bg-zinc-100/50 dark:bg-zinc-800/30 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 min-h-[500px] shadow-inner">
-              {email.htmlBody ? (
-                <>
-                  <div className="flex items-center gap-2 mb-3">
-                    <button
-                      onClick={() => setPreviewWidth("desktop")}
-                      className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${previewWidth === "desktop" ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900" : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}
-                    >
-                      Desktop
-                    </button>
-                    <button
-                      onClick={() => setPreviewWidth("mobile")}
-                      className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${previewWidth === "mobile" ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900" : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}
-                    >
-                      Mobile (375px)
-                    </button>
-                  </div>
-                  <iframe
-                    srcDoc={email.htmlBody}
-                    className={`${previewWidth === "mobile" ? "w-[375px] mx-auto" : "w-full"} h-[600px] bg-white rounded-lg border border-zinc-200 dark:border-zinc-700 shadow transition-all`}
-                    sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                    title="Email HTML preview"
+          {/* Forward Dialog (Expanded) */}
+          {showForward && (
+            <div className="mt-6 pt-6 border-t border-[rgba(123,122,129,0.1)]">
+              <div className="bg-[#f6f2f7] dark:bg-zinc-800 rounded-lg p-4">
+                <form onSubmit={handleForward} className="flex items-center gap-3">
+                  <input
+                    autoFocus
+                    type="email"
+                    value={forwardTo}
+                    onChange={(e) => setForwardTo(e.target.value)}
+                    placeholder="recipient@example.com"
+                    className="flex-1 bg-white dark:bg-zinc-900 border border-[rgba(123,122,129,0.3)] rounded-md py-2 px-3 text-sm focus:ring-[#5f5e60]/40 text-[#323238] dark:text-zinc-100 placeholder:text-[#b3b1b8]"
                   />
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-[400px] text-zinc-400 dark:text-zinc-500 text-sm">
-                  No HTML content
-                </div>
-              )}
-            </div>
-          )}
-
-          {tab === "text" && (
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 min-h-[400px]">
-              {email.textBody ? (
-                <pre className="font-mono text-sm text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap break-words">
-                  {email.textBody}
-                </pre>
-              ) : (
-                <p className="text-zinc-400 dark:text-zinc-500 text-sm">No plain text content</p>
-              )}
-            </div>
-          )}
-
-          {tab === "raw" && (
-            <div className="bg-zinc-950 rounded-xl p-6 min-h-[400px] overflow-auto">
-              <pre className="font-mono text-xs text-zinc-300 whitespace-pre-wrap break-words">
-                {email.rawSource}
-              </pre>
-            </div>
-          )}
-
-          {tab === "validation" && (
-            <div>
-              {validation ? (
-                <ValidationResult
-                  validation={validation}
-                  onRecheck={handleRecheck}
-                  recheckLoading={recheckLoading}
-                />
-              ) : (
-                <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 text-center">
-                  <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-4">No validation results yet.</p>
                   <button
-                    onClick={handleRecheck}
-                    disabled={recheckLoading}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                    type="submit"
+                    disabled={forwarding || !forwardTo.trim()}
+                    className="bg-[#5f5e60] text-white px-6 py-2 rounded-md font-bold text-sm tracking-tight shadow-lg hover:brightness-110 transition-all disabled:opacity-50"
                   >
-                    <RefreshCw className={`w-4 h-4 ${recheckLoading ? "animate-spin" : ""}`} />
-                    Run Validation
+                    <Send className="w-4 h-4 inline mr-1.5" />
+                    {forwarding ? "Sending..." : "Send"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setShowForward(false); setForwardTo(""); setForwardStatus("idle"); setForwardError(""); }}
+                    className="text-[#5f5e65] text-sm px-2 hover:text-[#323238] dark:hover:text-zinc-100 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </form>
+                {forwardStatus === "success" && (
+                  <p className="mt-2 text-xs text-green-600 dark:text-green-400">Email forwarded successfully.</p>
+                )}
+                {forwardStatus === "error" && (
+                  <p className="mt-2 text-xs text-red-500">{forwardError}</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Workspace Layout */}
+      <div className="flex flex-col lg:flex-row gap-8 flex-1">
+        {/* Content Preview (Left) */}
+        <div className="w-full lg:w-8/12">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl ghost-border overflow-hidden flex flex-col h-[700px] ambient-shadow">
+            {/* Tab Header */}
+            <div className="bg-[#f6f2f7] dark:bg-zinc-800 px-6 pt-4 flex justify-between items-end">
+              <div className="flex gap-6">
+                {tabs.map(({ id: tabId, label }) => (
+                  <button
+                    key={tabId}
+                    onClick={() => setTab(tabId)}
+                    className={`pb-3 border-b-2 font-bold text-xs uppercase tracking-widest transition-all ${
+                      tab === tabId
+                        ? "border-[#5f5e60] text-[#0e0e10] dark:text-zinc-100"
+                        : "border-transparent text-[#7b7a81] hover:text-[#323238] dark:hover:text-zinc-300"
+                    }`}
+                  >
+                    {label}
+                    {tabId === "validation" && validation && (
+                      <span
+                        className={`ml-1.5 inline-block w-2 h-2 rounded-full ${
+                          validation.overallScore === "green"
+                            ? "bg-green-500"
+                            : validation.overallScore === "yellow"
+                            ? "bg-amber-500"
+                            : "bg-red-500"
+                        }`}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+              {tab === "html" && (
+                <div className="pb-3 flex bg-[#f0edf2] dark:bg-zinc-700 p-1 rounded-lg mb-1">
+                  <button
+                    onClick={() => setPreviewWidth("desktop")}
+                    className={`p-1.5 rounded transition-all ${
+                      previewWidth === "desktop"
+                        ? "bg-white dark:bg-zinc-900 shadow-sm text-[#0e0e10] dark:text-zinc-100"
+                        : "text-[#7b7a81] hover:text-[#323238] dark:hover:text-zinc-300"
+                    }`}
+                  >
+                    <Monitor className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setPreviewWidth("mobile")}
+                    className={`p-1.5 rounded transition-all ${
+                      previewWidth === "mobile"
+                        ? "bg-white dark:bg-zinc-900 shadow-sm text-[#0e0e10] dark:text-zinc-100"
+                        : "text-[#7b7a81] hover:text-[#323238] dark:hover:text-zinc-300"
+                    }`}
+                  >
+                    <Smartphone className="w-4 h-4" />
                   </button>
                 </div>
               )}
             </div>
-          )}
+
+            {/* Preview Area */}
+            <div className="flex-1 overflow-y-auto no-scrollbar">
+              {tab === "html" && (
+                <div className="bg-[#f0edf2] dark:bg-zinc-800/50 p-8 min-h-full">
+                  {email.htmlBody ? (
+                    previewWidth === "mobile" ? (
+                      /* Mobile preview with phone frame */
+                      <div className="max-w-[400px] mx-auto bg-white rounded-[3rem] p-4 shadow-2xl border-[8px] border-[#0e0e10] min-h-[500px]">
+                        <div className="w-24 h-6 bg-[#0e0e10] mx-auto rounded-b-xl mb-4" />
+                        <iframe
+                          srcDoc={email.htmlBody}
+                          className="w-full h-[500px] bg-white rounded-lg border-none"
+                          sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                          title="Email HTML preview (mobile)"
+                        />
+                      </div>
+                    ) : (
+                      <iframe
+                        srcDoc={email.htmlBody}
+                        className="w-full h-[600px] bg-white rounded-lg border border-[rgba(123,122,129,0.15)] shadow-sm transition-all"
+                        sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                        title="Email HTML preview"
+                      />
+                    )
+                  ) : (
+                    <div className="flex items-center justify-center h-[400px] text-[#7b7a81] text-sm">
+                      No HTML content
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {tab === "text" && (
+                <div className="p-6 min-h-[400px]">
+                  {email.textBody ? (
+                    <pre className="font-mono text-sm text-[#5f5e65] dark:text-zinc-300 whitespace-pre-wrap break-words">
+                      {email.textBody}
+                    </pre>
+                  ) : (
+                    <p className="text-[#7b7a81] text-sm">No plain text content</p>
+                  )}
+                </div>
+              )}
+
+              {tab === "raw" && (
+                <div className="bg-[#0e0e10] p-6 min-h-[400px] overflow-auto">
+                  <pre className="font-mono text-xs text-zinc-300 whitespace-pre-wrap break-words">
+                    {email.rawSource}
+                  </pre>
+                </div>
+              )}
+
+              {tab === "validation" && (
+                <div className="p-6">
+                  {validation ? (
+                    <ValidationResult
+                      validation={validation}
+                      onRecheck={handleRecheck}
+                      recheckLoading={recheckLoading}
+                    />
+                  ) : (
+                    <div className="text-center py-12">
+                      <p className="text-[#7b7a81] text-sm mb-4">No validation results yet.</p>
+                      <button
+                        onClick={handleRecheck}
+                        disabled={recheckLoading}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-[#5f5e60] text-white rounded-lg text-sm font-medium hover:brightness-110 transition-all disabled:opacity-50"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${recheckLoading ? "animate-spin" : ""}`} />
+                        Run Validation
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Validation Sidebar */}
-        <aside className="lg:col-span-4 space-y-6">
+        {/* Validation Sidebar (Right) */}
+        <div className="w-full lg:w-4/12">
           {validation && (
-            <ValidationResult
-              validation={validation}
-              onRecheck={handleRecheck}
-              recheckLoading={recheckLoading}
-            />
+            <div className="h-[700px] flex flex-col">
+              <ValidationResult
+                validation={validation}
+                onRecheck={handleRecheck}
+                recheckLoading={recheckLoading}
+                compact
+              />
+            </div>
           )}
-        </aside>
+        </div>
       </div>
     </div>
   );

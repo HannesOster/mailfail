@@ -22,7 +22,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="p-2 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+      className="p-2 text-[#5f5e65] hover:text-[#323238] dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
       title={dark ? "Switch to light mode" : "Switch to dark mode"}
     >
       {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}

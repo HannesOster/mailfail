@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckCircle, AlertTriangle, XCircle, Info, ChevronRight, RefreshCw } from "lucide-react";
+import { CheckCircle, AlertTriangle, XCircle, Info, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
 
 // Inlined types from @mailfail/shared
 type OverallScore = "green" | "yellow" | "red";
@@ -62,40 +62,55 @@ function allIssues(v: ValidationData): CheckEntry[] {
 }
 
 function ScoreHeader({ score }: { score: OverallScore }) {
-  if (score === "green") {
-    return (
-      <div className="p-6 bg-green-50/50 dark:bg-green-950/20 border-b border-green-100 dark:border-green-900/30 flex items-center gap-4">
-        <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white shrink-0">
-          <CheckCircle className="w-7 h-7 fill-white" />
-        </div>
-        <div>
-          <h3 className="text-lg font-bold text-green-900 dark:text-green-400 leading-tight">Validation Pass</h3>
-          <p className="text-xs text-green-700 dark:text-green-500 mt-0.5">All checks passed</p>
-        </div>
-      </div>
-    );
-  }
-  if (score === "yellow") {
-    return (
-      <div className="p-6 bg-amber-50/50 dark:bg-amber-950/20 border-b border-amber-100 dark:border-amber-900/30 flex items-center gap-4">
-        <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-white shrink-0">
-          <AlertTriangle className="w-7 h-7" />
-        </div>
-        <div>
-          <h3 className="text-lg font-bold text-amber-900 dark:text-amber-400 leading-tight">Warnings Found</h3>
-          <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Some issues need attention</p>
-        </div>
-      </div>
-    );
-  }
+  const config = {
+    green: {
+      bg: "bg-[#e8f5e9] dark:bg-green-950/30",
+      iconBg: "bg-[#e8f5e9]",
+      iconColor: "text-[#2e7d32]",
+      title: "Validation Pass",
+    },
+    yellow: {
+      bg: "bg-[#fff9e6] dark:bg-amber-950/30",
+      iconBg: "bg-[#fff9e6]",
+      iconColor: "text-amber-600",
+      title: "Warnings Found",
+    },
+    red: {
+      bg: "bg-[#fee2e2] dark:bg-red-950/30",
+      iconBg: "bg-[#fee2e2]",
+      iconColor: "text-red-600",
+      title: "Validation Failed",
+    },
+  }[score];
+
+  const Icon = score === "green" ? CheckCircle : score === "yellow" ? AlertTriangle : XCircle;
+
   return (
-    <div className="p-6 bg-red-50/50 dark:bg-red-950/20 border-b border-red-100 dark:border-red-900/30 flex items-center gap-4">
-      <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white shrink-0">
-        <XCircle className="w-7 h-7 fill-white" />
+    <div className="p-6 border-b border-[rgba(123,122,129,0.1)]">
+      <div className="flex items-center gap-3 mb-6">
+        <div className={`w-10 h-10 rounded-full ${config.iconBg} flex items-center justify-center ${config.iconColor}`}>
+          <Icon className="w-5 h-5" />
+        </div>
+        <h3 className="text-xl font-bold tracking-tight text-[#323238] dark:text-zinc-100">{config.title}</h3>
       </div>
-      <div>
-        <h3 className="text-lg font-bold text-red-900 dark:text-red-400 leading-tight">Validation Failed</h3>
-        <p className="text-xs text-red-700 dark:text-red-500 mt-0.5">Critical issues detected</p>
+    </div>
+  );
+}
+
+function SummaryBar({ errors, warnings, infos }: { errors: number; warnings: number; infos: number }) {
+  return (
+    <div className="grid grid-cols-3 gap-2 px-6 pb-4">
+      <div className={`p-2 rounded text-center ${errors > 0 ? "bg-[#fee2e2]" : "bg-[#f6f2f7] dark:bg-zinc-800"}`}>
+        <span className="block font-label text-[10px] font-bold text-[#7b7a81] uppercase">Errors</span>
+        <span className={`font-label text-sm ${errors > 0 ? "text-red-600" : "text-[#b3b1b8]"}`}>{errors}</span>
+      </div>
+      <div className={`p-2 rounded text-center ${warnings > 0 ? "bg-[#fff9e6]" : "bg-[#f6f2f7] dark:bg-zinc-800"}`}>
+        <span className="block font-label text-[10px] font-bold text-[#7b7a81] uppercase">Warning</span>
+        <span className={`font-label text-sm ${warnings > 0 ? "text-[#856404]" : "text-[#b3b1b8]"}`}>{warnings}</span>
+      </div>
+      <div className="bg-[#f6f2f7] dark:bg-zinc-800 p-2 rounded text-center">
+        <span className="block font-label text-[10px] font-bold text-[#7b7a81] uppercase">Info</span>
+        <span className="font-label text-sm text-[#5f5e65] dark:text-zinc-400">{infos}</span>
       </div>
     </div>
   );
@@ -104,11 +119,11 @@ function ScoreHeader({ score }: { score: OverallScore }) {
 function CategoryRow({
   label,
   items,
-  extra,
+  statusText,
 }: {
   label: string;
   items: CheckEntry[];
-  extra?: React.ReactNode;
+  statusText?: string;
 }) {
   const [open, setOpen] = useState(false);
   const counts = countBySeverity(items);
@@ -116,80 +131,66 @@ function CategoryRow({
   const hasErrors = counts.errors > 0;
   const hasWarnings = counts.warnings > 0;
 
-  const icon = hasErrors ? (
-    <XCircle className="w-5 h-5 text-red-500 fill-red-500" />
-  ) : hasWarnings ? (
-    <AlertTriangle className="w-5 h-5 text-amber-500" />
-  ) : (
-    <CheckCircle className="w-5 h-5 text-green-500 fill-green-500" />
-  );
+  const Icon = hasErrors ? XCircle : hasWarnings ? AlertTriangle : hasIssues && items.some(i => i.severity === "info") ? Info : CheckCircle;
+  const iconColor = hasErrors ? "text-red-600" : hasWarnings ? "text-orange-600" : hasIssues && items.some(i => i.severity === "info") ? "text-blue-600" : "text-green-600";
 
-  const bgClass = hasErrors
-    ? "bg-red-50/20 dark:bg-red-950/10 hover:bg-red-50 dark:hover:bg-red-950/20"
-    : hasWarnings
-    ? "bg-amber-50/20 dark:bg-amber-950/10 hover:bg-amber-50 dark:hover:bg-amber-950/20"
-    : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50";
+  // Expanded style for items with warnings/errors
+  const hasCritical = hasErrors || hasWarnings;
 
-  return (
-    <div className={`${bgClass} transition-colors`}>
-      <button
-        onClick={() => hasIssues && setOpen((v) => !v)}
-        className="w-full p-4 flex items-center justify-between"
-      >
-        <div className="flex items-center gap-3">
-          {icon}
-          <span className="text-sm font-semibold dark:text-zinc-100">{label}</span>
-          {extra}
-          {counts.errors > 0 && (
-            <span className="text-[10px] font-bold text-red-600 bg-red-50 dark:bg-red-950/30 px-1.5 py-0.5 rounded border border-red-100 dark:border-red-900/50">
-              {counts.errors} error{counts.errors > 1 ? "s" : ""}
-            </span>
+  if (hasCritical) {
+    return (
+      <div className={`p-4 rounded-lg ${hasErrors ? "bg-red-50/50 dark:bg-red-950/10 border-l-4 border-red-400" : "bg-orange-50/50 dark:bg-amber-950/10 border-l-4 border-orange-400"}`}>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="w-full flex items-center justify-between mb-0"
+        >
+          <div className="flex items-center gap-3">
+            <Icon className={`w-4 h-4 ${iconColor}`} />
+            <span className="text-xs font-bold uppercase tracking-widest text-[#0e0e10] dark:text-zinc-100">{label}</span>
+          </div>
+          {open ? (
+            <ChevronUp className="w-3.5 h-3.5 text-[#7b7a81]" />
+          ) : (
+            <ChevronDown className="w-3.5 h-3.5 text-[#7b7a81]" />
           )}
-          {counts.warnings > 0 && (
-            <span className="text-[10px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/50">
-              {counts.warnings} warning{counts.warnings > 1 ? "s" : ""}
-            </span>
-          )}
-          {!hasIssues && (
-            <span className="text-xs text-zinc-400 dark:text-zinc-500">all ok</span>
-          )}
-        </div>
-        {hasIssues && (
-          <ChevronRight
-            className={`w-4 h-4 text-zinc-400 dark:text-zinc-500 transition-transform ${open ? "rotate-90" : ""}`}
-          />
-        )}
-      </button>
-      {open && hasIssues && (
-        <div className="pl-8 pr-4 pb-4 space-y-2">
-          {items.map((item, i) => (
-            <div key={i} className="text-xs flex items-start gap-2">
-              {item.severity === "error" ? (
-                <XCircle className="w-3.5 h-3.5 text-red-500 fill-red-500 mt-0.5 shrink-0" />
-              ) : item.severity === "warning" ? (
-                <AlertTriangle className="w-3.5 h-3.5 text-amber-500 mt-0.5 shrink-0" />
-              ) : (
-                <Info className="w-3.5 h-3.5 text-zinc-400 mt-0.5 shrink-0" />
-              )}
-              <span
-                className={
-                  item.severity === "error"
-                    ? "text-red-800 dark:text-red-400"
-                    : item.severity === "warning"
-                    ? "text-amber-800 dark:text-amber-400"
-                    : "text-zinc-500 dark:text-zinc-400"
-                }
-              >
+        </button>
+        {open && (
+          <div className="pl-7 mt-2 space-y-2">
+            {items.map((item, i) => (
+              <div key={i} className={`p-2 rounded text-[11px] font-label border ${
+                item.severity === "error"
+                  ? "bg-red-100/50 text-red-900 border-red-200 dark:bg-red-950/30 dark:text-red-300 dark:border-red-800"
+                  : item.severity === "warning"
+                  ? "bg-orange-100/50 text-orange-900 border-orange-200 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800"
+                  : "bg-blue-50/50 text-blue-900 border-blue-200 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-800"
+              }`}>
                 {item.message}
                 {item.element && (
-                  <span className="ml-1 font-mono text-[10px] text-zinc-400 dark:text-zinc-500">({item.element})</span>
+                  <span className="ml-1 text-[10px] text-[#7b7a81]">({item.element})</span>
                 )}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <button
+      onClick={() => hasIssues && setOpen((v) => !v)}
+      className="w-full flex items-center justify-between p-4 hover:bg-[#f6f2f7] dark:hover:bg-zinc-800/50 rounded-lg transition-colors group cursor-pointer"
+    >
+      <div className="flex items-center gap-3">
+        <Icon className={`w-4 h-4 ${iconColor}`} />
+        <span className="text-xs font-bold uppercase tracking-widest text-[#5f5e65] dark:text-zinc-400 group-hover:text-[#0e0e10] dark:group-hover:text-zinc-100">
+          {label}
+        </span>
+      </div>
+      <span className="text-[10px] font-label text-[#7b7a81] uppercase tracking-wider">
+        {statusText ?? (hasIssues ? `${items.length} items` : "Valid")}
+      </span>
+    </button>
   );
 }
 
@@ -197,10 +198,12 @@ export function ValidationResult({
   validation,
   onRecheck,
   recheckLoading,
+  compact,
 }: {
   validation: ValidationData;
   onRecheck?: () => void;
   recheckLoading?: boolean;
+  compact?: boolean;
 }) {
   const issues = allIssues(validation);
   const totalErrors = issues.filter((i) => i.severity === "error").length;
@@ -208,64 +211,53 @@ export function ValidationResult({
   const totalInfos = issues.filter((i) => i.severity === "info").length;
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+    <div className={`bg-white dark:bg-zinc-900 rounded-xl ghost-border overflow-hidden ambient-shadow flex flex-col ${compact ? "h-full" : ""}`}>
       <ScoreHeader score={validation.overallScore} />
 
-      {/* Summary */}
-      <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 flex gap-4 font-mono text-[11px] font-bold">
-        <span className="text-red-600">{totalErrors} ERRORS</span>
-        <span className="text-amber-600">{totalWarnings} WARNINGS</span>
-        <span className="text-zinc-500 dark:text-zinc-400">{totalInfos} INFO</span>
-      </div>
+      <SummaryBar errors={totalErrors} warnings={totalWarnings} infos={totalInfos} />
 
       {/* Categories */}
-      <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
-        <CategoryRow
-          label="Links"
-          items={validation.linkChecks}
-          extra={
-            validation.linkChecks.length > 0 ? (
-              <span className="text-xs text-zinc-400">
-                ({validation.linkChecks.length} checked)
-              </span>
-            ) : undefined
-          }
-        />
-        <CategoryRow
-          label="Images"
-          items={validation.imageChecks}
-          extra={
-            validation.imageChecks.length > 0 ? (
-              <span className="text-xs text-zinc-400">
-                ({validation.imageChecks.length} checked)
-              </span>
-            ) : undefined
-          }
-        />
-        <CategoryRow
-          label="Spam Score"
-          items={validation.spamScore.details}
-          extra={
-            <span className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold rounded">
-              {validation.spamScore.score}/10
-            </span>
-          }
-        />
-        <CategoryRow label="HTML" items={validation.htmlIssues} />
-        <CategoryRow label="Compatibility" items={validation.compatIssues} />
-        <CategoryRow label="Accessibility" items={validation.a11yIssues} />
+      <div className="flex-1 overflow-y-auto p-2">
+        <div className="space-y-1">
+          <CategoryRow
+            label="Links"
+            items={validation.linkChecks}
+            statusText={validation.linkChecks.length > 0 ? `${validation.linkChecks.length} checked` : "Valid"}
+          />
+          <CategoryRow
+            label="Images"
+            items={validation.imageChecks}
+            statusText={validation.imageChecks.length > 0 ? "Alt text set" : "Valid"}
+          />
+          <CategoryRow
+            label="Spam Score"
+            items={validation.spamScore.details}
+            statusText={`${validation.spamScore.score}/10`}
+          />
+          <CategoryRow label="HTML Structure" items={validation.htmlIssues} />
+          <CategoryRow
+            label="Compatibility"
+            items={validation.compatIssues}
+            statusText={validation.compatIssues.length === 0 ? "Outlook/Gmail" : undefined}
+          />
+          <CategoryRow
+            label="Accessibility"
+            items={validation.a11yIssues}
+            statusText={validation.a11yIssues.length === 0 ? "Details" : undefined}
+          />
+        </div>
       </div>
 
       {/* Re-check */}
       {onRecheck && (
-        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="p-4 bg-[#f6f2f7] dark:bg-zinc-800/30">
           <button
             onClick={onRecheck}
             disabled={recheckLoading}
-            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded font-bold text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
+            className="w-full bg-white dark:bg-zinc-900 text-[#0e0e10] dark:text-zinc-100 border border-[rgba(123,122,129,0.3)] py-3 rounded font-bold text-xs uppercase tracking-[0.2em] shadow-sm hover:bg-[#f0edf2] dark:hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${recheckLoading ? "animate-spin" : ""}`} />
-            Re-Check
+            Re-Check Validation
           </button>
         </div>
       )}
